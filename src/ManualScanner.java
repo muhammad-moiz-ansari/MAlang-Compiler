@@ -1,53 +1,66 @@
+package src;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class ManualScanner {
-    private int[][] transitionTable = new int[35][];
+    //private int tableSize = 40;   if add "start"
+    private int tableSize = 35;
+    private int[][] transitionTable = new int[tableSize][];
     private Map<String, Integer> symbolToIndex = new HashMap<>();
     private char[] alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#_,:;()[]{}.+-\n\t\r ".toCharArray();
     private int[] finalstates = {3,6,8,11,12,13,14,15,16,20,25,26,27,28,29,30,31,32,33,34};
 
     public String returnTokenName(int state){
         if(state == 3)
-            return "Single-Line-Comment";
+            return TokenType.SINGLE_LINE_COMMENT.toString();
         if(state == 5)
-            return "Integer-Literal";
+            return TokenType.INT_LITERAL.name();
         if(state == 11 || state == 8)
-            return "Float-Literal";
+            return TokenType.FLOAT_LITERAL.name();
         if(state == 12)
-            return "Identifier";
+            return TokenType.IDENTIFIER.name();
         if(state == 13)
-            return "Newline";
+            return TokenType.NEWLINE.name();
         if(state == 14)
-            return "Carriage";
+            return TokenType.CARRIAGE_RETURN.name();
         if(state == 15)
-            return "Tab";
+            return TokenType.TAB.name();
         if(state == 16)
-            return "Space";
+            return TokenType.WHITE_SPACE.name();     // Space
         if(state == 20)
-            return "True-Bool";
+            return TokenType.BOOL_LITERAL.name();         // "True-Bool";
         if(state == 25)
-            return "False-Bool";
+            return TokenType.BOOL_LITERAL.name();         // "False-Bool";
         if(state == 26)
-            return "Left-Round-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Left-Round-Bracket";
         if(state == 27)
-            return "Right-Round-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Right-Round-Bracket";
         if(state == 28)
-            return "Left-Curly-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Left-Curly-Bracket";
         if(state == 29)
-            return "Right-Curly-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Right-Curly-Bracket";
         if(state == 30)
-            return "Left-Square-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Left-Square-Bracket";
         if(state == 31)
-            return "Right-Square-Bracket";
+            return TokenType.PUNCTUATOR.name();         // "Right-Square-Bracket";
         if(state == 32)
-            return "Comma";
+            return TokenType.PUNCTUATOR.name();         // "Comma";
         if(state == 33)
-            return "SemiColon";
+            return TokenType.PUNCTUATOR.name();         // "SemiColon";
         if(state == 34)
-            return "Colon";
+            return TokenType.PUNCTUATOR.name();         // "Colon";
+        //if(state == 40)
+        //    return TokenType.KEYWORD.name();            // "Start";
+
+        /*   Maybe later
+        if(state == 35)
+            return TokenType.MULTI_LINE_COMMENT.name();         // "/*";
+        if(state == 36)
+            return TokenType.MULTI_LINE_COMMENT.name();         // "* /";   // Even java doesn't support nested multi-line comments -_-
+        */
         return null;
     }
 
