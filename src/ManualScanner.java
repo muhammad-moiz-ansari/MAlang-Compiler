@@ -1,66 +1,100 @@
-package src;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class ManualScanner {
-    //private int tableSize = 40;   if add "start"
-    private int tableSize = 35;
-    private int[][] transitionTable = new int[tableSize][];
+    private int[][] transitionTable = new int[35][];
     private Map<String, Integer> symbolToIndex = new HashMap<>();
     private char[] alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#_,:;()[]{}.+-\n\t\r ".toCharArray();
-    private int[] finalstates = {3,6,8,11,12,13,14,15,16,20,25,26,27,28,29,30,31,32,33,34};
+    ArrayList<Token> tok = new ArrayList<>();
+    int lineNum = 1, col = 1;
+    int prevl=0,prevc=0;
+    boolean fc = true;
+    SymbolTable st = new SymbolTable();
+    ErrorHandler ea = new ErrorHandler();
 
     public String returnTokenName(int state){
         if(state == 3)
-            return TokenType.SINGLE_LINE_COMMENT.toString();
+            return "Single-Line-Comment";
         if(state == 5)
-            return TokenType.INT_LITERAL.name();
+            return "Integer-Literal";
         if(state == 11 || state == 8)
-            return TokenType.FLOAT_LITERAL.name();
+            return "Float-Literal";
         if(state == 12)
-            return TokenType.IDENTIFIER.name();
+            return "Identifier";
         if(state == 13)
-            return TokenType.NEWLINE.name();
+            return "Newline";
         if(state == 14)
-            return TokenType.CARRIAGE_RETURN.name();
+            return "Carriage";
         if(state == 15)
-            return TokenType.TAB.name();
+            return "Tab";
         if(state == 16)
-            return TokenType.WHITE_SPACE.name();     // Space
-        if (state == 20)
-            return TokenType.TRUE_BOOL.name();          // "True-Bool"
-        if (state == 25)
-            return TokenType.FALSE_BOOL.name();         // "False-Bool"
-        if (state == 26)
-            return TokenType.L_ROUND_BRACKET.name();    // "Left-Round-Bracket"
-        if (state == 27)
-            return TokenType.R_ROUND_BRACKET.name();    // "Right-Round-Bracket"
-        if (state == 28)
-            return TokenType.L_CURLY_BRACKET.name();    // "Left-Curly-Bracket"
-        if (state == 29)
-            return TokenType.R_CURLY_BRACKET.name();    // "Right-Curly-Bracket"
-        if (state == 30)
-            return TokenType.L_SQUARE_BRACKET.name();   // "Left-Square-Bracket"
-        if (state == 31)
-            return TokenType.R_SQUARE_BRACKET.name();   // "Right-Square-Bracket"
-        if (state == 32)
-            return TokenType.COMMA.name();              // "Comma"
-        if (state == 33)
-            return TokenType.SEMICOLON.name();          // "SemiColon"
-        if (state == 34)
-            return TokenType.COLON.name();              // "Colon"
-        //if(state == 40)
-        //    return TokenType.KEYWORD.name();            // "Start";
+            return "Space";
+        if(state == 20)
+            return "True-Bool";
+        if(state == 25)
+            return "False-Bool";
+        if(state == 26)
+            return "Left-Round-Bracket";
+        if(state == 27)
+            return "Right-Round-Bracket";
+        if(state == 28)
+            return "Left-Curly-Bracket";
+        if(state == 29)
+            return "Right-Curly-Bracket";
+        if(state == 30)
+            return "Left-Square-Bracket";
+        if(state == 31)
+            return "Right-Square-Bracket";
+        if(state == 32)
+            return "Comma";
+        if(state == 33)
+            return "SemiColon";
+        if(state == 34)
+            return "Colon";
+        return null;
+    }
 
-        /*   Maybe later
-        if(state == 35)
-            return TokenType.MULTI_LINE_COMMENT.name();         // "/*";
-        if(state == 36)
-            return TokenType.MULTI_LINE_COMMENT.name();         // "* /";   // Even java doesn't support nested multi-line comments -_-
-        */
+    public TokenType returnCompatibleTokenName(int state){
+            if(state == 3)
+                return TokenType.SINGLE_LINE_COMMENT;
+            if(state == 5)
+                return TokenType.INT_LITERAL;
+            if(state == 11 || state == 8)
+                return TokenType.FLOAT_LITERAL;
+            if(state == 12)
+                return TokenType.IDENTIFIER;
+            if(state == 13)
+                return TokenType.NEWLINE;
+            if(state == 14)
+                return TokenType.CARRIAGE_RETURN;
+            if(state == 15)
+                return TokenType.TAB;
+            if(state == 16)
+                return TokenType.WHITE_SPACE;     // Space
+            if (state == 20)
+                return TokenType.TRUE_BOOL;          // "True-Bool"
+            if (state == 25)
+                return TokenType.FALSE_BOOL;         // "False-Bool"
+            if (state == 26)
+                return TokenType.L_ROUND_BRACKET;    // "Left-Round-Bracket"
+            if (state == 27)
+                return TokenType.R_ROUND_BRACKET;    // "Right-Round-Bracket"
+            if (state == 28)
+                return TokenType.L_CURLY_BRACKET;    // "Left-Curly-Bracket"
+            if (state == 29)
+                return TokenType.R_CURLY_BRACKET;    // "Right-Curly-Bracket"
+            if (state == 30)
+                return TokenType.L_SQUARE_BRACKET;   // "Left-Square-Bracket"
+            if (state == 31)
+                return TokenType.R_SQUARE_BRACKET;   // "Right-Square-Bracket"
+            if (state == 32)
+                return TokenType.COMMA;              // "Comma"
+            if (state == 33)
+                return TokenType.SEMICOLON;          // "SemiColon"
+            if (state == 34)
+                return TokenType.COLON;              // "Colon"
         return null;
     }
 
@@ -128,14 +162,6 @@ public class ManualScanner {
         }
     }
 
-    public boolean isFinal(int state){
-        for(int i=0; i< finalstates.length;i++){
-            if(finalstates[i]==state)
-                return true;
-        }
-        return false;
-    }
-
     public boolean isValidAlphabet(char c){
         for(int i=0; i< alphabets.length;i++){
             if(c==alphabets[i])
@@ -144,12 +170,35 @@ public class ManualScanner {
         return false;
     }
 
-    public void printToken(String input, int s, int e, int currentState){
-        System.out.print("Token Generated: "+returnTokenName(currentState)+ " -> ");
-        for(int i=s; i<e; i++){
-            System.out.print(input.charAt(i));
+    public void updateLineAndCols(char c){
+        prevl = lineNum;
+        prevc = col;
+        if(c == '\n'){
+            lineNum=lineNum+1;
+            col=1;
+            fc= true;
         }
-        System.out.println(" ");
+        else {
+            if (!fc){
+                col++;
+            }
+            else {
+                fc = false;
+            }
+        }
+    }
+
+    public void printToken(String input, int s, int e, int currentState, int sl, int sc){
+        //System.out.print("Token Generated: "+returnTokenName(currentState)+ " -> ");
+        String lex="";
+        for(int i=s; i<e; i++){
+            //System.out.print(input.charAt(i));
+            lex = lex.concat(input.charAt(i)+"");
+        }
+        //System.out.println(" ");
+        Token tt = new Token(returnCompatibleTokenName(currentState),lex,sl,sc);
+        st.insert(lex,returnCompatibleTokenName(currentState).name(),sl);
+        tok.add(tt);
     }
 
     public int check_ID_Constraint(int currentState, int idcons){
@@ -168,10 +217,11 @@ public class ManualScanner {
         return cons;
     }
 
-    public void printInvalidCharError(int currentState,int s, int e, String input, char c){
-        System.out.println("Lexical Error: Character "+c+" does not belong to the language");
+    public void printInvalidCharError(int currentState,int s, int e, String input, char c, int sline, int scol){
+        //System.out.println("Line : "+lineNum+", Column : "+col+" Lexical Error: Character "+c+" does not belong to the language");
+        ea.insert("Lexical Error", lineNum, col,"Character "+c+" does not belong to the language");
         if(returnTokenName(currentState)!=null){
-            printToken(input,s,e,currentState);
+            printToken(input,s,e,currentState,sline,scol);
         }
     }
 
@@ -180,7 +230,10 @@ public class ManualScanner {
         int col=-1,row=-1;
         if(!cat.isEmpty())
             col = symbolToIndex.get(cat);
-        row = currentState;
+        if(currentState>0)
+            row = currentState;
+        else
+            row=1;
 
         int nextState=0;
         if(col>=0 && row>=0)
@@ -188,14 +241,21 @@ public class ManualScanner {
         return nextState;
     }
 
+    public void printAllTokens(){
+        for(int i=0; i< tok.size(); i++){
+            System.out.println(tok.get(i).toString());
+        }
+    }
+
     public void run(String input) {
-        int currentState = 1, s=0, e=0, idcons = 0, floatcons = 0;
+        int currentState = 1, s=0, e=0, idcons = 0, floatcons = 0, sline = lineNum, scol = col;
+        char c='@';
 
         while (true){
             // Check if input is complete
             if(e >= input.length()) {
                 if(returnTokenName(currentState)!=null){
-                    printToken(input,s,e,currentState);
+                    printToken(input,s,e,currentState,sline,scol);
                 }
                 break;
             }
@@ -203,7 +263,8 @@ public class ManualScanner {
             // Check Identifier Character Limit
             idcons = check_ID_Constraint(currentState,idcons);
             if(idcons >= 32){
-                System.out.println("Lexical Error: Maximum 31 characters allowed in Identifier Name");
+                //System.out.println("Line : "+sline+", Column : "+scol+" Lexical Error: ");
+                ea.insert("Lexical Error", sline, scol,"Maximum 31 characters allowed in Identifier Name");
                 s=e;
                 idcons = 0;
                 currentState = 1;
@@ -213,7 +274,8 @@ public class ManualScanner {
             // Check Float Decimal Point Limit
             floatcons = check_Float_Constraint(currentState,floatcons);
             if(floatcons >= 7){
-                System.out.println("Lexical Error: Maximum 6 characters allowed after Decimal Point in Float");
+                //System.out.println("Line : "+sline+", Column : "+scol+ " Lexical Error: ");
+                ea.insert("Lexical Error", sline, scol,"Maximum 6 characters allowed after Decimal Point in Float");
                 s=e;
                 floatcons = 0;
                 currentState = 1;
@@ -221,14 +283,16 @@ public class ManualScanner {
             }
 
             // Get input character
-            char c = input.charAt(e);
-            if(e==25){
-                c='\n';
+            c = input.charAt(e);
+            updateLineAndCols(c);
+            if(currentState == 1) {
+                sline=lineNum;
+                scol= col;
             }
 
             // Check Character Validity if it belongs to alphabets or not
             if(!isValidAlphabet(c)){
-                printInvalidCharError(currentState,s,e,input,c);
+                printInvalidCharError(currentState,s,e,input,c,sline,scol);
                 e++;
                 s=e;
                 currentState=1;
@@ -240,16 +304,19 @@ public class ManualScanner {
 
             // If input character violates the transition
             if(nextState == -1) {
-                System.out.println("Lexical Error : Violation of Rule, no token either start or contain "+getCategory(c, currentState));
+                //System.out.println("Line : "+sline+", Column : "+scol+" Lexical Error : Violation of Rule, no token either start or contain "+c);
+                ea.insert("Lexical Error", sline, scol,"Violation of Rule, no token either start or contain "+c);
                 currentState = 1;
                 s=e+1;
             }
             // If a transition completes, Go back to initial state for other patterns match
             else if(nextState == 1){
-                printToken(input,s,e,currentState);
+                printToken(input,s,e,currentState,sline,scol);
                 currentState = 1;
                 s=e;
                 e--;
+                lineNum = prevl;
+                col = prevc;
             }
             // Otherwise Go to next state
             else{
@@ -257,13 +324,16 @@ public class ManualScanner {
             }
             e++;
         }
+        printAllTokens();
+        st.printTable();
+        ea.printTable();
     }
 
     public static void main(String[] args) {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
 
-        String testInput = "Abc**s90_,:()+1.5E-1##Abc )**(   +1.5654329E+15  A";
+        String testInput = "Abc**s90_,:()+1.5E-1##Abc  )**(   +1.5654329E+15  A";
         dfa.run(testInput);
     }
 }
