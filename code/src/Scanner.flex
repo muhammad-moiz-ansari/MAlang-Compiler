@@ -18,12 +18,15 @@ import src.Token;
     public int getTokenCount() {
         return tokenCount;
     }
-    private Token returnToken(TokenType ttype) { return new Token(ttype, yytext(), yyline + 1, yycolumn + 1); }
+    private Token returnToken(TokenType ttype) {
+        return new Token(ttype, yytext(), yyline + 1, yycolumn + 1);
+    }
+    private Token returnToken(TokenType ttype, string text) {
+        return new Token(ttype, text, yyline + 1, yycolumn + 1);
+    }
 %}
 
-/* ------------ Regular Expressions ------------ */
-//Letter = [A-Za-z]
-//Digit = [0-9]
+/* ------------ Macros ------------ */
 Keyword = "start"|"finish"|"loop"|"condition"|"declare"|"output"|"input"|"function"|"return"|"break"|"continue"|"else"
 Identifier = [A-Z][a-z0-9_]{0,30}
 Int_literal = [+-]?[0-9]+
@@ -48,12 +51,18 @@ White_space = [ \t\r\n]+
 {Keyword}   { tokenCount++; return returnToken(TokenType.KEYWORD); }
 {Bool_literal}   { tokenCount++; return returnToken(TokenType.BOOL_LITERAL); }
 {Identifier}   { tokenCount++; return returnToken(TokenType.IDENTIFIER); }
-{Float_literal}   { tokenCount++; return returnToken(TokenType.FLOAT_LITERAL); }
 {Int_literal}   { tokenCount++; return returnToken(TokenType.INT_LITERAL); }
+{Float_literal}   { tokenCount++; return returnToken(TokenType.FLOAT_LITERAL); }
 {String_literal}    { tokenCount++; return returnToken(TokenType.STRING_LITERAL); }
 {Char_literal}   { tokenCount++; return returnToken(TokenType.CHAR_LITERAL); }
 {Operator}   { tokenCount++; return returnToken(TokenType.OPERATOR); }
 {Punctuator}   { tokenCount++; return returnToken(TokenType.PUNCTUATOR); }
 
+/* End Of File */
+<<EOF>>         { return returnToken(TokenType.EOF, null); }
+
 /* Error Handling */
-. { System.out.println("Lexical error at line " + (yyline + 1) + ":" + yytext()); }
+.      { System.out.println("Lexical error at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
+         return returnToken(TokenType.ERROR); }
+[^]    { System.out.println("WARNING! Unrecognized character at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
+         return returnToken(TokenType.EOF); }
