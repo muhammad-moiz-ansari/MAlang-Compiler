@@ -30,28 +30,28 @@ public class ManualScanner {
             return TokenType.TAB.name();
         if(state == 16)
             return TokenType.WHITE_SPACE.name();     // Space
-        if(state == 20)
-            return TokenType.BOOL_LITERAL.name();         // "True-Bool";
-        if(state == 25)
-            return TokenType.BOOL_LITERAL.name();         // "False-Bool";
-        if(state == 26)
-            return TokenType.PUNCTUATOR.name();         // "Left-Round-Bracket";
-        if(state == 27)
-            return TokenType.PUNCTUATOR.name();         // "Right-Round-Bracket";
-        if(state == 28)
-            return TokenType.PUNCTUATOR.name();         // "Left-Curly-Bracket";
-        if(state == 29)
-            return TokenType.PUNCTUATOR.name();         // "Right-Curly-Bracket";
-        if(state == 30)
-            return TokenType.PUNCTUATOR.name();         // "Left-Square-Bracket";
-        if(state == 31)
-            return TokenType.PUNCTUATOR.name();         // "Right-Square-Bracket";
-        if(state == 32)
-            return TokenType.PUNCTUATOR.name();         // "Comma";
-        if(state == 33)
-            return TokenType.PUNCTUATOR.name();         // "SemiColon";
-        if(state == 34)
-            return TokenType.PUNCTUATOR.name();         // "Colon";
+        if (state == 20)
+            return TokenType.TRUE_BOOL.name();          // "True-Bool"
+        if (state == 25)
+            return TokenType.FALSE_BOOL.name();         // "False-Bool"
+        if (state == 26)
+            return TokenType.L_ROUND_BRACKET.name();    // "Left-Round-Bracket"
+        if (state == 27)
+            return TokenType.R_ROUND_BRACKET.name();    // "Right-Round-Bracket"
+        if (state == 28)
+            return TokenType.L_CURLY_BRACKET.name();    // "Left-Curly-Bracket"
+        if (state == 29)
+            return TokenType.R_CURLY_BRACKET.name();    // "Right-Curly-Bracket"
+        if (state == 30)
+            return TokenType.L_SQUARE_BRACKET.name();   // "Left-Square-Bracket"
+        if (state == 31)
+            return TokenType.R_SQUARE_BRACKET.name();   // "Right-Square-Bracket"
+        if (state == 32)
+            return TokenType.COMMA.name();              // "Comma"
+        if (state == 33)
+            return TokenType.SEMICOLON.name();          // "SemiColon"
+        if (state == 34)
+            return TokenType.COLON.name();              // "Colon"
         //if(state == 40)
         //    return TokenType.KEYWORD.name();            // "Start";
 
