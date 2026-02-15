@@ -21,7 +21,7 @@ import src.Token;
     private Token returnToken(TokenType ttype) {
         return new Token(ttype, yytext(), yyline + 1, yycolumn + 1);
     }
-    private Token returnToken(TokenType ttype, string text) {
+    private Token returnToken(TokenType ttype, String text) {
         return new Token(ttype, text, yyline + 1, yycolumn + 1);
     }
 %}
@@ -29,8 +29,8 @@ import src.Token;
 /* ------------ Macros ------------ */
 Keyword = "start"|"finish"|"loop"|"condition"|"declare"|"output"|"input"|"function"|"return"|"break"|"continue"|"else"
 Identifier = [A-Z][a-z0-9_]{0,30}
-Int_literal = [+-]?[0-9]+
 Float_literal = [+-]?[0-9]+\.[0-9]{1,6}([eE][+-]?[0-9]+)?
+Int_literal = [+-]?[0-9]+
 String_literal = \"([^\"\\\n]|\\[\"\\ntr])*\"
 Char_literal = \'([^\'\\\n]|\\[\'\\ntr])\'
 Bool_literal = "true"|"false"
