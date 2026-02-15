@@ -1,67 +1,53 @@
-import src.TokenType;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class ManualScanner {
-    private int tableSize = 35;
-    //private int tableSize = 40;   if add "start"
-    private int[][] transitionTable = new int[tableSize][];
+    private int[][] transitionTable = new int[35][];
     private Map<String, Integer> symbolToIndex = new HashMap<>();
     private char[] alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#_,:;()[]{}.+-\n\t\r ".toCharArray();
     private int[] finalstates = {3,6,8,11,12,13,14,15,16,20,25,26,27,28,29,30,31,32,33,34};
 
     public String returnTokenName(int state){
         if(state == 3)
-            return TokenType.SINGLE_LINE_COMMENT.toString();
+            return "Single-Line-Comment";
         if(state == 5)
-            return TokenType.INT_LITERAL.name();
+            return "Integer-Literal";
         if(state == 11 || state == 8)
-            return TokenType.FLOAT_LITERAL.name();
+            return "Float-Literal";
         if(state == 12)
-            return TokenType.IDENTIFIER.name();
+            return "Identifier";
         if(state == 13)
-            return TokenType.NEWLINE.name();
+            return "Newline";
         if(state == 14)
-            return TokenType.CARRIAGE_RETURN.name();
+            return "Carriage";
         if(state == 15)
-            return TokenType.TAB.name();
+            return "Tab";
         if(state == 16)
-            return TokenType.WHITE_SPACE.name();     // Space
+            return "Space";
         if(state == 20)
-            return TokenType.BOOL_LITERAL.name();         // "True-Bool";
+            return "True-Bool";
         if(state == 25)
-            return TokenType.BOOL_LITERAL.name();         // "False-Bool";
+            return "False-Bool";
         if(state == 26)
-            return TokenType.PUNCTUATOR.name();         // "Left-Round-Bracket";
+            return "Left-Round-Bracket";
         if(state == 27)
-            return TokenType.PUNCTUATOR.name();         // "Right-Round-Bracket";
+            return "Right-Round-Bracket";
         if(state == 28)
-            return TokenType.PUNCTUATOR.name();         // "Left-Curly-Bracket";
+            return "Left-Curly-Bracket";
         if(state == 29)
-            return TokenType.PUNCTUATOR.name();         // "Right-Curly-Bracket";
+            return "Right-Curly-Bracket";
         if(state == 30)
-            return TokenType.PUNCTUATOR.name();         // "Left-Square-Bracket";
+            return "Left-Square-Bracket";
         if(state == 31)
-            return TokenType.PUNCTUATOR.name();         // "Right-Square-Bracket";
+            return "Right-Square-Bracket";
         if(state == 32)
-            return TokenType.PUNCTUATOR.name();         // "Comma";
+            return "Comma";
         if(state == 33)
-            return TokenType.PUNCTUATOR.name();         // "SemiColon";
+            return "SemiColon";
         if(state == 34)
-            return TokenType.PUNCTUATOR.name();         // "Colon";
-        //if(state == 40)
-        //    return TokenType.KEYWORD.name();            // "Start";
-
-        /*   Maybe later
-        if(state == 35)
-            return TokenType.MULTI_LINE_COMMENT.name();         // "/*";
-        if(state == 36)
-            return TokenType.MULTI_LINE_COMMENT.name();         // "* /";   // Even java doesn't support nested multi-line comments -_-
-        */
-
+            return "Colon";
         return null;
     }
 
@@ -145,60 +131,114 @@ public class ManualScanner {
         return false;
     }
 
+    public void printToken(String input, int s, int e, int currentState){
+        System.out.print("Token Generated: "+returnTokenName(currentState)+ " -> ");
+        for(int i=s; i<e; i++){
+            System.out.print(input.charAt(i));
+        }
+        System.out.println(" ");
+    }
+
+    public int check_ID_Constraint(int currentState, int idcons){
+        if(currentState == 12)
+            idcons++;
+        else
+            idcons=0;
+        return idcons;
+    }
+
+    public int check_Float_Constraint(int currentState, int cons){
+        if(currentState == 8)
+            cons++;
+        else
+            cons=0;
+        return cons;
+    }
+
+    public void printInvalidCharError(int currentState,int s, int e, String input, char c){
+        System.out.println("Lexical Error: Character "+c+" does not belong to the language");
+        if(returnTokenName(currentState)!=null){
+            printToken(input,s,e,currentState);
+        }
+    }
+
+    public int getNextState(char c, int currentState){
+        String cat = getCategory(c, currentState);
+        int col=-1,row=-1;
+        if(!cat.isEmpty())
+            col = symbolToIndex.get(cat);
+        row = currentState;
+
+        int nextState=0;
+        if(col>=0 && row>=0)
+            nextState = transitionTable[row][col];
+        return nextState;
+    }
+
     public void run(String input) {
-        int currentState = 1,col=-1,row=1;
-        int s=0,e=0;
+        int currentState = 1, s=0, e=0, idcons = 0, floatcons = 0;
+
         while (true){
+            // Check if input is complete
             if(e >= input.length()) {
+                if(returnTokenName(currentState)!=null){
+                    printToken(input,s,e,currentState);
+                }
                 break;
             }
 
+            // Check Identifier Character Limit
+            idcons = check_ID_Constraint(currentState,idcons);
+            if(idcons >= 32){
+                System.out.println("Lexical Error: Maximum 31 characters allowed in Identifier Name");
+                s=e;
+                idcons = 0;
+                currentState = 1;
+                continue;
+            }
+
+            // Check Float Decimal Point Limit
+            floatcons = check_Float_Constraint(currentState,floatcons);
+            if(floatcons >= 7){
+                System.out.println("Lexical Error: Maximum 6 characters allowed after Decimal Point in Float");
+                s=e;
+                floatcons = 0;
+                currentState = 1;
+                continue;
+            }
+
+            // Get input character
             char c = input.charAt(e);
-            if(e==24){
+            if(e==25){
                 c='\n';
             }
-            if(c == ' ')
-            {
-                c=' ';
-            }
+
+            // Check Character Validity if it belongs to alphabets or not
             if(!isValidAlphabet(c)){
-                System.out.println("Not valid");
-                if(returnTokenName(currentState)!=null){
-                    System.out.print("Token Generated!, "+returnTokenName(currentState)+ ", ");
-                    for(int i=s; i<e; i++){
-                        System.out.print(input.charAt(i));
-                    }
-                    System.out.println(" ");
-                }
+                printInvalidCharError(currentState,s,e,input,c);
                 e++;
                 s=e;
                 currentState=1;
                 continue;
             }
-            String cat = getCategory(c, currentState);
-            if(!cat.isEmpty())
-                col = symbolToIndex.get(cat);
-            row = currentState;
 
-            int nextState=0;
-            if(col>=0 && row>=0)
-                nextState = transitionTable[row][col];
+            // Get Next State based on input character
+            int nextState = getNextState(c,currentState);
 
+            // If input character violates the transition
             if(nextState == -1) {
-                System.out.println("Lexical Error!");
+                System.out.println("Lexical Error : Violation of Rule, no token either start or contain "+getCategory(c, currentState));
                 currentState = 1;
                 s=e+1;
             }
+            // If a transition completes, Go back to initial state for other patterns match
             else if(nextState == 1){
-                System.out.print("Token Generated!, "+returnTokenName(currentState)+ ", ");
-                for(int i=s; i<e; i++){
-                    System.out.print(input.charAt(i));
-                }
-                System.out.println(" ");
+                printToken(input,s,e,currentState);
                 currentState = 1;
                 s=e;
                 e--;
             }
+            // Otherwise Go to next state
             else{
                 currentState=nextState;
             }
@@ -210,7 +250,7 @@ public class ManualScanner {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
 
-        String testInput = "Abc*s sta 90_,:()+1.5E-1##Abc )**(   ";
+        String testInput = "Abc**s90_,:()+1.5E-1##Abc )**(   +1.5654329E+15  A";
         dfa.run(testInput);
     }
 }
