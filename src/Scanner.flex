@@ -1,7 +1,4 @@
-package src;
 import java.io.*;
-import src.TokenType;
-import src.Token;
 
 /* ------------ Jflex Options ------------ */
 // JFLEX OPTIONS
