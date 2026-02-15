@@ -1,4 +1,4 @@
-import java.io.*;
+import src.TokenType;import java.io.*;
 
 /* ------------ Jflex Options ------------ */
 // JFLEX OPTIONS
@@ -28,6 +28,9 @@ Keyword = "start"|"finish"|"loop"|"condition"|"declare"|"output"|"input"|"functi
 Identifier = [A-Z][a-z0-9_]{0,30}
 Float_literal = [+-]?[0-9]+\.[0-9]{1,6}([eE][+-]?[0-9]+)?
 Int_literal = [+-]?[0-9]+
+Newline = \'\\n\'
+Carriage = \'\\r\'
+Tab = \'\\t\'
 String_literal = \"([^\"\\\n]|\\[\"\\ntr])*\"
 Char_literal = \'([^\'\\\n]|\\[\'\\ntr])\'
 Bool_literal = "true"|"false"
@@ -50,6 +53,9 @@ White_space = [ \t\r\n]+
 {Identifier}   { tokenCount++; return returnToken(TokenType.IDENTIFIER); }
 {Int_literal}   { tokenCount++; return returnToken(TokenType.INT_LITERAL); }
 {Float_literal}   { tokenCount++; return returnToken(TokenType.FLOAT_LITERAL); }
+{Newline}           { tokenCount++; return returnToken(TokenType.NEWLINE); }
+{Carriage}           { tokenCount++; return returnToken(TokenType.CARRIAGE_RETURN); }
+{Tab}           { tokenCount++; return returnToken(TokenType.TAB); }
 {String_literal}    { tokenCount++; return returnToken(TokenType.STRING_LITERAL); }
 {Char_literal}   { tokenCount++; return returnToken(TokenType.CHAR_LITERAL); }
 {Operator}   { tokenCount++; return returnToken(TokenType.OPERATOR); }

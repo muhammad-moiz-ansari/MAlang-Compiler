@@ -19,28 +19,46 @@ public class Main {
                 return;
             }
             */
+            System.out.println("------------- JFLEX SCANNER OUTPUT -------------");
 
-            // Symbol Table
-            SymbolTable symbolTable = new SymbolTable();
+            for (int i = 0; i < 5; ++i ) {
+                System.out.println(" _____________________________   ");
+                System.out.println("/        _____________        \\  ");
+                System.out.println("| == .  |             |       |  ");
+                System.out.println("|   _   |             |   Y   |  ");
+                System.out.println("|  / \\  |             | X   B |  ");
+                System.out.println("| | O | |    TEST " + String.valueOf(i+1) + "   |   A   |  ");
+                System.out.println("|  \\_/  |             |       |  ");
+                System.out.println("|       |             | . . . |  ");
+                System.out.println("|  :::  |             | . . . |  ");
+                System.out.println("|  :::  |_____________| . . . |  ");
+                System.out.println("|       MALANG COMPILER       |  ");
+                System.out.println("\\_____________________________/  \n");
 
-            // Read file
-            Yylex jflex_scanner = new Yylex(new FileReader("tests\\test5.malang"));
-            System.out.println("-------- JFLEX SCANNER OUTPUT --------");
+                // Symbol Table
+                SymbolTable symbolTable = new SymbolTable();
 
-            // First token
-            Token token = jflex_scanner.yylex();
+                // Read file
+                String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
+                Yylex jflex_scanner = new Yylex(new FileReader(filename));
 
-            // Keep reading all tokens
-            while (token != null && token.type != TokenType.EOF) {
-                symbolTable.insert(token.lexeme, token.type.toString(), token.line);
-                System.out.println(token.toString());
-                token = jflex_scanner.yylex();
+                // First token
+                Token token = jflex_scanner.yylex();
+
+                // Keep reading all tokens
+                while (token != null && token.type != TokenType.EOF) {
+                    symbolTable.insert(token.lexeme, token.type.toString(), token.line);
+                    System.out.println(token.toString());
+                    token = jflex_scanner.yylex();
+                }
+
+                System.out.println("Total tokens found: " + jflex_scanner.getTokenCount());
+
+                symbolTable.printTable();
+                symbolTable.printTotalFrequency();
+
+                System.out.println("================================================================================================");
             }
-
-            System.out.println("Total tokens found: " + jflex_scanner.getTokenCount());
-
-            symbolTable.printTable();
-            symbolTable.printTotalFrequency();
 
         } catch (Exception e) {
             e.printStackTrace();

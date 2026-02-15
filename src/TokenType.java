@@ -12,6 +12,9 @@ public enum TokenType {
     PUNCTUATOR,
     COMMENT,
     WHITE_SPACE,
+    NEWLINE,
+    CARRIAGE_RETURN,
+    TAB,
     ERROR,
     EOF // End of File
 }
