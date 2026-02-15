@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class ManualScanner {
-    private int[][] transitionTable = new int[35][];
+    private int tableSize = 35;
+    //private int tableSize = 40;   if add "start"
+    private int[][] transitionTable = new int[tableSize][];
     private Map<String, Integer> symbolToIndex = new HashMap<>();
     private char[] alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#_,:;()[]{}.+-\n\t\r ".toCharArray();
     private int[] finalstates = {3,6,8,11,12,13,14,15,16,20,25,26,27,28,29,30,31,32,33,34};
@@ -50,6 +52,16 @@ public class ManualScanner {
             return TokenType.PUNCTUATOR.name();         // "SemiColon";
         if(state == 34)
             return TokenType.PUNCTUATOR.name();         // "Colon";
+        //if(state == 40)
+        //    return TokenType.KEYWORD.name();            // "Start";
+
+        /*   Maybe later
+        if(state == 35)
+            return TokenType.MULTI_LINE_COMMENT.name();         // "/*";
+        if(state == 36)
+            return TokenType.MULTI_LINE_COMMENT.name();         // "* /";   // Even java doesn't support nested multi-line comments -_-
+        */
+
         return null;
     }
 
@@ -198,7 +210,7 @@ public class ManualScanner {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
 
-        String testInput = "Abc*s90_,:()+1.5E-1##Abc )**(   ";
+        String testInput = "Abc*s sta 90_,:()+1.5E-1##Abc )**(   ";
         dfa.run(testInput);
     }
 }
