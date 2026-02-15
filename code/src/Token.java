@@ -1,3 +1,5 @@
+package src;
+
 public class Token {
     public TokenType type;
     public String lexeme;
@@ -14,7 +16,7 @@ public class Token {
 
     @Override
     public String toString() {
-        // Required format: <KEYWORD, "start", Line: 1, Col: 1>
+        // Format: <KEYWORD, "start", Line: 1, Col: 1>
         return "<" + type + ", \"" + lexeme + "\", Line: " + line + ", Col: " + column + ">";
     }
 }
