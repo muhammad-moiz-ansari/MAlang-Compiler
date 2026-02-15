@@ -20,6 +20,9 @@ public class Main {
             }
             */
 
+            // Symbol Table
+            SymbolTable symbolTable = new SymbolTable();
+
             // Read file
             Yylex jflex_scanner = new Yylex(new FileReader("tests\\test1.malang"));
             System.out.println("-------- JFLEX SCANNER OUTPUT --------");
@@ -29,11 +32,15 @@ public class Main {
 
             // Keep reading all tokens
             while (token != null && token.type != TokenType.EOF) {
+                symbolTable.insert(token.lexeme, token.type.toString(), token.line);
                 System.out.println(token.toString());
                 token = jflex_scanner.yylex();
             }
 
             System.out.println("Total tokens found: " + jflex_scanner.getTokenCount());
+
+            symbolTable.printTable();
+            symbolTable.printTotalFrequency();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -7,7 +7,7 @@ public class SymbolTable {
 
     // Row of the table
     class SymbolEntry {
-        String name;
+        String name;      // The exact name of word
         String type;      // "KEYWORD", "IDENTIFIER", etc
         int firstLine;    // First occurrence
         int frequency;
@@ -34,10 +34,11 @@ public class SymbolTable {
     public void insert(String name, String type, int line) {
         if (table.containsKey(name)) {
             SymbolEntry entry = table.get(name);
-            entry.firstLine = line;
+            entry.frequency++;
         }
         else {
             SymbolEntry entry = new SymbolEntry(name, type, line, 1);
+            table.put(name, entry);
         }
     }
 
@@ -47,9 +48,17 @@ public class SymbolTable {
         System.out.printf("%-20s %-15s %-10s %-10s\n", "Name", "Type", "First Line", "Frequency");
         System.out.println("---------------------------------------------------------------");
 
-        for (int i=0; i<table.size(); i++) {
-            SymbolEntry entry = table.get(i);
+        for (SymbolEntry entry : table.values()) {
             System.out.printf("%-20s %-15s %-10s %-10s\n", entry.name, entry.type, entry.firstLine, entry.frequency);
         }
+    }
+
+    // Total Frequency
+    public void printTotalFrequency() {
+        int total = 0;
+        for (SymbolEntry entry : table.values()) {
+            total += entry.frequency;
+        }
+        System.out.println("Total frequency: " + total);
     }
 }
