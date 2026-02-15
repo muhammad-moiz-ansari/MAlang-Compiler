@@ -45,7 +45,8 @@ White_space = [ \t\r\n]+
 
 /* Ignore Whitespace and comments */
 {White_space}   { /* ignore */ }
-{Comment}       { /* ignore */ }
+{Single_line_comment}       { /* ignore */ }
+{Multi_line_comment}        { /* ignore */ }
 
 /* Return tokens */
 {Keyword}   { tokenCount++; return returnToken(TokenType.KEYWORD); }

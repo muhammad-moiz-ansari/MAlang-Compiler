@@ -13,7 +13,7 @@ public class ManualScanner {
 
     public String returnTokenName(int state){
         if(state == 3)
-            return TokenType.COMMENT.toString();
+            return TokenType.SINGLE_LINE_COMMENT.toString();
         if(state == 5)
             return TokenType.INT_LITERAL.name();
         if(state == 11 || state == 8)
