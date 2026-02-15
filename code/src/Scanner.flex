@@ -34,8 +34,8 @@ Int_literal = [+-]?[0-9]+
 String_literal = \"([^\"\\\n]|\\[\"\\ntr])*\"
 Char_literal = \'([^\'\\\n]|\\[\'\\ntr])\'
 Bool_literal = "true"|"false"
-Operator = "++" | "--" | "**" | "==" | "+=" | "-=" | "*=" | "!=" | "=" | "<=" | ">=" | "<" | ">" | "&&" | "||" | "!" | "+" | "-" | "*" | "/" | "%"
-Punctuator = [(){}[\\][,;:]]
+Operator = "++"|"--"|"**"|"=="|"+="|"-="|"*="|"!="|"="|"<="|">="|"<"|">"|"&&"|"||"|"!"|"+"|"-"|"*"|"/"|"%"
+Punctuator = "("|")"|"{"|"}"|"["|"]"|","|";"|":"
 Single_line_comment = ##[^\n]*
 Multi_line_comment = #\*([^*]|\*+[^*#])*\*+#
 Comment = {Single_line_comment} | {Multi_line_comment}
