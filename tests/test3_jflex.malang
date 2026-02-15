@@ -1,0 +1,14 @@
+## test3.malang - Strings and Characters with Escape Sequences
+
+## 1. Standard Strings and Escapes
+Greeting = "Hello\nWorld" ;
+Tabbed_data = "Name:\tMoiz\tScore:\t100" ;
+Quote_string = "She said, \"Compilers are fun!\"" ;
+Path_string = "Folder\\Subfolder\\File.txt" ;
+
+## 2. Standard Characters and Escapes
+Newline_char = '\n' ;
+Tab_char = '\t' ;
+Quote_char = '\'' ;
+Backslash_char = '\\' ;
+Letter_a = 'A' ;

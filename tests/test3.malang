@@ -1,14 +1,11 @@
-## test3.malang - Strings and Characters with Escape Sequences
+## test3.malang - Literal Edge Cases
 
-## 1. Standard Strings and Escapes
-Greeting = "Hello\nWorld" ;
-Tabbed_data = "Name:\tMoiz\tScore:\t100" ;
-Quote_string = "She said, \"Compilers are fun!\"" ;
-Path_string = "Folder\\Subfolder\\File.txt" ;
+## Float extremes (Signs on exponents, max decimal length)
+-1.0e-5 +5.5E+10
+0.000001 9.999999
 
-## 2. Standard Characters and Escapes
-Newline_char = '\n' ;
-Tab_char = '\t' ;
-Quote_char = '\'' ;
-Backslash_char = '\\' ;
-Letter_a = 'A' ;
+## Integer extremes (Signed zeros)
++0 -0
+
+## Identifiers hitting exactly the 31-character limit rule
+Maximum_length_identifier_12345

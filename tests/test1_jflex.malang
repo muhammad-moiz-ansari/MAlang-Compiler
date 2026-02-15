@@ -1,0 +1,22 @@
+## test1.lang - Testing all valid implemented tokens
+
+## 1. Identifiers and Booleans
+Count true false X
+Variable_name
+Total_sum_2024
+
+## 2. Integer Literals (Positive, Negative, Zero)
+42 +100 -567 0
+
+## 3. Floating-Point Literals (Standard and Scientific)
+3.14 +2.5 -0.123456
+1.5e10 2.0E-3
+
+## 4. Punctuators
+( ) { } [ ] , ; :
+
+## 5. A mixed dummy expression to test whitespace and column tracking
+Count ( Variable_name , X ) {
+    Total_sum_2024 : +100 ;
+    [ true , -567 , 3.14 ]
+}

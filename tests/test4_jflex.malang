@@ -1,0 +1,16 @@
+## test4.malang - Lexical Errors
+
+## 1. Invalid Characters (@, $, ?, ~)
+Price = $100 ;
+Email = User@mail.com ;
+Temp ~ 45 ;
+
+## 2. Invalid Identifiers (Must start with A-Z)
+count = 10 ;
+_Variable = 20 ;
+2nd_value = 30 ;
+
+## 3. Malformed Literals
+Bad_float = 3.14.15 ;
+Bad_string = "This string never closes
+Next_var = 10 ;

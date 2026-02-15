@@ -1,18 +1,9 @@
-## test2.malang - Complex Expressions
+## test2.malang - Complex nested structures
 
-start function Calculate_math () {
-    declare Base = 10 ;
-    declare Height = +25.5 ;
+Data_array [ { ( 42 , -3.14 ) } , { ( true , false ) } ] ;
 
-    ## Arithmetic & Assignment
-    Area = ( Base ** 2 ) + ( Height * 4 ) / 2 ;
-    Total_score += 100 ;
-    Count ++ ;
-
-    ## Relational & Logical Expressions
-    condition ( ( Area >= 100.0 ) && ( Total_score != 0 ) || ! false ) {
-        output "Valid" ;
-    } else {
-        Total_score -- ;
-    }
-} finish
+Nested_call ( Call_one ( 1.5e10 ) , Call_two ( -567 ) ) :
+{
+    Value_one : +100 ;
+    Value_two : 2.0E-3 ;
+}

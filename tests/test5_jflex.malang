@@ -1,0 +1,17 @@
+## test5.malang - Comments
+
+start
+
+## This is a standard single-line comment. It should be ignored.
+
+#* This is a multi-line comment.
+   It spans across several lines.
+   The scanner should skip all of this text,
+   but the line counter should keep ticking up!
+*#
+
+declare X = 10 ; ## Inline comment after some code
+
+#* A single-line multi-line comment *#
+
+finish

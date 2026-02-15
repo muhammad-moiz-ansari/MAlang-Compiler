@@ -1,17 +1,9 @@
-## test5.malang - Comments
+## test5.malang - Comments and Whitespace
 
-start
+## This is a single line comment.
+## The next line has just whitespace and an identifier.
 
-## This is a standard single-line comment. It should be ignored.
+    Valid_identifier   ## Comment after code
 
-#* This is a multi-line comment.
-   It spans across several lines.
-   The scanner should skip all of this text,
-   but the line counter should keep ticking up!
-*#
-
-declare X = 10 ; ## Inline comment after some code
-
-#* A single-line multi-line comment *#
-
-finish
+## Testing multiple empty lines above and tabs
+	Next_identifier
