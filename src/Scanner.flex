@@ -59,7 +59,7 @@ White_space = [ \t\r\n]+
 <<EOF>>         { return returnToken(TokenType.EOF, null); }
 
 /* Error Handling */
-.      { System.out.println("Lexical error at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
+.      { //System.out.println("Lexical error at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
          return returnToken(TokenType.ERROR); }
-[^]    { System.out.println("WARNING! Unrecognized character at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
-         return returnToken(TokenType.EOF); }
+[^]    { //System.out.println("WARNING! Unrecognized character at Line: " + (yyline + 1) + ", Col: " + (yycolumn + 1) + " : " + yytext());
+         return returnToken(TokenType.ERROR); }

@@ -24,7 +24,7 @@ public class Main {
             SymbolTable symbolTable = new SymbolTable();
 
             // Read file
-            Yylex jflex_scanner = new Yylex(new FileReader("tests\\test1.malang"));
+            Yylex jflex_scanner = new Yylex(new FileReader("tests\\test5.malang"));
             System.out.println("-------- JFLEX SCANNER OUTPUT --------");
 
             // First token
