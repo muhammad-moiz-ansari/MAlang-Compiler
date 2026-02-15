@@ -339,7 +339,7 @@ public class Yylex {
         return tokenCount;
     }
     private Token returnToken(TokenType ttype) {
-        return new Token(ttype, yytext().toString(), yyline + 1, yycolumn + 1);
+        return new Token(ttype, yytext(), yyline + 1, yycolumn + 1);
     }
     private Token returnToken(TokenType ttype, String text) {
         return new Token(ttype, text, yyline + 1, yycolumn + 1);

@@ -7,9 +7,9 @@ public class Token {
     public int column;
 
     // Constructor
-    public Token(TokenType type, CharSequence lexeme, int line, int column) {
+    public Token(TokenType type, String lexeme, int line, int column) {
         this.type = type;
-        this.lexeme = (lexeme == null) ? "" : lexeme.toString();
+        this.lexeme = lexeme;
         this.line = line;
         this.column = column;
     }
