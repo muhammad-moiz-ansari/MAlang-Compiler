@@ -99,6 +99,15 @@ public class ManualScanner {
     }
 
     public String getCategory(char ch, int current_s){
+        if(current_s == 1 && ch == 't')     return "t";
+        if(current_s == 17 && ch == 'r')    return "r";
+        if(current_s == 18 && ch == 'u')     return "u";
+        if(current_s == 19 && ch == 'e')    return "e";
+        if(current_s == 1 && ch == 'f')     return "f";
+        if(current_s == 21 && ch == 'a')    return "a";
+        if(current_s == 22 && ch == 'l')     return "l";
+        if(current_s == 23 && ch == 's')    return "s";
+        if(current_s == 24 && ch == 'e')     return "e";
         if(ch>=65 && ch<=90 && current_s!=8){
             return "upper";
         }
@@ -112,6 +121,10 @@ public class ManualScanner {
             return "exp";
         if(ch == '\n')
             return "\\n";
+        if(ch == '\r')
+            return "\\r";
+        if(ch == '\t')
+            return "\\t";
         if(ch == ' ')
             return " ";
         return ch+"";
@@ -196,6 +209,8 @@ public class ManualScanner {
             lex = lex.concat(input.charAt(i)+"");
         }
         //System.out.println(" ");
+        lex = lex.replace('\n','n');
+        lex = lex.replace('\r','r');
         Token tt = new Token(returnCompatibleTokenName(currentState),lex,sl,sc);
         st.insert(lex,returnCompatibleTokenName(currentState).name(),sl);
         tok.add(tt);
@@ -260,6 +275,9 @@ public class ManualScanner {
                 break;
             }
 
+            if(currentState == 5 && c == '3')
+                currentState = 5;
+
             // Check Identifier Character Limit
             idcons = check_ID_Constraint(currentState,idcons);
             if(idcons >= 32){
@@ -291,11 +309,15 @@ public class ManualScanner {
             }
 
             // Check Character Validity if it belongs to alphabets or not
-            if(!isValidAlphabet(c)){
+            if(!isValidAlphabet(c) && currentState!=3){
                 printInvalidCharError(currentState,s,e,input,c,sline,scol);
                 e++;
                 s=e;
                 currentState=1;
+                continue;
+            }
+            if(!isValidAlphabet(c) && currentState==3) {
+                e++;
                 continue;
             }
 
@@ -311,7 +333,10 @@ public class ManualScanner {
             }
             // If a transition completes, Go back to initial state for other patterns match
             else if(nextState == 1){
-                printToken(input,s,e,currentState,sline,scol);
+                if(currentState == 3)
+                    printToken(input,s,e-1,currentState,sline,scol);
+                else
+                    printToken(input,s,e,currentState,sline,scol);
                 currentState = 1;
                 s=e;
                 e--;
@@ -333,7 +358,19 @@ public class ManualScanner {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
 
-        String testInput = "Abc**s90_,:()+1.5E-1##Abc  )**(   +1.5654329E+15  A";
+        String testInput = "";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("test3.malang"))) {
+            int charValue;
+            while ((charValue = reader.read()) != -1) {
+                char x = (char) charValue;
+                testInput=testInput+x;
+            }
+        } catch (IOException e) {
+            // This runs if the file path is wrong or the file is locked
+            System.err.println("Could not read the file: " + e.getMessage());
+        }
+
         dfa.run(testInput);
     }
 }
