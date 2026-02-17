@@ -360,17 +360,36 @@ public class ManualScanner {
 
         String testInput = "";
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("test3.malang"))) {
-            int charValue;
-            while ((charValue = reader.read()) != -1) {
-                char x = (char) charValue;
-                testInput=testInput+x;
-            }
-        } catch (IOException e) {
-            // This runs if the file path is wrong or the file is locked
-            System.err.println("Could not read the file: " + e.getMessage());
-        }
+        System.out.println("------------- JFLEX SCANNER OUTPUT -------------");
 
-        dfa.run(testInput);
+        for (int i = 0; i < 5; ++i ) {
+            System.out.println(" _____________________________   ");
+            System.out.println("/        _____________        \\  ");
+            System.out.println("| == .  |             |       |  ");
+            System.out.println("|   _   |             |   Y   |  ");
+            System.out.println("|  / \\  |             | X   B |  ");
+            System.out.println("| | O | |    TEST " + String.valueOf(i + 1) + "   |   A   |  ");
+            System.out.println("|  \\_/  |             |       |  ");
+            System.out.println("|       |             | . . . |  ");
+            System.out.println("|  :::  |             | . . . |  ");
+            System.out.println("|  :::  |_____________| . . . |  ");
+            System.out.println("|       MALANG COMPILER       |  ");
+            System.out.println("\\_____________________________/  \n");
+
+            String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                int charValue;
+                while ((charValue = reader.read()) != -1) {
+                    char x = (char) charValue;
+                    testInput = testInput + x;
+                }
+            } catch (IOException e) {
+                // This runs if the file path is wrong or the file is locked
+                System.err.println("Could not read the file: " + e.getMessage());
+            }
+
+            dfa.run(testInput);
+            System.out.println("================================================================================================");
+        }
     }
 }

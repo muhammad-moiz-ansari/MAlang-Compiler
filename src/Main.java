@@ -1,4 +1,3 @@
-package src;
 
 import java.io.File;
 import java.io.FileReader;
@@ -37,6 +36,7 @@ public class Main {
 
                 // Symbol Table
                 SymbolTable symbolTable = new SymbolTable();
+                ErrorHandler errorHandler = new ErrorHandler();
 
                 // Read file
                 String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
@@ -47,8 +47,14 @@ public class Main {
 
                 // Keep reading all tokens
                 while (token != null && token.type != TokenType.EOF) {
-                    symbolTable.insert(token.lexeme, token.type.toString(), token.line);
-                    System.out.println(token.toString());
+                    if (token.type != TokenType.ERROR) {
+                        System.out.println(token.toString());
+                        symbolTable.insert(token.lexeme, token.type.toString(), token.line);
+                    }
+                    else {
+                        //System.out.println(token.toString());     // Print error right in between the tokens
+                        errorHandler.insert(token.lexeme, token.line, token.column, "Reason");
+                    }
                     token = jflex_scanner.yylex();
                 }
 
@@ -56,6 +62,7 @@ public class Main {
 
                 symbolTable.printTable();
                 symbolTable.printTotalFrequency();
+                errorHandler.printTable();
 
                 System.out.println("================================================================================================");
             }
