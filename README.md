@@ -376,7 +376,7 @@ Lexical Error        4               1          Violation of Rule, no token eith
 ## 📁 Project Structure
 
 ```
-23i-0523-23i-0617-Section/
+23i-0523-23i-0617-F/
 ├── src/
 │   ├── ManualScanner.java      ← Manual DFA-based scanner
 │   ├── Main_jflex.java         ← Entry point for JFlex scanner
@@ -397,6 +397,7 @@ Lexical Error        4               1          Violation of Rule, no token eith
 │   ├── test3.malang            ← Literal edge cases
 │   ├── test4.malang            ← Lexical error cases
 │   └── test5.malang            ← Comments and whitespace
+│   └── TestResults.txt
 └── README.md
 ```
 
