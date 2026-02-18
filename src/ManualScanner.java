@@ -101,13 +101,13 @@ public class ManualScanner {
     public String getCategory(char ch, int current_s){
         if(current_s == 1 && ch == 't')     return "t";
         if(current_s == 17 && ch == 'r')    return "r";
-        if(current_s == 18 && ch == 'u')     return "u";
+        if(current_s == 18 && ch == 'u')    return "u";
         if(current_s == 19 && ch == 'e')    return "e";
         if(current_s == 1 && ch == 'f')     return "f";
         if(current_s == 21 && ch == 'a')    return "a";
-        if(current_s == 22 && ch == 'l')     return "l";
+        if(current_s == 22 && ch == 'l')    return "l";
         if(current_s == 23 && ch == 's')    return "s";
-        if(current_s == 24 && ch == 'e')     return "e";
+        if(current_s == 24 && ch == 'e')    return "e";
         if(ch>=65 && ch<=90 && current_s!=8){
             return "upper";
         }
