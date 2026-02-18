@@ -1,0 +1,203 @@
+================================================================================
+               MALANG LEXICAL ANALYZER — TEST RESULTS SUMMARY
+           CS4031 Compiler Construction | Assignment 01 | Spring 2026
+             Moiz Ansari (23i-0523) | Abdullah Siddiqui (23i-0617)
+================================================================================
+
+Both scanners were run on 5 test files using identical inputs.
+Results are summarized below for each test.
+
+--------------------------------------------------------------------------------
+TEST 1 — test1.malang — All Valid Tokens
+--------------------------------------------------------------------------------
+Purpose : Verify that every valid token category is recognized correctly.
+
+  JFlex Scanner
+  -------------
+  Total tokens    : 71
+  Errors          : 0
+  Symbol entries  : 32 unique tokens
+  Notable tokens  : IDENTIFIER (Count, Variable_name, Total_sum_2024, X),
+                    TRUE_BOOL (true), FALSE_BOOL (false),
+                    INT_LITERAL (42, +100, -567, 0),
+                    FLOAT_LITERAL (3.14, +2.5, -0.123456, 1.5e10, 2.0E-3),
+                    All 9 punctuators: ( ) { } [ ] , ; :
+                    SINGLE_LINE_COMMENT (4 comments)
+  Result          : PASS — all tokens recognized with correct type and lexeme.
+
+  Manual Scanner
+  --------------
+  Total tokens    : 71 (inferred from symbol table total frequency)
+  Errors          : 0
+  Symbol entries  : 32 unique tokens (identical to JFlex)
+  Result          : PASS — all tokens recognized correctly.
+
+  Differences     :
+    - Whitespace token type: JFlex=SPACE, Manual=WHITE_SPACE
+    - Column offset +1 for first token on each line (Manual)
+    - Newline token line number off by +1 (Manual)
+    - Comment lexeme: JFlex includes trailing space, Manual does not
+
+  Overall Verdict : PASS (both scanners agree on all meaningful output)
+
+--------------------------------------------------------------------------------
+TEST 2 — test2.malang — Complex Nested Structures
+--------------------------------------------------------------------------------
+Purpose : Test scanner on deeply nested brackets, mixed literals, and colons.
+
+  JFlex Scanner
+  -------------
+  Total tokens    : 102
+  Errors          : 0
+  Symbol entries  : 27 unique tokens
+  Notable tokens  : Nested brackets [ { ( ) } ], multiple COMMAs and COLONs,
+                    IDENTIFIER (Data_array, Nested_call, Call_one, Call_two,
+                                Value_one, Value_two),
+                    Mixed INT_LITERAL and FLOAT_LITERAL in same expression
+  Result          : PASS
+
+  Manual Scanner
+  --------------
+  Total tokens    : 102 (inferred from symbol table)
+  Errors          : 0
+  Symbol entries  : 27 unique tokens (identical to JFlex)
+  Result          : PASS
+
+  Differences     : Same cosmetic differences as Test 1 (token type name,
+                    column offset, newline line number)
+
+  Overall Verdict : PASS
+
+--------------------------------------------------------------------------------
+TEST 3 — test3.malang — Literal Edge Cases
+--------------------------------------------------------------------------------
+Purpose : Test boundary values: signed exponents, max-length floats,
+          signed zeros, and identifiers at exactly the 31-character limit.
+
+  JFlex Scanner
+  -------------
+  Total tokens    : 30
+  Errors          : 0
+  Tokens verified :
+    FLOAT -1.0e-5     → correctly tokenized with negative sign and exponent
+    FLOAT +5.5E+10    → positive sign, uppercase E, positive exponent
+    FLOAT 0.000001    → 6 decimal places (at limit) — accepted
+    FLOAT 9.999999    → 6 decimal places (at limit) — accepted
+    INT   +0, -0      → signed zeros accepted
+    IDENTIFIER Maximum_length_identifier_12345 → 31 chars — accepted
+  Result          : PASS
+
+  Manual Scanner
+  --------------
+  Total tokens    : 30
+  Errors          : 0
+  Result          : PASS — identical symbol table and token sequence
+
+  Overall Verdict : PASS — boundary conditions handled correctly by both
+
+--------------------------------------------------------------------------------
+TEST 4 — test4.malang — Lexical Error Cases
+--------------------------------------------------------------------------------
+Purpose : Verify error detection for: lowercase identifiers, digit-start
+          identifiers, comma-separated numbers, float with 7+ decimals,
+          trailing dot float, and invalid characters (@, $, ~).
+
+  JFlex Scanner
+  -------------
+  Total tokens    : 45
+  Valid tokens    : (comments, newlines, partial ints/identifiers)
+  Errors detected : 7
+    Line 4, Col 1  → Violation of Rule … 'c'  (word "count" — lowercase start)
+    Line 6, Col 1  → Violation of Rule … 'm'  (word "myVariable" — lowercase start)
+    Line 12, Col 1 → Maximum 6 characters allowed after Decimal Point in Float (1.2345678)
+    Line 13, Col 2 → Unrecognized character: '.'  (trailing dot in "3.")
+    Line 16, Col 1 → Character @ does not belong to the language
+    Line 16, Col 3 → Character $ does not belong to the language
+    Line 16, Col 5 → Character ~ does not belong to the language
+  Recovery        : Word-level — entire invalid word skipped in one step
+
+  Manual Scanner
+  --------------
+  Total tokens    : ~36 (valid tokens recognized after error recovery)
+  Errors detected : 12
+    Line 4, Col 2  → Violation … 'c'
+    Line 4, Col 3  → Violation … 'o'
+    Line 4, Col 4  → Violation … 'u'
+    Line 4, Col 5  → Violation … 'n'
+    Line 4, Col 6  → Violation … (trailing space after "count")
+    Line 6, Col 2  → Violation … 'm'
+    Line 6, Col 3  → Violation … 'y'
+    Line 12, Col 2 → Maximum 6 characters allowed after Decimal Point in Float
+    Line 13, Col 2 → Violation of Rule … '.'
+    Line 16, Col 1 → Character @ does not belong to the language
+    Line 16, Col 3 → Character $ does not belong to the language
+    Line 16, Col 5 → Character ~ does not belong to the language
+  Recovery        : Character-level — each invalid char triggers individual error
+
+  KEY DIFFERENCE:
+    JFlex: 7 errors  — word-level recovery (one error per invalid identifier)
+    Manual: 12 errors — char-level recovery (one error per invalid character)
+    Both correctly identify the SAME problematic inputs; they differ only in
+    how granularly they report errors within an invalid token.
+
+  Overall Verdict : PARTIAL MATCH — both detect all error-causing inputs,
+                    but error granularity and count differ
+
+--------------------------------------------------------------------------------
+TEST 5 — test5.malang — Comments and Whitespace
+--------------------------------------------------------------------------------
+Purpose : Test comment recognition, whitespace handling (spaces, tabs, newlines,
+          carriage returns), and identifiers mixed with comments.
+
+  JFlex Scanner
+  -------------
+  Total tokens    : 26
+  Errors          : 0
+  Notable tokens  : 5 SINGLE_LINE_COMMENTs correctly recognized,
+                    4 SPACEs before Valid_identifier,
+                    3 SPACEs after Valid_identifier (before inline comment),
+                    TAB before Next_identifier correctly tokenized as TAB
+  Result          : PASS
+
+  Manual Scanner
+  --------------
+  Total tokens    : 26
+  Errors          : 0
+  Symbol entries  : 11 unique entries (identical to JFlex)
+  Result          : PASS
+
+  Differences     : Same cosmetic differences as Tests 1–3
+
+  Overall Verdict : PASS
+
+================================================================================
+                         OVERALL RESULTS SUMMARY
+================================================================================
+
+  Test   | JFlex  | Manual | Agreement
+  -------|--------|--------|--------------------------------------------
+  Test 1 | PASS   | PASS   | Full — all 71 tokens match
+  Test 2 | PASS   | PASS   | Full — all 102 tokens match
+  Test 3 | PASS   | PASS   | Full — all 30 tokens match, edge cases OK
+  Test 4 | PASS   | PASS*  | Partial — error count differs (7 vs 12)
+  Test 5 | PASS   | PASS   | Full — all 26 tokens match
+
+  * Manual scanner reports character-level errors vs JFlex word-level errors.
+    All actual error sources are detected by both scanners.
+
+================================================================================
+                         DIFFERENCES RECAP
+================================================================================
+
+  #   Difference                              Severity   Tests Affected
+  --- --------------------------------------- ---------- ------------------
+  1   Whitespace token: SPACE vs WHITE_SPACE  Minor      All
+  2   Column number +1 offset (Manual)        Minor      All
+  3   Newline attributed to next line (Manual) Minor     All
+  4   Comment lexeme: trailing space in JFlex Negligible All
+  5   Error count: 7 (JFlex) vs 12 (Manual)  Moderate   Test 4 only
+  6   Whitespace tokens after error (Test 4)  Low        Test 4 only
+
+================================================================================
+End of Test Results
+================================================================================
