@@ -43,11 +43,11 @@ public class SymbolTable {
     // Print table
     public void printTable() {
         System.out.println("\n--- SYMBOL TABLE ---");
-        System.out.printf("%-20s %-15s %-10s %-10s\n", "Name", "Type", "First Line", "Frequency");
-        System.out.println("---------------------------------------------------------------");
+        System.out.printf("%-60s %-20s %-11s %-10s\n", "Name", "Type", "First Line", "Frequency");
+        System.out.println("-------------------------------------------------------------------------------------------------------");
 
         for (SymbolEntry entry : table.values()) {
-            System.out.printf("%-20s %-15s %-10s %-10s\n", entry.name, entry.type, entry.firstLine, entry.frequency);
+            System.out.printf("%-60s %-20s %-11s %-10s\n", entry.name, entry.type, entry.firstLine, entry.frequency);
         }
     }
 

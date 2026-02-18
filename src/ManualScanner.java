@@ -209,8 +209,10 @@ public class ManualScanner {
             lex = lex.concat(input.charAt(i)+"");
         }
         //System.out.println(" ");
-        lex = lex.replace('\n','n');
-        lex = lex.replace('\r','r');
+        lex = lex.replace("\n","\\n");
+        lex = lex.replace("\r","\\r");
+        lex = lex.replace("\t","\\t");
+        //lex = lex.replace(" ", "\" \"");
         Token tt = new Token(returnCompatibleTokenName(currentState),lex,sl,sc);
         st.insert(lex,returnCompatibleTokenName(currentState).name(),sl);
         tok.add(tt);
@@ -263,6 +265,19 @@ public class ManualScanner {
     }
 
     public void run(String input) {
+        // Reseting all variables before processing new file
+        this.lineNum = 1;
+        this.col = 1;
+        this.prevl = 0;
+        this.prevc = 0;
+        this.fc = true;
+
+        // Clearing storage lists
+        this.tok.clear();
+        this.st = new SymbolTable();   // Start with a fresh Symbol Table
+        this.ea = new ErrorHandler();  // Start with a fresh Error Handler
+        // ---------------------------------------------------------
+
         int currentState = 1, s=0, e=0, idcons = 0, floatcons = 0, sline = lineNum, scol = col;
         char c='@';
 
@@ -351,14 +366,13 @@ public class ManualScanner {
         }
         printAllTokens();
         st.printTable();
+        st.printTotalFrequency();
         ea.printTable();
     }
 
     public static void main(String[] args) {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
-
-        String testInput = "";
 
         System.out.println("------------- JFLEX SCANNER OUTPUT -------------");
 
@@ -376,7 +390,9 @@ public class ManualScanner {
             System.out.println("|       MALANG COMPILER       |  ");
             System.out.println("\\_____________________________/  \n");
 
-            String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
+            String testInput = "";
+
+            String filename = "tests\\test" + String.valueOf(i + 1) + ".malang";
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 int charValue;
                 while ((charValue = reader.read()) != -1) {

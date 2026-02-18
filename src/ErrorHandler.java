@@ -37,9 +37,14 @@ public class ErrorHandler {
 
     // Print table
     public void printTable() {
-            System.out.println("\n--- ERROR TABLE ---");
-        System.out.printf("%-20s %-15s %-10s %-10s\n", "Name", "Line", "Column", "Reason");
-        System.out.println("---------------------------------------------------------------");
+        System.out.println("\n--- ERROR TABLE ---");
+        if (table.isEmpty()) {
+            System.out.println("No Errors found!");
+        }
+        else {
+            System.out.printf("%-20s %-15s %-10s %-10s\n", "Name", "Line", "Column", "Reason");
+            System.out.println("---------------------------------------------------------------------------");
+        }
 
         for(int i=0; i< table.size(); i++) {
             System.out.printf("%-20s %-15s %-10s %-10s\n", table.get(i).name, table.get(i).line, table.get(i).col, table.get(i).reason);

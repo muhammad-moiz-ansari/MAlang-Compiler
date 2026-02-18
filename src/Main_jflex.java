@@ -1,9 +1,7 @@
 
-import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 
-public class Main {
+public class Main_jflex {
     public static void main(String[] args) {
         try {
             // Checking if file is empty
@@ -62,7 +60,7 @@ public class Main {
 
                 symbolTable.printTable();
                 symbolTable.printTotalFrequency();
-                errorHandler.printTable();
+                jflex_scanner.getErrorHandler().printTable();
 
                 System.out.println("================================================================================================");
             }

@@ -924,7 +924,7 @@ public class Yylex {
           // fall through
           case 49: break;
           case 21:
-            { tokenCount++; return returnToken(TokenType.SINGLE_LINE_COMMENT, yytext().replace('\r',' '));
+            { tokenCount++; return returnToken(TokenType.SINGLE_LINE_COMMENT, yytext());
             }
           // fall through
           case 50: break;
