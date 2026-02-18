@@ -36,7 +36,7 @@ Keyword = "start"|"finish"|"loop"|"condition"|"declare"|"output"|"input"|"functi
 Identifier = [A-Z][a-z0-9_]{0,30}
 Float_literal = [+-]?[0-9]+\.[0-9]{1,6}([eE][+-]?[0-9]+)?
 Int_literal = [+-]?[0-9]+
-String_literal = \"([^\"\\\n]|\\[\"\\ntr]|\\u[0-9a-fA-F]{4})*\"
+String_literal = \"([^\"\\\n]|\\[\"\\ntr])*\"
 Char_literal = \'([^\'\\\n]|\\[\'\\ntr])\'
 Operator = "++"|"--"|"**"|"=="|"+="|"-="|"*="|"!="|"="|"<="|">="|"<"|">"|"&&"|"||"|"!"|"+"|"-"|"*"|"/"|"%"
 
@@ -68,7 +68,7 @@ Invalid_ID_Start = [a-z][a-z0-9_]*          // Invalid Identifier (starts with l
 Long_Identifier = [A-Z][a-z0-9_]{31}        // Identifier Too Long (31 or more characters)
 Long_Float = [+-]?[0-9]+\.[0-9]{7}([eE][+-]?[0-9]+)?      // Float Too Long (7 or more decimals)
 // CHANGE THE FOLLOWING WHEN ADD OPERATORS
-Invalid_Char = [^a-zA-Z0-9#_,:;()\[\]{}\.\+\-\n\t\r\u ]    // Characters other than language --> Invalid
+Invalid_Char = [^a-zA-Z0-9#_,:;()\[\]{}\.\+\-\n\t\r ]    // Characters other than language --> Invalid
 %%
 
 /* Ignore Whitespace and comments */
@@ -99,12 +99,7 @@ Invalid_Char = [^a-zA-Z0-9#_,:;()\[\]{}\.\+\-\n\t\r\u ]    // Characters other t
 {Identifier}      { tokenCount++; return returnToken(TokenType.IDENTIFIER); }
 {Int_literal}     { tokenCount++; return returnToken(TokenType.INT_LITERAL); }
 {Float_literal}   { tokenCount++; return returnToken(TokenType.FLOAT_LITERAL); }
-{String_literal}  { tokenCount++;
-                    String translated_string = yytext()
-                            .replace("\\u0024", "\u0024")  // $
-                            .replace("\\u03A3", "\u03A3")  // Σ
-                            .replace("\\u263A", "\u263A");  // ☺
-                    return returnToken(TokenType.STRING_LITERAL, translated_string); }
+{String_literal}  { tokenCount++; return returnToken(TokenType.STRING_LITERAL); }
 {Char_literal}    { tokenCount++; return returnToken(TokenType.CHAR_LITERAL); }
 {Operator}        { tokenCount++; return returnToken(TokenType.OPERATOR); }
 

@@ -1,0 +1,9 @@
+## test5.malang - Comments and Whitespace
+
+## This is a single line comment.
+## The next line has just whitespace and an identifier.
+
+    Valid_identifier   ## Comment after code
+
+## Testing multiple empty lines above and tabs
+	Next_identifier

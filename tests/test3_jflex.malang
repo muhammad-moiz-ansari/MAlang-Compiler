@@ -5,6 +5,7 @@ Greeting = "Hello\nWorld" ;
 Tabbed_data = "Name:\tMoiz\tScore:\t100" ;
 Quote_string = "She said, \"Compilers are fun!\"" ;
 Path_string = "Folder\\Subfolder\\File.txt" ;
+Unicode_string = "\u03A3 \u263A \u0024" ;
 
 ## 2. Standard Characters and Escapes
 Newline_char = '\n' ;

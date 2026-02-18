@@ -1,0 +1,11 @@
+## test3.malang - Literal Edge Cases
+
+## Float extremes (Signs on exponents, max decimal length)
+-1.0e-5 +5.5E+10
+0.000001 9.999999
+
+## Integer extremes (Signed zeros)
++0 -0
+
+## Identifiers hitting exactly the 31-character limit rule
+Maximum_length_identifier_12345

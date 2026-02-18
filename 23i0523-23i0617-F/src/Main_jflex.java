@@ -34,10 +34,10 @@ public class Main_jflex {
 
                 // Symbol Table
                 SymbolTable symbolTable = new SymbolTable();
+                ErrorHandler errorHandler = new ErrorHandler();
 
                 // Read file
                 String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
-                filename = "tests\\test" + String.valueOf(i+1) + "_jflex.malang";
                 Yylex jflex_scanner = new Yylex(new FileReader(filename));
 
                 // First token
@@ -48,6 +48,10 @@ public class Main_jflex {
                     if (token.type != TokenType.ERROR) {
                         System.out.println(token.toString());
                         symbolTable.insert(token.lexeme, token.type.toString(), token.line);
+                    }
+                    else {
+                        //System.out.println(token.toString());     // Print error right in between the tokens
+                        errorHandler.insert(token.lexeme, token.line, token.column, "Reason");
                     }
                     token = jflex_scanner.yylex();
                 }
