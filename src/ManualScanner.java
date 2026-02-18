@@ -72,7 +72,7 @@ public class ManualScanner {
             if(state == 15)
                 return TokenType.TAB;
             if(state == 16)
-                return TokenType.WHITE_SPACE;     // Space
+                return TokenType.SPACE;              // Space
             if (state == 20)
                 return TokenType.TRUE_BOOL;          // "True-Bool"
             if (state == 25)
