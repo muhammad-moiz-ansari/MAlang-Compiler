@@ -374,7 +374,7 @@ public class ManualScanner {
         ManualScanner dfa = new ManualScanner();
         dfa.loadCSV("src/dfa.csv");
 
-        System.out.println("------------- JFLEX SCANNER OUTPUT -------------");
+        System.out.println("------------- MANUAL SCANNER OUTPUT -------------");
 
         for (int i = 0; i < 5; ++i ) {
             System.out.println(" _____________________________   ");
