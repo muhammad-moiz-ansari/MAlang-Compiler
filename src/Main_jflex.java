@@ -37,7 +37,7 @@ public class Main_jflex {
 
                 // Read file
                 String filename = "tests\\test" + String.valueOf(i+1) + ".malang";
-                filename = "tests\\test" + String.valueOf(i+1) + "_jflex.malang";
+                //filename = "tests\\test" + String.valueOf(i+1) + "_jflex.malang";     // For running only jflex test files
                 Yylex jflex_scanner = new Yylex(new FileReader(filename));
 
                 // First token
