@@ -5,13 +5,11 @@
 using namespace std;
 
 bool isNonTerminal(const string& symbol) {
-	if(!symbol.empty() && isupper(symbol[0]))
-		return true;
+	return !symbol.empty() && isupper(symbol[0]);
 }
 
 bool isTerminal(const string& symbol) {
-	if(!symbol.empty() && (islower(symbol[0]) || isdigit(symbol[0]) || ispunct(symbol[0])) && (symbol != "@" && symbol != "epsilon"))
-		return true;
+	return !symbol.empty() && !isNonTerminal(symbol) && !isEpsilon(symbol);
 }
 
 bool isEpsilon(const string& symbol) {
@@ -27,29 +25,30 @@ GrammarRule parseLine(const string& line) {
 	ss >> token;				// The "->" symbol
 
 	// Productions (RHS)
+	Production prod;
 	while (ss >> token) {
-		Production prod;
-		prod.symbols.push_back(token);
-
-		// Read until "|" or end of line comes
-		while (ss.peek() != '|' && ss.peek() != EOF) {
-			ss >> token;
+		if (token == "|") {
+			rule.prods.push_back(prod);
+			prod = Production();  // start fresh
+		}
+		else
 			prod.symbols.push_back(token);
-		}
-		rule.prods.push_back(prod);
-		// Skip the separator "|"
-		if (ss.peek() == '|') {
-			ss.get(); // Consume
-		}
 	}
+	if (!prod.symbols.empty())
+		rule.prods.push_back(prod);  // push last production
+
 	return rule;
 }
 
 Grammar loadGrammar(const string& filename) {
 	Grammar g;
-	ifstream file(filename);
 	string line;
 	bool isStartSymbol = true;
+	ifstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error: could not open file: " << filename << endl;
+		exit(1);
+	}
 
 	while (getline(file, line)) {
 		if (line.empty())
@@ -66,11 +65,12 @@ Grammar loadGrammar(const string& filename) {
 	}
 
 	// Collecting all non-terminals
-	for (auto& pair : g.rules) {
-		auto rule = pair.second;
+	for (const auto& nt : g.nonTerminals) {
+		auto& rule = g.rules.at(nt);
 		for (int i = 0; i < rule.prods.size(); ++i) {
 			for (int j = 0; j < rule.prods[i].symbols.size(); ++j) {
 				auto symbol = rule.prods[i].symbols[j];
+				// Add the ternimal to list if doesnt already exists
 				if (isTerminal(symbol)) {
 					if (find(g.terminals.begin(), g.terminals.end(), symbol) == g.terminals.end())
 						g.terminals.push_back(symbol);
@@ -100,4 +100,5 @@ void printGrammar(const Grammar& g) {
 		}
 		cout << endl;
 	}
+	cout << endl;
 }
