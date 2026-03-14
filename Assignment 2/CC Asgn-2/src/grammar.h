@@ -1,8 +1,4 @@
 #pragma once
-
-//#ifndef GRAMMAR_H
-//#define GRAMMAR_H
-
 #include <string>
 #include <vector>
 #include <map>
@@ -15,8 +11,8 @@ struct Production {
 };
 
 struct GrammarRule {
-    string nonTerminal;
-    vector<Production> prods;
+    string nonTerminal;         // L.H.S of arrow (->)
+    vector<Production> prods;   // R.H.S of arrow (->)
 };
 
 struct Grammar {
@@ -28,8 +24,9 @@ struct Grammar {
 
 // ── Function Declarations ─────────────────────────────────
 
+bool isNonTerminal(const string& symbol);   // uppercase first char?
+bool isTerminal(const string& symbol);      // lowercase first char, digit, or punctuation (except @)
+bool isEpsilon(const string& symbol);       // "epsilon" or "@"
+GrammarRule parseLine(const string& line);
 Grammar loadGrammar(const string& filename);   // reads grammar.txt
-void    printGrammar(const Grammar& g);        // for debugging
-bool    isNonTerminal(const string& symbol);   // uppercase first char?
-bool    isTerminal(const string& symbol);      // lowercase first char, digit, or punctuation (except @)
-bool    isEpsilon(const string& symbol);       // "epsilon" or "@"
+void printGrammar(const Grammar& g);        // for debugging
