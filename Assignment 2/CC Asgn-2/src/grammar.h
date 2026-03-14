@@ -7,7 +7,7 @@ using namespace std;
 // ── Data Structures ──────────────────────────────────────
 
 struct Production {
-    vector<string> symbols;  // e.g. ["Term", "ExprPrime"]
+    vector<string> symbols;     // All the terminals & non-terminals
 };
 
 struct GrammarRule {

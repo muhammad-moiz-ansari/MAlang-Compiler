@@ -67,7 +67,6 @@ Grammar loadGrammar(const string& filename) {
 
 	// Collecting all non-terminals
 	for (auto& pair : g.rules) {
-		auto name = pair.first;
 		auto rule = pair.second;
 		for (int i = 0; i < rule.prods.size(); ++i) {
 			for (int j = 0; j < rule.prods[i].symbols.size(); ++j) {
