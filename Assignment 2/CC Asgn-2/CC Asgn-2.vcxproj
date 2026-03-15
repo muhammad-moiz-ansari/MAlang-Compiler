@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -123,16 +123,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="left_recursion.cpp" />
+    <ClCompile Include="src\first_follow.cpp" />
     <ClCompile Include="src\grammar.cpp" />
     <ClCompile Include="src\left_factoring.cpp" />
+    <ClCompile Include="src\left_recursion.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="left_recursion.h" />
+    <ClInclude Include="src\first_follow.h" />
     <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\left_factoring.h" />
+    <ClInclude Include="src\left_recursion.h" />
     <ClInclude Include="src\stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
