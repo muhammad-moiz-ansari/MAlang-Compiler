@@ -19,6 +19,6 @@ void substitute(GrammarRule& rc, vector<Production>& betaProds, vector<Productio
 
 void removeExtraTerms(vector<Production>& betaProds, vector<int>& indices);
 
-void RemoveIndirectLeftRecursion(Grammar& r, vector<Production>& betaProds, string nt);
+void RemoveIndirectLeftRecursion(Grammar r, vector<Production>& betaProds, string nt);
 
 Grammar* eliminateRecursion(Grammar& d);
