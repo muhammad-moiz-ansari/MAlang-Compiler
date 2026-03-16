@@ -128,6 +128,7 @@
     <ClCompile Include="src\left_factoring.cpp" />
     <ClCompile Include="src\left_recursion.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\parser.cpp" />
     <ClCompile Include="src\stack.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +136,7 @@
     <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\left_factoring.h" />
     <ClInclude Include="src\left_recursion.h" />
+    <ClInclude Include="src\parser.h" />
     <ClInclude Include="src\stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -27,7 +27,13 @@
     <ClCompile Include="src\stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="left_recursion.cpp">
+    <ClCompile Include="src\first_follow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\left_recursion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +47,13 @@
     <ClInclude Include="src\stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="left_recursion.h">
+    <ClInclude Include="src\first_follow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\left_recursion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
