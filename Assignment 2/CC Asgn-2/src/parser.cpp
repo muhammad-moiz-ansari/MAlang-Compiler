@@ -1,10 +1,11 @@
-#include "parser.h"
 #include <iostream>
 #include <set>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include "parser.h"
 #include "first_follow.h"
+#include "grammar.h"
 using namespace std;
 
 ///////////////////////////////////
@@ -24,7 +25,9 @@ void createParseTable(map<string, set<string>>& firs, map<string, set<string>>& 
         }
         ll1table[g.nonTerminals[i]]["$"] = r;
     }
-    g.terminals.push_back("$");
+    if (find(g.terminals.begin(), g.terminals.end(), "$") == g.terminals.end())
+        g.terminals.push_back("$");
+
     for (int i = 0; i < g.nonTerminals.size(); i++) {
         for (auto prod : g.rules[g.nonTerminals[i]].prods) {
             map<string, set<string>> first;
@@ -111,6 +114,7 @@ void printParseTable(Grammar& g) {
 //                                //
 ////////////////////////////////////
 
+// Reading Input File
 vector<string> tokenizeLine(const string& line) {
     vector<string> tokens;
     stringstream ss(line);
@@ -140,9 +144,110 @@ vector<vector<string>> readInputFile(const string& filename) {
     return tokensList;
 }
 
+void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action) {
 
-////////////////////////////////////
-//                                //
-//         ERROR HANDLING         //
-//                                //
-////////////////////////////////////
+    // ----- Convert stack to string (bottom to top) -----
+    Stack<string> st1 = stk;
+    Stack<string> st2;
+    string stackStr;
+    // Reversing stack
+    while (!st1.empty()) {
+        st2.push(st1.top());
+        st1.pop();
+    }
+    // Appending in string
+    while (!st2.empty()) {
+        stackStr.append(st2.top());
+        st2.pop();
+        if (!st2.empty())
+            stackStr.append(" ");
+    }
+
+    // ----- Convert remaining tokens to string -----
+    string inputStr;
+    for(int i=pos; i<tokens.size(); ++i) {
+        inputStr.append(tokens[i]);
+        if (i < tokens.size() - 1)
+            inputStr.append(" ");
+    }
+
+    // ----- Print formatted row -----
+    cout << left
+        << setw(5) << step
+        << "| " << setw(30) << stackStr
+        << "| " << setw(20) << inputStr
+        << "| " << action << "\n";
+}
+
+void parse(vector<string> input, const Grammar& g)
+{
+    cout << "\n\n======= PARSING TRACE =======\n\n";
+    cout << left << "Step | " << setw(30) << "Stack" << "| " << setw(20) << "Input" << "| Action\n";
+    //cout << "Step | Stack" << setw(30) << "| Input" << setw(20) << "| Action\n";
+    cout << "-----|-" << string(30, '-') << "|-" << string(20, '-') << "|" << string(60, '-') << endl;
+
+    Stack<string> st;
+    int ind = 0;
+    string action;
+    int step = 1;
+
+    st.push("$");
+    st.push(g.startSymbol);
+
+    while (!st.empty()) {
+        string tos = st.top();  // Top of Stack
+        string lookahead = input[ind];
+        Stack<string> tempSt = st;
+
+        // Case 1: Both are $ (Accept)
+        if (tos == "$" && lookahead == "$") {
+            action = "Accept";
+            printStep(step, st, input, ind, action);
+            cout << "\nResult: String accepted!\n";
+            break;
+        }
+
+        // Case 2: tos is a Terminal or $
+        if (isTerminal(tos) || tos == "$") {
+            if (tos == lookahead) {
+                action = "Match " + lookahead;
+                st.pop();
+                ind++;
+            }
+            else {
+                action = "ERROR: Unexpected \'" + lookahead + "\'\n";
+                action.append("Expected: " + tos + "\n");
+                action.append("Skipping \'" + lookahead + "\'");
+                ind++; // skip input
+            }
+        }
+        // Case 3: tos is a Non-Terminal
+        else {
+            GrammarRule rule = ll1table[tos][lookahead];
+
+            if (rule.prods.empty()) {
+                action = "ERROR: No production for M[" + tos + ", " + lookahead + "]\n";
+                // Pop the stack for error recovery
+                st.pop();
+            }
+            else {
+                // Expand the production
+                action = "Gen " + rule.nonTerminal + " ->";
+                int size = rule.prods[0].symbols.size();
+                st.pop();
+
+                // Push the right side in reverse order
+                for (int i = size - 1; i >= 0; --i) {
+                    string sym = rule.prods[0].symbols[i];
+                    if (!isEpsilon(sym)) {
+                        st.push(sym);
+                    }
+                    action.append(" " + rule.prods[0].symbols[size - 1 - i]);
+                }
+            }
+        }
+
+        printStep(step, st, input, ind, action);
+        ++step;
+    }
+}

@@ -6,6 +6,7 @@
 #include <vector>
 #include <iomanip>
 #include "first_follow.h"
+#include "stack.h"
 
 using namespace std;
 
@@ -33,10 +34,14 @@ void printParseTable(Grammar& g);
 //                                //
 ////////////////////////////////////
 
-// reads one line like "id + id * id"
-// returns ["id", "+", "id", "*", "id", "$"]
+// Reads one line like "id + id * id"
 vector<string> tokenizeLine(const string& line);
 
-// reads the whole input.txt
-// returns a list of token lists, one per line
+// Returns a list of token lists, one per line
 vector<vector<string>> readInputFile(const string& filename);
+
+
+// Prints a single step of Parsing Trace
+void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action);
+
+void parse(vector<string> input, const Grammar& g);

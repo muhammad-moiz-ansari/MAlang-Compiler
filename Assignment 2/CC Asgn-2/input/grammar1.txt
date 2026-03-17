@@ -1,3 +1,4 @@
-Expr -> Expr + Term | Term
+Expr -> SubExpr
+SubExpr -> Expr + Term | Term
 Term -> Term * Factor | Factor
-Factor -> ( Expr ) | id
+Factor -> id | id ( Expr ) | ( Expr )
