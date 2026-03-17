@@ -56,6 +56,12 @@ void computeFirstOfNT(map<string, set<string>>& first, string nt, const Grammar&
 	}
 }
 
+void computeFirstOfNTll1TableEdition(map<string, set<string>>& first, string nt, const Grammar& g, Production&prod) {
+	const auto& rule = g.rules.at(nt);
+	set<string> tempSet = computeFirstOfString(prod.symbols, g, first);
+	first[nt].insert(tempSet.begin(), tempSet.end());
+}
+
 map<string, set<string>> computeFirst(const Grammar& g)
 {
 	map<string, set<string>> first;

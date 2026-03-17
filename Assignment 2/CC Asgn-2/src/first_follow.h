@@ -19,6 +19,7 @@ set<string> computeFirstOfString(const vector<string>& symbols, const Grammar& g
 // Computes FIRST set for a non-terminal
 void computeFirstOfNT(map<string, set<string>>& first, string nt, const Grammar& g);
 
+void computeFirstOfNTll1TableEdition(map<string, set<string>>& first, string nt, const Grammar& g, Production& prod);
 // Computes FIRST sets for ALL non-terminals in grammar
 map<string, set<string>> computeFirst(const Grammar& g);
 
