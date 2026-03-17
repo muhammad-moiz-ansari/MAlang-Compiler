@@ -130,6 +130,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parser.cpp" />
     <ClCompile Include="src\stack.cpp" />
+    <ClCompile Include="src\tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\first_follow.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="src\left_recursion.h" />
     <ClInclude Include="src\parser.h" />
     <ClInclude Include="src\stack.h" />
+    <ClInclude Include="src\tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
