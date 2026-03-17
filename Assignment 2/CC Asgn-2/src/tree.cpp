@@ -51,7 +51,7 @@ ParseTreeNode* buildParseTree(
             ip++; // match
         }
         else if (find(g.terminals.begin(), g.terminals.end(), X) != g.terminals.end() || X == "$") {
-            cout << "ERROR: Unexpected token " << a << endl;
+            cout << "TREE ERROR: Unexpected token " << a << endl;
             return nullptr;
         }
         else {
@@ -59,7 +59,7 @@ ParseTreeNode* buildParseTree(
             auto& rule = table[X][a];
 
             if (rule.prods.empty()) {
-                cout << "ERROR: No rule for (" << X << ", " << a << ")\n";
+                cout << "TREE ERROR: No rule for (" << X << ", " << a << ")\n";
                 return nullptr;
             }
 

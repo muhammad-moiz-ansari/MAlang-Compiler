@@ -5,14 +5,15 @@
 #include "first_follow.h"
 #include "parser.h"
 #include "tree.h"
-//#include <stack>
 #include "stack.h"
 #include <algorithm>
 using namespace std;
 
 int main() {
+    string filename_suffix = "5_error_handle1";
+
     // load grammar
-    Grammar gr = loadGrammar("input/grammar2.txt");
+    Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
     cout << "=== Original Grammar ===\n";
     printGrammar(gr);
 
@@ -43,7 +44,7 @@ int main() {
     cout << endl << endl;
     printParseTable(g);
 
-    auto inputs = readInputFile("input/input2.txt");
+    auto inputs = readInputFile("input/input" + filename_suffix + ".txt");
     for (auto& input : inputs) {
         parse(input, g);
         ParseTreeNode* root = buildParseTree(g, ll1table, input);

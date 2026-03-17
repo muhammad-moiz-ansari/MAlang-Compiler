@@ -144,12 +144,15 @@ vector<vector<string>> readInputFile(const string& filename) {
     return tokensList;
 }
 
+int stackStr_gap = 50,
+    inputStr_gap = 21;
+
 void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action) {
 
     // ----- Convert stack to string (bottom to top) -----
     Stack<string> st1 = stk;
     Stack<string> st2;
-    string stackStr;
+    string stackStr = "";
     // Reversing stack
     while (!st1.empty()) {
         st2.push(st1.top());
@@ -164,8 +167,8 @@ void printStep(int step, Stack<string> stk, const vector<string>& tokens, int po
     }
 
     // ----- Convert remaining tokens to string -----
-    string inputStr;
-    for(int i=pos; i<tokens.size(); ++i) {
+    string inputStr = "";
+    for (int i = pos; i < tokens.size(); ++i) {
         inputStr.append(tokens[i]);
         if (i < tokens.size() - 1)
             inputStr.append(" ");
@@ -174,22 +177,23 @@ void printStep(int step, Stack<string> stk, const vector<string>& tokens, int po
     // ----- Print formatted row -----
     cout << left
         << setw(5) << step
-        << "| " << setw(30) << stackStr
-        << "| " << setw(20) << inputStr
+        << "| " << setw(stackStr_gap) << stackStr
+        << "| " << setw(inputStr_gap) << inputStr
         << "| " << action << "\n";
 }
 
 void parse(vector<string> input, const Grammar& g)
 {
     cout << "\n\n======= PARSING TRACE =======\n\n";
-    cout << left << "Step | " << setw(30) << "Stack" << "| " << setw(20) << "Input" << "| Action\n";
-    //cout << "Step | Stack" << setw(30) << "| Input" << setw(20) << "| Action\n";
-    cout << "-----|-" << string(30, '-') << "|-" << string(20, '-') << "|" << string(60, '-') << endl;
+    cout << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
+    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(37, '-') << endl;
 
     Stack<string> st;
     int ind = 0;
     string action;
     int step = 1;
+    int errorCount = 0;
+    bool isAbort = false;
 
     st.push("$");
     st.push(g.startSymbol);
@@ -207,6 +211,15 @@ void parse(vector<string> input, const Grammar& g)
             break;
         }
 
+        // Stack is empty, but input still has tokens (Extra garbage at the end)
+        if (tos == "$" && lookahead != "$") {
+            errorCount++;
+            action = "ERROR: Extra input remaining. Unexpected trailing '" + lookahead + "'";
+            printStep(step, st, input, ind, action);
+            isAbort = true;
+            break;
+        }
+
         // Case 2: tos is a Terminal or $
         if (isTerminal(tos) || tos == "$") {
             if (tos == lookahead) {
@@ -215,8 +228,9 @@ void parse(vector<string> input, const Grammar& g)
                 ind++;
             }
             else {
-                action = "ERROR: Unexpected \'" + lookahead + "\'\n";
-                action.append("Expected: " + tos + "\n");
+                errorCount++;
+                action = "ERROR: Unexpected \'" + lookahead + "\'\t";
+                action.append("Expected: " + tos + "\t");
                 action.append("Skipping \'" + lookahead + "\'");
                 ind++; // skip input
             }
@@ -226,7 +240,8 @@ void parse(vector<string> input, const Grammar& g)
             GrammarRule rule = ll1table[tos][lookahead];
 
             if (rule.prods.empty()) {
-                action = "ERROR: No production for M[" + tos + ", " + lookahead + "]\n";
+                errorCount++;
+                action = "ERROR: No production for M[" + tos + ", " + lookahead + "]\t";
                 // Pop the stack for error recovery
                 st.pop();
             }
@@ -247,7 +262,18 @@ void parse(vector<string> input, const Grammar& g)
             }
         }
 
-        printStep(step, st, input, ind, action);
+        printStep(step, tempSt, input, ind, action);
         ++step;
+
+        if (ind >= input.size()) {
+            isAbort = true;
+            break;
+        }
+    }
+    if (errorCount > 0) {
+        if (!isAbort)
+            cout << "\nResult: Parsing completed with " << errorCount << " error.\n";
+        else
+            cout << "\nResult: Parsing aborted with " << errorCount << " error.\n";
     }
 }
