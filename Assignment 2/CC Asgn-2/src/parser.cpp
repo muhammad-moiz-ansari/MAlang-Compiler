@@ -217,8 +217,8 @@ void parse(vector<string> input, const Grammar& g, int trace_no) {
     cout << "\n\n======= PARSING TRACE " << trace_no << " =======\n\n";
     cout << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
 	if (outFile.is_open()) outFile << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
-    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(30, '-') << endl;
-	if (outFile.is_open()) outFile << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(30, '-') << endl;
+    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(25, '-') << endl;
+	if (outFile.is_open()) outFile << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(25, '-') << endl;
 
     Stack<string> st;
     int ind = 0;
