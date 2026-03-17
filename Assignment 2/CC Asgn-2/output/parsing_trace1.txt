@@ -1,0 +1,27 @@
+Step | Stack                                                            | Input               | Action
+-----|------------------------------------------------------------------|---------------------|------------------------------
+1    | $ E                                                              | id + ( id * id ) $  | Gen E -> T E'
+2    | $ E' T                                                           | id + ( id * id ) $  | Gen T -> F T'
+3    | $ E' T' F                                                        | id + ( id * id ) $  | Gen F -> id
+4    | $ E' T' id                                                       | + ( id * id ) $     | Match id
+5    | $ E' T'                                                          | + ( id * id ) $     | Gen T' -> epsilon
+6    | $ E'                                                             | + ( id * id ) $     | Gen E' -> + T E'
+7    | $ E' T +                                                         | ( id * id ) $       | Match +
+8    | $ E' T                                                           | ( id * id ) $       | Gen T -> F T'
+9    | $ E' T' F                                                        | ( id * id ) $       | Gen F -> ( E )
+10   | $ E' T' ) E (                                                    | id * id ) $         | Match (
+11   | $ E' T' ) E                                                      | id * id ) $         | Gen E -> T E'
+12   | $ E' T' ) E' T                                                   | id * id ) $         | Gen T -> F T'
+13   | $ E' T' ) E' T' F                                                | id * id ) $         | Gen F -> id
+14   | $ E' T' ) E' T' id                                               | * id ) $            | Match id
+15   | $ E' T' ) E' T'                                                  | * id ) $            | Gen T' -> * F T'
+16   | $ E' T' ) E' T' F *                                              | id ) $              | Match *
+17   | $ E' T' ) E' T' F                                                | id ) $              | Gen F -> id
+18   | $ E' T' ) E' T' id                                               | ) $                 | Match id
+19   | $ E' T' ) E' T'                                                  | ) $                 | Gen T' -> epsilon
+20   | $ E' T' ) E'                                                     | ) $                 | Gen E' -> epsilon
+21   | $ E' T' )                                                        | $                   | Match )
+22   | $ E' T'                                                          | $                   | Gen T' -> epsilon
+23   | $ E'                                                             | $                   | Gen E' -> epsilon
+24   | $                                                                | $                   | Accept
+

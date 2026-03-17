@@ -24,7 +24,7 @@ ParseTreeNode* buildParseTree(
 
 void printParseTree(ParseTreeNode* node, int depth = 0);
 void printTreeASCII(ParseTreeNode* node, string prefix = "", bool isLast = true);
-void printTreeColored(ParseTreeNode* node, Grammar& g, string prefix = "", bool isLast = true);
+void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string prefix = "", bool isLast = true);
 
 // Memory cleanup 
 void deleteTree(ParseTreeNode* node);

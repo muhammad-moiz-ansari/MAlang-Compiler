@@ -1,0 +1,11 @@
+Step | Stack                                                            | Input               | Action
+-----|------------------------------------------------------------------|---------------------|------------------------------
+1    | $ Expr                                                           | id id $             | Gen Expr -> Term NEWExpr
+2    | $ NEWExpr Term                                                   | id id $             | Gen Term -> Factor NEWTerm
+3    | $ NEWExpr NEWTerm Factor                                         | id id $             | Gen Factor -> id Factor'
+4    | $ NEWExpr NEWTerm Factor' id                                     | id $                | Match id
+5    | $ NEWExpr NEWTerm Factor'                                        | id $                | ERROR: No production for M[Factor', id]	
+6    | $ NEWExpr NEWTerm                                                | id $                | ERROR: No production for M[NEWTerm, id]	
+7    | $ NEWExpr                                                        | id $                | ERROR: No production for M[NEWExpr, id]	
+8    | $                                                                | id $                | ERROR: Extra input remaining. Unexpected trailing 'id'
+

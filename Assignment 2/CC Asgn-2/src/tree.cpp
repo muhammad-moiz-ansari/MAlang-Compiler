@@ -1,7 +1,7 @@
 #include "grammar.h"
-//#include <stack>
 #include "stack.h"
 #include <iostream>
+#include <fstream> // Included for ofstream
 
 
 // ANSI color codes (work in most terminals)
@@ -122,21 +122,40 @@ void printTreeASCII(ParseTreeNode* node, string prefix, bool isLast = true) {
     }
 }
 
-void printTreeColored(ParseTreeNode* node, Grammar& g, string prefix, bool isLast = true) {
+void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string prefix, bool isLast = true) {
     if (!node) return;
 
+    // Use append mode to stream the parsed tree continuously across invocations
+    ofstream outFile("output/parse_trees.txt", ios::app);
+    if (!outFile.is_open()) {
+        cout << "TREE ERROR: Unable to successfully open the parse_trees.txt file" << endl;
+        return;
+    }
+
+    if (prefix.empty()) {
+        outFile << "\n==============================\n";
+        outFile << "Tree Number: " << trace_no << "\n";
+        outFile << "==============================\n";
+    }
+
+    // Write structure block to terminal
     cout << prefix;
+    
+    // Write structure block to file
+    outFile << prefix;
 
     if (isLast) {
         cout << "\\-- ";
+        outFile << "\\-- ";
         prefix += "    ";
     }
     else {
         cout << "|-- ";
+        outFile << "|-- ";
         prefix += "|   ";
     }
 
-    // Color logic
+    // Color logic (Only printed to console, otherwise adds ANSI colors to file directly)
     if (node->symbol == "epsilon") {
         cout << YELLOW << node->symbol << RESET << endl;
     }
@@ -147,8 +166,11 @@ void printTreeColored(ParseTreeNode* node, Grammar& g, string prefix, bool isLas
         cout << GREEN << node->symbol << RESET << endl;
     }
 
+    outFile << node->symbol << "\n";
+    outFile.close();
+
     for (int i = 0; i < node->children.size(); i++) {
-        printTreeColored(node->children[i], g, prefix, i == node->children.size() - 1);
+        printTreeColored(node->children[i], g, trace_no, prefix, i == node->children.size() - 1);
     }
 }
 

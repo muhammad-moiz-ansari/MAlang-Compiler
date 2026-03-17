@@ -1,6 +1,7 @@
 #include "first_follow.h"
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 using namespace std;
 
 set<string> computeFirstOfSymbol(const string& symbol, const Grammar& g, map<string, set<string>>& first)
@@ -75,7 +76,7 @@ map<string, set<string>> computeFirst(const Grammar& g)
 	return first;
 }
 
-void printFirst(const map<string, set<string>>& FIRST, const map<string, set<string>>& FOLLOW, const Grammar& g)
+void printFirst(const map<string, set<string>>& FIRST, const Grammar& g)
 {
 	cout << "--- First() Sets ---\n";
 	for (const auto& nt : g.nonTerminals) {
@@ -186,4 +187,40 @@ void printFollow(const map<string, set<string>>& FIRST, const map<string, set<st
 		cout << "\b}\n";
 	}
 	cout << endl;
+}
+
+// ----- Save first() and follow() ------
+void saveFirstFollow(const map<string, set<string>>& FIRST, const map<string, set<string>>& FOLLOW, const Grammar& g, const string& filename) {
+	// Open the file for writing
+	ofstream outFile(filename);
+	if (!outFile.is_open()) {
+		cout << "Error: Could not open " << filename << " for writing.\n";
+	}
+
+	if (outFile.is_open()) outFile <<  "--- First() Sets ---\n";
+	for (const auto& nt : g.nonTerminals) {
+		if (outFile.is_open()) outFile <<  nt << ":\t{";
+		for (const auto& s : FIRST.at(nt)) {
+			if (outFile.is_open()) outFile <<  " " << s << ",";
+		}
+		if (outFile.is_open()) outFile <<  "\b }\n";
+	}
+	if (outFile.is_open()) outFile <<  endl;
+
+	if (outFile.is_open()) outFile <<  "--- Follow() Sets ---\n";
+	for (const auto& nt : g.nonTerminals) {
+		if (outFile.is_open()) outFile <<  nt << ":\t{";
+		for (const auto& s : FOLLOW.at(nt)) {
+			if (outFile.is_open()) outFile <<  " " << s << ",";
+		}
+		if (outFile.is_open()) outFile <<  "\b}\n";
+	}
+	if (outFile.is_open()) outFile <<  endl;
+
+	// Close the file and confirm
+	if (outFile.is_open()) {
+		outFile << endl;
+		outFile.close();
+		cout << "\n[Success] First follow sets safely saved to " << filename << "\n\n";
+	}
 }

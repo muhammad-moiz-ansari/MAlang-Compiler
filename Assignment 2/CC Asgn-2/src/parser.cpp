@@ -57,25 +57,34 @@ void createParseTable(map<string, set<string>>& firs, map<string, set<string>>& 
     }
 }
 
-void printParseTable(Grammar& g) {
-
+void printNsaveParseTable(Grammar& g, const string& filename) {
     const int COL_WIDTH = 15;
+    // Open the file for writing
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open " << filename << " for writing.\n";
+    }
 
     cout << "\n\n========= LL(1) PARSE TABLE =========\n\n";
 
     // Header
     cout << setw(COL_WIDTH) << " ";
+    if (outFile.is_open()) outFile << setw(COL_WIDTH) << " ";
     for (const auto& t : g.terminals) {
         cout << setw(COL_WIDTH) << t;
+        if (outFile.is_open()) outFile << setw(COL_WIDTH) << t;
     }
     cout << endl;
+    if (outFile.is_open()) outFile << endl;
 
     // Line
     cout << string(COL_WIDTH * (g.terminals.size() + 1), '-') << endl;
+    if (outFile.is_open()) outFile << string(COL_WIDTH * (g.terminals.size() + 1), '-') << endl;
 
     // Rows
     for (const auto& nt : g.nonTerminals) {
         cout << setw(COL_WIDTH) << nt;
+        if (outFile.is_open()) outFile << setw(COL_WIDTH) << nt;
 
         for (const auto& t : g.terminals) {
             stringstream cellStream;
@@ -103,8 +112,17 @@ void printParseTable(Grammar& g) {
             }
 
             cout << setw(COL_WIDTH) << cell;
+            if (outFile.is_open()) outFile << setw(COL_WIDTH) << cell;
         }
         cout << endl;
+        if (outFile.is_open()) outFile << endl;
+    }
+
+    // Close the file and confirm
+    if (outFile.is_open()) {
+        outFile << endl;
+        outFile.close();
+        cout << "\n[Success] Parsing table safely saved to " << filename << "\n\n";
     }
 }
 
@@ -144,10 +162,10 @@ vector<vector<string>> readInputFile(const string& filename) {
     return tokensList;
 }
 
-int stackStr_gap = 50,
-    inputStr_gap = 21;
+int stackStr_gap = 65,
+    inputStr_gap = 20;
 
-void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action) {
+void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action, ofstream& outFile) {
 
     // ----- Convert stack to string (bottom to top) -----
     Stack<string> st1 = stk;
@@ -180,13 +198,27 @@ void printStep(int step, Stack<string> stk, const vector<string>& tokens, int po
         << "| " << setw(stackStr_gap) << stackStr
         << "| " << setw(inputStr_gap) << inputStr
         << "| " << action << "\n";
+    if (outFile.is_open()) outFile << left
+        << setw(5) << step
+        << "| " << setw(stackStr_gap) << stackStr
+        << "| " << setw(inputStr_gap) << inputStr
+		<< "| " << action << "\n";
 }
 
-void parse(vector<string> input, const Grammar& g)
-{
-    cout << "\n\n======= PARSING TRACE =======\n\n";
+void parse(vector<string> input, const Grammar& g, int trace_no) {
+	string filename = "output/parsing_trace" + to_string(trace_no) + ".txt";
+
+    // Open the file for writing
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open " << filename << " for writing.\n";
+    }
+
+    cout << "\n\n======= PARSING TRACE " << trace_no << " =======\n\n";
     cout << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
-    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(37, '-') << endl;
+	if (outFile.is_open()) outFile << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
+    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(30, '-') << endl;
+	if (outFile.is_open()) outFile << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(30, '-') << endl;
 
     Stack<string> st;
     int ind = 0;
@@ -206,7 +238,7 @@ void parse(vector<string> input, const Grammar& g)
         // Case 1: Both are $ (Accept)
         if (tos == "$" && lookahead == "$") {
             action = "Accept";
-            printStep(step, st, input, ind, action);
+            printStep(step, st, input, ind, action, outFile);
             cout << "\nResult: String accepted!\n";
             break;
         }
@@ -215,7 +247,7 @@ void parse(vector<string> input, const Grammar& g)
         if (tos == "$" && lookahead != "$") {
             errorCount++;
             action = "ERROR: Extra input remaining. Unexpected trailing '" + lookahead + "'";
-            printStep(step, st, input, ind, action);
+            printStep(step, st, input, ind, action, outFile);
             isAbort = true;
             break;
         }
@@ -262,7 +294,7 @@ void parse(vector<string> input, const Grammar& g)
             }
         }
 
-        printStep(step, tempSt, input, ind, action);
+        printStep(step, tempSt, input, ind, action, outFile);
         ++step;
 
         if (ind >= input.size()) {
@@ -275,5 +307,12 @@ void parse(vector<string> input, const Grammar& g)
             cout << "\nResult: Parsing completed with " << errorCount << " error.\n";
         else
             cout << "\nResult: Parsing aborted with " << errorCount << " error.\n";
+    }
+
+    // Close the file and confirm
+    if (outFile.is_open()) {
+        outFile << endl;
+        outFile.close();
+        cout << "\n[Success] Parsing table safely saved to " << filename << "\n\n";
     }
 }

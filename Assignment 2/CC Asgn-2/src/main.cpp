@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-    string filename_suffix = "5_error_handle1";
+    string filename_suffix = "5_all_accept1";
 
     // load grammar
     Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
@@ -26,6 +26,7 @@ int main() {
     cout << "=== Left Factored Grammar ===\n";
     leftFactor(g);
     printGrammar(g);
+    saveGrammar(g);
 
     cout << "=== First & Follow Sets ===\n";
 
@@ -35,24 +36,26 @@ int main() {
     // Follow Sets
     map<string, set<string>> follow = computeFollow(g, first);
 
-    printFirst(first, follow, g);
+    printFirst(first, g);
     printFollow(first, follow, g);
 
     // Parsing Table
     createParseTable(first, follow, g);
 
     cout << endl << endl;
-    printParseTable(g);
+    printNsaveParseTable(g);
 
     auto inputs = readInputFile("input/input" + filename_suffix + ".txt");
+    int trace_no = 1;
     for (auto& input : inputs) {
-        parse(input, g);
+        parse(input, g, trace_no);
         ParseTreeNode* root = buildParseTree(g, ll1table, input);
 
         if (root) {
             cout << "\n\n======= PARSE TREE (ASCII) =======\n\n";
-            printTreeColored(root, g);
+            printTreeColored(root, g, trace_no);
         }
+		++trace_no;
     }
     return 0;
 }

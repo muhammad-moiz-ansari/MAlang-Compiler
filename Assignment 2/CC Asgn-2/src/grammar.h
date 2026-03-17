@@ -30,3 +30,4 @@ bool isEpsilon(const string& symbol);       // "epsilon" or "@"
 GrammarRule parseLine(const string& line);
 Grammar loadGrammar(const string& filename);   // reads grammar.txt
 void printGrammar(const Grammar& g);        // for debugging
+void saveGrammar(const Grammar& g, const string& filename = "output/grammar_transormed.txt");

@@ -1,0 +1,5 @@
+Step | Stack                                                            | Input               | Action
+-----|------------------------------------------------------------------|---------------------|------------------------------
+1    | $ Expr                                                           | * id + id $         | ERROR: No production for M[Expr, *]	
+2    | $                                                                | * id + id $         | ERROR: Extra input remaining. Unexpected trailing '*'
+

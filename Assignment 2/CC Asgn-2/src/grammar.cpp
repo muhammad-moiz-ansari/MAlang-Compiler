@@ -102,3 +102,43 @@ void printGrammar(const Grammar& g) {
 	}
 	cout << endl;
 }
+
+
+void saveGrammar(const Grammar& g, const string& filename) {
+	// Open the file for writing
+	ofstream outFile(filename);
+	if (!outFile.is_open()) {
+		cout << "Error: Could not open " << filename << " for writing.\n";
+	}
+
+	// For each non-terminal
+	for (const auto& nonT : g.nonTerminals) {
+		const auto& rule = g.rules.at(nonT);
+
+		// Print to console and file
+		if (outFile.is_open()) outFile << nonT << " -> ";
+
+		// For each production of that non-terminal
+		for (int i = 0; i < rule.prods.size(); ++i) {
+			const auto& prod = rule.prods[i];
+
+			// For each symbol of that production
+			for (const auto& symbol : prod.symbols) {
+				if (outFile.is_open()) outFile << symbol << " ";
+			}
+
+			// Handle the pipe separator
+			if (i != rule.prods.size() - 1) {
+				if (outFile.is_open()) outFile << "| ";
+			}
+		}
+		if (outFile.is_open()) outFile << endl;
+	}
+
+	// Close the file and confirm
+	if (outFile.is_open()) {
+		outFile << endl;
+		outFile.close();
+		cout << "\n[Success] Grammar safely saved to " << filename << "\n\n";
+	}
+}

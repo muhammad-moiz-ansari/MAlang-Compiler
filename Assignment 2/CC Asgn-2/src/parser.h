@@ -26,7 +26,7 @@ extern map<string, map<string, GrammarRule>> ll1table;
 ///////////////////////////////////
 void createParseTable(map<string, set<string>>& firs, map<string, set<string>>& follow, Grammar& g);
 
-void printParseTable(Grammar& g);
+void printNsaveParseTable(Grammar& g, const string& filename = "output/parsing_table.txt");
 
 ////////////////////////////////////
 //                                //
@@ -42,6 +42,6 @@ vector<vector<string>> readInputFile(const string& filename);
 
 
 // Prints a single step of Parsing Trace
-void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action);
+void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action, ofstream& outFile);
 
-void parse(vector<string> input, const Grammar& g);
+void parse(vector<string> input, const Grammar& g, int trace_no);

@@ -25,7 +25,7 @@ void computeFirstOfNTll1TableEdition(map<string, set<string>>& first, string nt,
 map<string, set<string>> computeFirst(const Grammar& g);
 
 // Prints FIRST sets in tabular format
-void printFirst(const map<string, set<string>>& FIRST, const map<string, set<string>>& FOLLOW, const Grammar& g);
+void printFirst(const map<string, set<string>>& FIRST, const Grammar& g);
 
 ///////////////////////////
 //                       //
@@ -44,3 +44,8 @@ map<string, set<string>> computeFollow(Grammar& g, map<string, set<string>>& FIR
 
 // Prints FOLLOW sets in tabular format
 void printFollow(const map<string, set<string>>& FIRST, const map<string, set<string>>& FOLLOW, const Grammar& g);
+
+
+
+// ----- Save first() and follow() -----
+void saveFirstFollow(const map<string, set<string>>& FIRST, const map<string, set<string>>& FOLLOW, const Grammar& g, const string& filename = "output/first_follow_sets.txt");
