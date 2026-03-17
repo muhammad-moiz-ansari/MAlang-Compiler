@@ -1,29 +1,27 @@
-Step | Stack                                                            | Input               | Action
------|------------------------------------------------------------------|---------------------|------------------------------
-1    | $ Expr                                                           | ( ( id + id ) $     | Gen Expr -> Term NEWExpr
-2    | $ NEWExpr Term                                                   | ( ( id + id ) $     | Gen Term -> Factor NEWTerm
-3    | $ NEWExpr NEWTerm Factor                                         | ( ( id + id ) $     | Gen Factor -> ( Expr )
-4    | $ NEWExpr NEWTerm ) Expr (                                       | ( id + id ) $       | Match (
-5    | $ NEWExpr NEWTerm ) Expr                                         | ( id + id ) $       | Gen Expr -> Term NEWExpr
-6    | $ NEWExpr NEWTerm ) NEWExpr Term                                 | ( id + id ) $       | Gen Term -> Factor NEWTerm
-7    | $ NEWExpr NEWTerm ) NEWExpr NEWTerm Factor                       | ( id + id ) $       | Gen Factor -> ( Expr )
-8    | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) Expr (                     | id + id ) $         | Match (
-9    | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) Expr                       | id + id ) $         | Gen Expr -> Term NEWExpr
-10   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr Term               | id + id ) $         | Gen Term -> Factor NEWTerm
-11   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor     | id + id ) $         | Gen Factor -> id Factor'
-12   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor' id | + id ) $            | Match id
-13   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor'    | + id ) $            | Gen Factor' -> epsilon
-14   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm            | + id ) $            | Gen NEWTerm -> epsilon
-15   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr                    | + id ) $            | Gen NEWExpr -> + Term NEWExpr
-16   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr Term +             | id ) $              | Match +
-17   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr Term               | id ) $              | Gen Term -> Factor NEWTerm
-18   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor     | id ) $              | Gen Factor -> id Factor'
-19   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor' id | ) $                 | Match id
-20   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm Factor'    | ) $                 | Gen Factor' -> epsilon
-21   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr NEWTerm            | ) $                 | Gen NEWTerm -> epsilon
-22   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm ) NEWExpr                    | ) $                 | Gen NEWExpr -> epsilon
-23   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm )                            | $                   | Match )
-24   | $ NEWExpr NEWTerm ) NEWExpr NEWTerm                              | $                   | Gen NEWTerm -> epsilon
-25   | $ NEWExpr NEWTerm ) NEWExpr                                      | $                   | Gen NEWExpr -> epsilon
-26   | $ NEWExpr NEWTerm )                                              |                     | ERROR: Unexpected '$'	Expected: )	Skipping '$'
+Step | Stack                                             | Input               | Action
+-----|---------------------------------------------------|---------------------|-------------------------
+1    | $ E                                               | ( ( id + id ) $     | Gen E -> T E'
+2    | $ E' T                                            | ( ( id + id ) $     | Gen T -> F T'
+3    | $ E' T' F                                         | ( ( id + id ) $     | Gen F -> ( E )
+4    | $ E' T' ) E (                                     | ( id + id ) $       | Match (
+5    | $ E' T' ) E                                       | ( id + id ) $       | Gen E -> T E'
+6    | $ E' T' ) E' T                                    | ( id + id ) $       | Gen T -> F T'
+7    | $ E' T' ) E' T' F                                 | ( id + id ) $       | Gen F -> ( E )
+8    | $ E' T' ) E' T' ) E (                             | id + id ) $         | Match (
+9    | $ E' T' ) E' T' ) E                               | id + id ) $         | Gen E -> T E'
+10   | $ E' T' ) E' T' ) E' T                            | id + id ) $         | Gen T -> F T'
+11   | $ E' T' ) E' T' ) E' T' F                         | id + id ) $         | Gen F -> id
+12   | $ E' T' ) E' T' ) E' T' id                        | + id ) $            | Match id
+13   | $ E' T' ) E' T' ) E' T'                           | + id ) $            | Gen T' -> epsilon
+14   | $ E' T' ) E' T' ) E'                              | + id ) $            | Gen E' -> + T E'
+15   | $ E' T' ) E' T' ) E' T +                          | id ) $              | Match +
+16   | $ E' T' ) E' T' ) E' T                            | id ) $              | Gen T -> F T'
+17   | $ E' T' ) E' T' ) E' T' F                         | id ) $              | Gen F -> id
+18   | $ E' T' ) E' T' ) E' T' id                        | ) $                 | Match id
+19   | $ E' T' ) E' T' ) E' T'                           | ) $                 | Gen T' -> epsilon
+20   | $ E' T' ) E' T' ) E'                              | ) $                 | Gen E' -> epsilon
+21   | $ E' T' ) E' T' )                                 | $                   | Match )
+22   | $ E' T' ) E' T'                                   | $                   | Gen T' -> epsilon
+23   | $ E' T' ) E'                                      | $                   | Gen E' -> epsilon
+24   | $ E' T' )                                         |                     | ERROR: Unexpected '$'	Expected: )	Skipping '$'
 

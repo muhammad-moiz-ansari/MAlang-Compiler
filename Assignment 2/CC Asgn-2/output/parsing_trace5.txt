@@ -1,14 +1,5 @@
-Step | Stack                                                            | Input               | Action
------|------------------------------------------------------------------|---------------------|-------------------------
-1    | $ E                                                              | id * id $           | Gen E -> T E'
-2    | $ E' T                                                           | id * id $           | Gen T -> F T'
-3    | $ E' T' F                                                        | id * id $           | Gen F -> id
-4    | $ E' T' id                                                       | * id $              | Match id
-5    | $ E' T'                                                          | * id $              | Gen T' -> * F T'
-6    | $ E' T' F *                                                      | id $                | Match *
-7    | $ E' T' F                                                        | id $                | Gen F -> id
-8    | $ E' T' id                                                       | $                   | Match id
-9    | $ E' T'                                                          | $                   | Gen T' -> epsilon
-10   | $ E'                                                             | $                   | Gen E' -> epsilon
-11   | $                                                                | $                   | Accept
+Step | Stack                                             | Input               | Action
+-----|---------------------------------------------------|---------------------|-------------------------
+1    | $ E                                               | * id + id $         | ERROR: No production for M[E, *]	
+2    | $                                                 | * id + id $         | ERROR: Extra input remaining. Unexpected trailing '*'
 

@@ -1,4 +1,5 @@
-Expr -> SubExpr
-SubExpr -> Expr + Term | Term
-Term -> Term * Factor | Factor
-Factor -> id | id ( Expr ) | ( Expr )
+E -> T E'
+E' -> + T E' | epsilon
+T -> F T'
+T' -> * F T' | epsilon
+F -> ( E ) | id

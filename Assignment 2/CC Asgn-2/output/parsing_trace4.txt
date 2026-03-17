@@ -1,27 +1,10 @@
-Step | Stack                                                            | Input               | Action
------|------------------------------------------------------------------|---------------------|-------------------------
-1    | $ E                                                              | ( id * id ) + id $  | Gen E -> T E'
-2    | $ E' T                                                           | ( id * id ) + id $  | Gen T -> F T'
-3    | $ E' T' F                                                        | ( id * id ) + id $  | Gen F -> ( E )
-4    | $ E' T' ) E (                                                    | id * id ) + id $    | Match (
-5    | $ E' T' ) E                                                      | id * id ) + id $    | Gen E -> T E'
-6    | $ E' T' ) E' T                                                   | id * id ) + id $    | Gen T -> F T'
-7    | $ E' T' ) E' T' F                                                | id * id ) + id $    | Gen F -> id
-8    | $ E' T' ) E' T' id                                               | * id ) + id $       | Match id
-9    | $ E' T' ) E' T'                                                  | * id ) + id $       | Gen T' -> * F T'
-10   | $ E' T' ) E' T' F *                                              | id ) + id $         | Match *
-11   | $ E' T' ) E' T' F                                                | id ) + id $         | Gen F -> id
-12   | $ E' T' ) E' T' id                                               | ) + id $            | Match id
-13   | $ E' T' ) E' T'                                                  | ) + id $            | Gen T' -> epsilon
-14   | $ E' T' ) E'                                                     | ) + id $            | Gen E' -> epsilon
-15   | $ E' T' )                                                        | + id $              | Match )
-16   | $ E' T'                                                          | + id $              | Gen T' -> epsilon
-17   | $ E'                                                             | + id $              | Gen E' -> + T E'
-18   | $ E' T +                                                         | id $                | Match +
-19   | $ E' T                                                           | id $                | Gen T -> F T'
-20   | $ E' T' F                                                        | id $                | Gen F -> id
-21   | $ E' T' id                                                       | $                   | Match id
-22   | $ E' T'                                                          | $                   | Gen T' -> epsilon
-23   | $ E'                                                             | $                   | Gen E' -> epsilon
-24   | $                                                                | $                   | Accept
+Step | Stack                                             | Input               | Action
+-----|---------------------------------------------------|---------------------|-------------------------
+1    | $ E                                               | id id $             | Gen E -> T E'
+2    | $ E' T                                            | id id $             | Gen T -> F T'
+3    | $ E' T' F                                         | id id $             | Gen F -> id
+4    | $ E' T' id                                        | id $                | Match id
+5    | $ E' T'                                           | id $                | ERROR: No production for M[T', id]	
+6    | $ E'                                              | id $                | ERROR: No production for M[E', id]	
+7    | $                                                 | id $                | ERROR: Extra input remaining. Unexpected trailing 'id'
 

@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-    string filename_suffix = "5_all_accept1";
+    string filename_suffix = "5_error_handle1";
 
     // load grammar
     Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");

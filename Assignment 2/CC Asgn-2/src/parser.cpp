@@ -162,7 +162,7 @@ vector<vector<string>> readInputFile(const string& filename) {
     return tokensList;
 }
 
-int stackStr_gap = 65,
+int stackStr_gap = 50,
     inputStr_gap = 20;
 
 void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action, ofstream& outFile) {
