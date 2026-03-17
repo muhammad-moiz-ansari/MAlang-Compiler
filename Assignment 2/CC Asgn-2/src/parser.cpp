@@ -3,6 +3,7 @@
 #include <set>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 #include "first_follow.h"
 using namespace std;
 
@@ -110,6 +111,34 @@ void printParseTable(Grammar& g) {
 //                                //
 ////////////////////////////////////
 
+vector<string> tokenizeLine(const string& line) {
+    vector<string> tokens;
+    stringstream ss(line);
+    string token;
+    while (ss >> token)
+        tokens.push_back(token);
+    tokens.push_back("$");  // Append end marker
+    return tokens;
+}
+
+vector<vector<string>> readInputFile(const string& filename) {
+    vector<vector<string>> tokensList;
+    string line;
+
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error: could not open file: " << filename << endl;
+        exit(1);
+    }
+
+    while (getline(file, line)) {
+        if (line.empty())
+            continue;
+
+        tokensList.push_back(tokenizeLine(line));
+    }
+    return tokensList;
+}
 
 
 ////////////////////////////////////
