@@ -129,7 +129,6 @@
     <ClCompile Include="src\left_recursion.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parser.cpp" />
-    <ClCompile Include="src\stack.cpp" />
     <ClCompile Include="src\tree.cpp" />
   </ItemGroup>
   <ItemGroup>

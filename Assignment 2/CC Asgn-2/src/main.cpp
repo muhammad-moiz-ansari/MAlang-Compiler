@@ -5,7 +5,8 @@
 #include "first_follow.h"
 #include "parser.h"
 #include "tree.h"
-#include <stack>
+//#include <stack>
+#include "stack.h"
 #include <algorithm>
 using namespace std;
 

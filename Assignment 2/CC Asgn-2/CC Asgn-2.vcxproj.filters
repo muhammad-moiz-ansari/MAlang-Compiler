@@ -24,9 +24,6 @@
     <ClCompile Include="src\left_factoring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\stack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\first_follow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -1,5 +1,6 @@
 #include "grammar.h"
-#include <stack>
+//#include <stack>
+#include "stack.h"
 #include <iostream>
 
 
@@ -25,7 +26,7 @@ ParseTreeNode* buildParseTree(
     map<string, map<string, GrammarRule>>& table,
     vector<string> input
 ) {
-    stack<pair<string, ParseTreeNode*>> st;
+    Stack<pair<string, ParseTreeNode*>> st;
 
     // Root
     ParseTreeNode* root = new ParseTreeNode(g.startSymbol);
