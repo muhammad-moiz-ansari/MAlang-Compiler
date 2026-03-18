@@ -21,6 +21,15 @@ bool isTerminal(string sym, Grammar& g) {
     return isTerminal(sym);
 }
 
+
+void deleteTree(ParseTreeNode* node) {
+    if (!node) return;
+    for (auto child : node->children) {
+        deleteTree(child);
+    }
+    delete node;
+}
+
 ParseTreeNode* buildParseTree(
     Grammar& g,
     map<string, map<string, GrammarRule>>& table,
@@ -52,6 +61,7 @@ ParseTreeNode* buildParseTree(
         }
         else if (find(g.terminals.begin(), g.terminals.end(), X) != g.terminals.end() || X == "$") {
             cout << "TREE ERROR: Unexpected token " << a << endl;
+            deleteTree(root);
             return nullptr;
         }
         else {
@@ -60,6 +70,7 @@ ParseTreeNode* buildParseTree(
 
             if (rule.prods.empty()) {
                 cout << "TREE ERROR: No rule for (" << X << ", " << a << ")\n";
+                deleteTree(root);
                 return nullptr;
             }
 
@@ -172,12 +183,4 @@ void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string pref
     for (int i = 0; i < node->children.size(); i++) {
         printTreeColored(node->children[i], g, trace_no, prefix, i == node->children.size() - 1);
     }
-}
-
-void deleteTree(ParseTreeNode* node) {
-    if (!node) return;
-    for (auto child : node->children) {
-        deleteTree(child);
-    }
-    delete node;
 }

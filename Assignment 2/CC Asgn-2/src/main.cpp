@@ -10,7 +10,8 @@
 using namespace std;
 
 int main() {
-    string filename_suffix = "5_error_handle1";
+    string filename_suffix = "5_all_accept1";
+    filename_suffix = "5_error_handle1";
 
     // load grammar
     Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
@@ -19,7 +20,9 @@ int main() {
 
     // Left Recursion Removal
     cout << "=== Left Recursion Removed Grammar ===\n";
-    Grammar g = *eliminateRecursion(gr);
+    Grammar* temp = eliminateRecursion(gr);
+    Grammar g = *temp;
+    delete temp;
     printGrammar(g);
     
     // Left Factoring
@@ -54,6 +57,8 @@ int main() {
         if (root) {
             cout << "\n\n======= PARSE TREE (ASCII) =======\n\n";
             printTreeColored(root, g, trace_no);
+            deleteTree(root);
+            root = nullptr;
         }
 		++trace_no;
     }
