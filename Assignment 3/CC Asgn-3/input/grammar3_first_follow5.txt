@@ -1,0 +1,5 @@
+Start -> Expr Tail
+Tail -> + Expr Tail | epsilon
+Expr -> Term Opt
+Opt -> * Term Opt | epsilon
+Term -> id | ( Start ) | epsilon
