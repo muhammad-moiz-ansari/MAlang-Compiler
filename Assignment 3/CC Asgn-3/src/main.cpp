@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "tree.h"
 #include "stack.h"
+#include "items.h"
 #include <algorithm>
 using namespace std;
 
@@ -17,6 +18,8 @@ int main() {
     Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
     cout << "=== Original Grammar ===\n";
     printGrammar(gr);
+    
+    printItemSets(dfa_generate(gr));
 
     // Left Recursion Removal
     cout << "=== Left Recursion Removed Grammar ===\n";
