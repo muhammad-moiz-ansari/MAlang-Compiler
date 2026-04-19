@@ -40,3 +40,5 @@ ItemState closure(ItemState is, const Grammar& g, map<string, set<string>>& FIRS
 ItemState gotoState(ItemState is, const string& sym, const Grammar& g, map<string, set<string>>& FIRST);
 
 vector<ItemState> dfa_generate(const Grammar& g, map<string, set<string>>& FIRST);
+
+int getGotoState(ItemState I, string X, vector<ItemState>& C, int type, Grammar g, map<string, set<string>>& first);

@@ -4,6 +4,7 @@
 #include "left_recursion.h"
 #include "first_follow.h"
 #include "parser.h"
+#include "parsing_table.h"
 #include "tree.h"
 #include "stack.h"
 #include "items.h"
@@ -11,16 +12,32 @@
 using namespace std;
 
 int main() {
+    // ====================================================
+    // ====================================================
+
+    Grammar gr = loadGrammar("input/grammar5_error_handle1.txt");
+    vector<ItemState> v;
+    map<string, set<string>> fist = computeFirst(gr);
+    map<string, set<string>> follo = computeFollow(gr, fist);
+    v = dfa_generate(gr, fist);
+    printItemSets(v);
+    buildParsingTable(v, gr, follo, 1, fist);
+    printLRParseTable();
+
+    // ====================================================
+    // ====================================================
+    return 0;
+
     string filename_suffix = "5_all_accept1";
     filename_suffix = "5_error_handle1";
 
     // load grammar
-    Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
+    //Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");
     cout << "=== Original Grammar ===\n";
     printGrammar(gr);
     
-    map<string, set<string>> fist = computeFirst(gr);
-    printItemSets(dfa_generate(gr, fist));
+    
+    
 
     // Left Recursion Removal
     cout << "=== Left Recursion Removed Grammar ===\n";

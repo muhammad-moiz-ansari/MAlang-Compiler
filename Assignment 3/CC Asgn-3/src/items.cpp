@@ -75,7 +75,7 @@ vector<ItemState> dfa_generate(const Grammar& g) {
 
     ItemState is;
     Item i;
-    i.lhs = g.startSymbol + "^";
+    i.lhs = "S'";
     i.rhs = { g.startSymbol };
     i.dotPos = 0;
     i.look = "x";
@@ -208,7 +208,7 @@ vector<ItemState> dfa_generate(const Grammar& g, map<string, set<string>>& FIRST
 
     ItemState is;
     Item i;
-    i.lhs = g.startSymbol + "^";
+    i.lhs = "S'";
     i.rhs = { g.startSymbol };
     i.dotPos = 0;
     i.look = "$";
@@ -251,4 +251,34 @@ vector<ItemState> dfa_generate(const Grammar& g, map<string, set<string>>& FIRST
     } while (changed);
 
     return c;
+}
+
+int getGotoState(ItemState I, string X, vector<ItemState>& C, int type, Grammar g, map<string, set<string>>& first) {
+
+    ItemState moved;
+
+    for (auto& item : I.items) {
+        if (item.dotPos < item.rhs.size() &&
+            item.rhs[item.dotPos] == X) {
+
+            Item newItem = item;
+            newItem.dotPos++;
+            moved.items.push_back(newItem);
+        }
+    }
+
+    if (moved.items.empty())
+        return -1;
+
+    if (type == 0)
+        moved = closure(moved, g);
+    else if(type == 1)
+        moved = closure(moved, g, first);
+
+    for (int i = 0; i < C.size(); i++) {
+        if (equalItemSet(C[i], moved))
+            return i;
+    }
+
+    return -1;
 }
