@@ -1,14 +1,17 @@
 #pragma once
 #include "grammar.h"
+#include "first_follow.h"
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 using namespace std;
 
 struct Item {
     string lhs;                 // A
     vector<string> rhs;         // α β
     int dotPos;                 // position of .
+    string look;
 };
 
 struct ItemState {
@@ -28,3 +31,12 @@ ItemState gotoState(ItemState is, const string& sym, const Grammar& g);
 vector<ItemState> dfa_generate(const Grammar& g);
 
 void printItemSets(const vector<ItemState>& C);
+
+// =====================================================================
+// =====================================================================
+
+ItemState closure(ItemState is, const Grammar& g, map<string, set<string>>& FIRST);
+
+ItemState gotoState(ItemState is, const string& sym, const Grammar& g, map<string, set<string>>& FIRST);
+
+vector<ItemState> dfa_generate(const Grammar& g, map<string, set<string>>& FIRST);

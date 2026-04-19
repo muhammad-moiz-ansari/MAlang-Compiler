@@ -19,7 +19,8 @@ int main() {
     cout << "=== Original Grammar ===\n";
     printGrammar(gr);
     
-    printItemSets(dfa_generate(gr));
+    map<string, set<string>> fist = computeFirst(gr);
+    printItemSets(dfa_generate(gr, fist));
 
     // Left Recursion Removal
     cout << "=== Left Recursion Removed Grammar ===\n";
