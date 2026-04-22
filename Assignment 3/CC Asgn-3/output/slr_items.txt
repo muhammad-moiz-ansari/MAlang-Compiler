@@ -1,0 +1,63 @@
+I0:
+S' -> .Expr'  , x
+Expr' -> .Expr  , x
+Expr -> .Expr + Term  , x
+Expr -> .Term  , x
+Term -> .Term * Factor  , x
+Term -> .Factor  , x
+Factor -> .( Expr )  , x
+Factor -> .id  , x
+
+I1:
+Factor -> ( .Expr )  , x
+Expr -> .Expr + Term  , x
+Expr -> .Term  , x
+Term -> .Term * Factor  , x
+Term -> .Factor  , x
+Factor -> .( Expr )  , x
+Factor -> .id  , x
+
+I2:
+Factor -> id . , x
+
+I3:
+S' -> Expr' . , x
+
+I4:
+Expr' -> Expr . , x
+Expr -> Expr .+ Term  , x
+
+I5:
+Expr -> Term . , x
+Term -> Term .* Factor  , x
+
+I6:
+Term -> Factor . , x
+
+I7:
+Factor -> ( Expr .)  , x
+Expr -> Expr .+ Term  , x
+
+I8:
+Expr -> Expr + .Term  , x
+Term -> .Term * Factor  , x
+Term -> .Factor  , x
+Factor -> .( Expr )  , x
+Factor -> .id  , x
+
+I9:
+Term -> Term * .Factor  , x
+Factor -> .( Expr )  , x
+Factor -> .id  , x
+
+I10:
+Factor -> ( Expr ) . , x
+
+I11:
+Expr -> Expr + Term . , x
+Term -> Term .* Factor  , x
+
+I12:
+Term -> Term * Factor . , x
+
+

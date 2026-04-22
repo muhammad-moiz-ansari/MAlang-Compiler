@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Grammar augmentGrammar(const Grammar& g) {
-	Grammar augmented = g;
+void augmentGrammar(Grammar& g) {
+	Grammar& augmented = g;
 	string newStartSymbol = g.nonTerminals[0] + "'";
 	
 	// Create new start rule
@@ -17,6 +17,4 @@ Grammar augmentGrammar(const Grammar& g) {
 	augmented.rules[newStartSymbol] = newStartRule;
 	augmented.nonTerminals.insert(augmented.nonTerminals.begin(), newStartSymbol);
 	augmented.startSymbol = newStartSymbol;
-	
-	return augmented;
 }

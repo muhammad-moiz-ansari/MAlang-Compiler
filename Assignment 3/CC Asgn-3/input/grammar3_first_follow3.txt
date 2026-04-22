@@ -1,3 +1,0 @@
-Start -> ( Low ) | a
-Low -> Start Low1
-Low1 -> , Start Low1 | epsilon

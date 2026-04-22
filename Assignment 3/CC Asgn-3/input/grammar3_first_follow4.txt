@@ -1,3 +1,0 @@
-Start -> Any a Any b | Bus b Bus a
-Any -> epsilon
-Bus -> epsilon

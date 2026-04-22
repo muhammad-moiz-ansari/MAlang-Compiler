@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,19 +128,25 @@
     <ClCompile Include="src\first_follow.cpp" />
     <ClCompile Include="src\grammar.cpp" />
     <ClCompile Include="src\grammar_augment.cpp" />
+    <ClCompile Include="src\items.cpp" />
     <ClCompile Include="src\left_factoring.cpp" />
     <ClCompile Include="src\left_recursion.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parser.cpp" />
+    <ClCompile Include="src\parsing_table.cpp" />
+    <ClCompile Include="src\slr_parser.cpp" />
     <ClCompile Include="src\tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\first_follow.h" />
     <ClInclude Include="src\grammar.h" />
     <ClInclude Include="src\grammar_augment.h" />
+    <ClInclude Include="src\items.h" />
     <ClInclude Include="src\left_factoring.h" />
     <ClInclude Include="src\left_recursion.h" />
     <ClInclude Include="src\parser.h" />
+    <ClInclude Include="src\parsing_table.h" />
+    <ClInclude Include="src\slr_parser.h" />
     <ClInclude Include="src\stack.h" />
     <ClInclude Include="src\tree.h" />
   </ItemGroup>

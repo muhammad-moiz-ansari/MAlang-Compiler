@@ -1,5 +1,6 @@
 #include"parsing_table.h"
 #include<iostream>
+#include <fstream>
 using namespace std;
 
 map<int, map<string, string>> ACTION;
@@ -32,9 +33,10 @@ void buildParsingTable(vector<ItemState>& C, const Grammar& g, map<string, set<s
 
                 // SLR(1) reduce
                 if (type == 0) {
-
-                    for (auto& t : FOLLOW.at(A))
-                        ACTION[i][t] = "r(" + production + ")";
+                    // S' is the augmented start, skiping it here, accept case handles it
+                    if (FOLLOW.count(A))
+                        for (auto& t : FOLLOW.at(A))
+                            ACTION[i][t] = "r(" + production + ")";
                 }
 
                 // LR(1) reduce
@@ -69,21 +71,37 @@ void buildParsingTable(vector<ItemState>& C, const Grammar& g, map<string, set<s
     }
 }
 
-void printLRParseTable() {
-
+void printNsaveLRParseTable(const string& filename) {
+    // Open the file for writing
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open " << filename << " for writing.\n";
+    }
     cout << "\nACTION TABLE\n";
+    outFile << "\nACTION TABLE\n";
     for (auto& row : ACTION) {
         cout << "State " << row.first << ":\n";
+        outFile << "State " << row.first << ":\n";
         for (auto& col : row.second) {
             cout << "  " << col.first << " -> " << col.second << endl;
+            outFile << "  " << col.first << " -> " << col.second << endl;
         }
     }
 
     cout << "\nGOTO TABLE\n";
+    outFile << "\nGOTO TABLE\n";
     for (auto& row : GOTO) {
         cout << "State " << row.first << ":\n";
+        outFile << "State " << row.first << ":\n";
         for (auto& col : row.second) {
             cout << "  " << col.first << " -> " << col.second << endl;
+            outFile << "  " << col.first << " -> " << col.second << endl;
         }
+    }
+
+    if (outFile.is_open()) {
+        outFile << endl;
+        outFile.close();
+        cout << "\n[Success] LR Parsing Table safely saved to " << filename << "\n\n";
     }
 }

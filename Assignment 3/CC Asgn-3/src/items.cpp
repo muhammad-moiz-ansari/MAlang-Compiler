@@ -1,6 +1,7 @@
 #include "items.h"
 #include "first_follow.h"
 #include <iostream>
+#include <fstream>
 #include <set>
 using namespace std;
 
@@ -120,24 +121,47 @@ vector<ItemState> dfa_generate(const Grammar& g) {
     return c;
 }
 
-void printItemSets(const vector<ItemState>& C) {
+void printNsaveItemSets(const vector<ItemState>& C, const string& filename) {
+    // Open the file for writing
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cout << "Error: Could not open " << filename << " for writing.\n";
+    }
+
     for (int i = 0; i < C.size(); i++) {
         cout << "I" << i << ":\n";
+        outFile << "I" << i << ":\n";
 
         for (const auto& item : C[i].items) {
             cout << item.lhs << " -> ";
+            outFile << item.lhs << " -> ";
 
             for (int j = 0; j < item.rhs.size(); j++) {
-                if (j == item.dotPos) cout << ".";
+                if (j == item.dotPos) {
+                    cout << ".";
+                    outFile << ".";
+                }
                 cout << item.rhs[j] << " ";
+                outFile << item.rhs[j] << " ";
             }
 
-            if (item.dotPos == item.rhs.size())
+            if (item.dotPos == item.rhs.size()) {
                 cout << ".";
+                outFile << ".";
+            }
             cout << " , " << item.look;
             cout << endl;
+            outFile << " , " << item.look;
+            outFile << endl;
         }
         cout << endl;
+        outFile << endl;
+    }
+
+    if (outFile.is_open()) {
+        outFile << endl;
+        outFile.close();
+        cout << "\n[Success] Item sets safely saved to " << filename << "\n\n";
     }
 }
 

@@ -30,7 +30,7 @@ ItemState gotoState(ItemState is, const string& sym, const Grammar& g);
 
 vector<ItemState> dfa_generate(const Grammar& g);
 
-void printItemSets(const vector<ItemState>& C);
+void printNsaveItemSets(const vector<ItemState>& C, const string& filename);
 
 // =====================================================================
 // =====================================================================

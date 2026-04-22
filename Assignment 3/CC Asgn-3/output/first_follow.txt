@@ -1,0 +1,13 @@
+--- First() Sets ---
+Expr':	{ (, id, }
+Expr:	{ (, id, }
+Term:	{ (, id, }
+Factor:	{ (, id, }
+
+--- Follow() Sets ---
+Expr':	{ $,}
+Expr:	{ $, ), +,}
+Term:	{ $, ), *, +,}
+Factor:	{ $, ), *, +,}
+
+

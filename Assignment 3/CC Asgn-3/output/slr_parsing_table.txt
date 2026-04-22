@@ -1,0 +1,69 @@
+
+ACTION TABLE
+State 0:
+  ( -> s1
+  id -> s2
+State 1:
+  ( -> s1
+  id -> s2
+State 2:
+  $ -> r(Factor->id)
+  ) -> r(Factor->id)
+  * -> r(Factor->id)
+  + -> r(Factor->id)
+State 3:
+  $ -> accept
+State 4:
+  $ -> r(Expr'->Expr)
+  + -> s8
+State 5:
+  $ -> r(Expr->Term)
+  ) -> r(Expr->Term)
+  * -> s9
+  + -> r(Expr->Term)
+State 6:
+  $ -> r(Term->Factor)
+  ) -> r(Term->Factor)
+  * -> r(Term->Factor)
+  + -> r(Term->Factor)
+State 7:
+  ) -> s10
+  + -> s8
+State 8:
+  ( -> s1
+  id -> s2
+State 9:
+  ( -> s1
+  id -> s2
+State 10:
+  $ -> r(Factor->(Expr))
+  ) -> r(Factor->(Expr))
+  * -> r(Factor->(Expr))
+  + -> r(Factor->(Expr))
+State 11:
+  $ -> r(Expr->Expr+Term)
+  ) -> r(Expr->Expr+Term)
+  * -> s9
+  + -> r(Expr->Expr+Term)
+State 12:
+  $ -> r(Term->Term*Factor)
+  ) -> r(Term->Term*Factor)
+  * -> r(Term->Term*Factor)
+  + -> r(Term->Term*Factor)
+
+GOTO TABLE
+State 0:
+  Expr -> 4
+  Expr' -> 3
+  Factor -> 6
+  Term -> 5
+State 1:
+  Expr -> 7
+  Factor -> 6
+  Term -> 5
+State 8:
+  Factor -> 6
+  Term -> 11
+State 9:
+  Factor -> 12
+

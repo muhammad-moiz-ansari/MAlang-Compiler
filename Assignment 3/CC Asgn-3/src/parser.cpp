@@ -1,11 +1,9 @@
 #include <iostream>
-#include <set>
 #include <iomanip>
 #include <sstream>
 #include <fstream>
 #include "parser.h"
-#include "first_follow.h"
-#include "grammar.h"
+#include "stack.h"
 using namespace std;
 
 ///////////////////////////////////
@@ -14,305 +12,198 @@ using namespace std;
 //                               //
 ///////////////////////////////////
 
-map<string, map<string, GrammarRule>> ll1table;
-
-void createParseTable(map<string, set<string>>& firs, map<string, set<string>>& follow, Grammar& g) {
-    for (int i = 0; i < g.nonTerminals.size(); i++) {
-        ll1table[g.nonTerminals[i]];
-        GrammarRule r;
-        for (int j = 0; j < g.terminals.size(); j++) {
-            ll1table[g.nonTerminals[i]][g.terminals[j]] = r;
-        }
-        ll1table[g.nonTerminals[i]]["$"] = r;
-    }
-    if (find(g.terminals.begin(), g.terminals.end(), "$") == g.terminals.end())
-        g.terminals.push_back("$");
-
-    for (int i = 0; i < g.nonTerminals.size(); i++) {
-        for (auto prod : g.rules[g.nonTerminals[i]].prods) {
-            map<string, set<string>> first;
-            computeFirstOfNTll1TableEdition(first, g.nonTerminals[i], g, prod);
-            for (auto x : first[g.nonTerminals[i]])
-                if (isEpsilon(x)) {
-                    for (auto y : follow[g.nonTerminals[i]]) {
-                        GrammarRule r;
-                        r.prods.push_back(prod);
-                        r.nonTerminal = g.nonTerminals[i];
-                        if (ll1table[g.nonTerminals[i]][y].prods.empty())
-                            ll1table[g.nonTerminals[i]][y] = r;
-                        else
-                            cout << "Error" << endl;
-                    }
-                }
-                else {
-                    GrammarRule r;
-                    r.prods.push_back(prod);
-                    r.nonTerminal = g.nonTerminals[i];
-                    if (ll1table[g.nonTerminals[i]][x].prods.empty())
-                        ll1table[g.nonTerminals[i]][x] = r;
-                    else
-                        cout << "Error" << endl;
-                }
-        }
-    }
-}
-
-void printNsaveParseTable(Grammar& g, const string& filename) {
-    const int COL_WIDTH = 15;
-    // Open the file for writing
-    ofstream outFile(filename);
-    if (!outFile.is_open()) {
-        cout << "Error: Could not open " << filename << " for writing.\n";
-    }
-
-    cout << "\n\n========= LL(1) PARSE TABLE =========\n\n";
-
-    // Header
-    cout << setw(COL_WIDTH) << " ";
-    if (outFile.is_open()) outFile << setw(COL_WIDTH) << " ";
-    for (const auto& t : g.terminals) {
-        cout << setw(COL_WIDTH) << t;
-        if (outFile.is_open()) outFile << setw(COL_WIDTH) << t;
-    }
-    cout << endl;
-    if (outFile.is_open()) outFile << endl;
-
-    // Line
-    cout << string(COL_WIDTH * (g.terminals.size() + 1), '-') << endl;
-    if (outFile.is_open()) outFile << string(COL_WIDTH * (g.terminals.size() + 1), '-') << endl;
-
-    // Rows
-    for (const auto& nt : g.nonTerminals) {
-        cout << setw(COL_WIDTH) << nt;
-        if (outFile.is_open()) outFile << setw(COL_WIDTH) << nt;
-
-        for (const auto& t : g.terminals) {
-            stringstream cellStream;
-            auto& productions = ll1table[nt][t].prods;
-
-            if (productions.empty()) {
-                cellStream << "-";
-            }
-            else {
-                for (int i = 0; i < productions.size(); i++) {
-                    cellStream << nt << "->";
-                    for (const auto& sym : productions[i].symbols) {
-                        cellStream << sym;
-                    }
-                    if (i != productions.size() - 1)
-                        cellStream << " | ";
-                }
-            }
-
-            string cell = cellStream.str();
-
-            // Trim if too long
-            if (cell.length() > COL_WIDTH - 2) {
-                cell = cell.substr(0, COL_WIDTH - 5) + "...";
-            }
-
-            cout << setw(COL_WIDTH) << cell;
-            if (outFile.is_open()) outFile << setw(COL_WIDTH) << cell;
-        }
-        cout << endl;
-        if (outFile.is_open()) outFile << endl;
-    }
-
-    // Close the file and confirm
-    if (outFile.is_open()) {
-        outFile << endl;
-        outFile.close();
-        cout << "\n[Success] Parsing table safely saved to " << filename << "\n\n";
-    }
-}
-
-////////////////////////////////////
-//                                //
-//         STRING PARSING         //
-//                                //
-////////////////////////////////////
-
-// Reading Input File
-vector<string> tokenizeLine(const string& line) {
+// Tokenize Input Line (e.g. "id + id * id") into vector of symbols, appends "$"
+vector<string> tokenizeInput(const string& line) {
     vector<string> tokens;
-    stringstream ss(line);
+
     string token;
+    stringstream ss(line);
+
     while (ss >> token)
         tokens.push_back(token);
     tokens.push_back("$");  // Append end marker
     return tokens;
 }
 
-vector<vector<string>> readInputFile(const string& filename) {
-    vector<vector<string>> tokensList;
-    string line;
+// HELPER: Print one step of the trace
+// stepNum | stack (symbols) | remaining input | action taken
+void printStep(int stepNum, const vector<pair<string, int>>& stk,  // (symbol, state) pairs
+    const vector<string>& tokens, int inputPos, const string& action, ofstream& outFile)
+{
+    // Step number
+    cout << left << setw(6) << stepNum;
+    if (outFile.is_open()) outFile << left << setw(6) << stepNum;
 
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cout << "Error: could not open file: " << filename << endl;
-        exit(1);
+    // Stack
+    cout << "| ";
+    if (outFile.is_open()) outFile << "| ";
+    for (auto& element : stk) {
+        cout << element.first << " ";
+        if (outFile.is_open()) outFile << element.first << " ";
     }
+    cout << setw(30 - (int)stk.size() * 2) << " ";  // padding
+    if (outFile.is_open()) outFile << setw(30 - (int)stk.size() * 2) << " ";
 
-    while (getline(file, line)) {
-        if (line.empty())
-            continue;
-
-        tokensList.push_back(tokenizeLine(line));
+    // Remaining input
+    cout << "| ";
+	if (outFile.is_open()) outFile << "| ";
+    for (int i = inputPos; i < tokens.size(); i++) {
+        cout << tokens[i] << " ";
+        if (outFile.is_open()) outFile << tokens[i] << " ";
     }
-    return tokensList;
+    cout << setw(20) << " ";
+	if (outFile.is_open()) outFile << setw(20) << " ";
+
+    // Action
+    cout << "| " << action << endl;
+	if (outFile.is_open()) outFile << "| " << action << endl;
 }
 
-int stackStr_gap = 50,
-    inputStr_gap = 20;
 
-void printStep(int step, Stack<string> stk, const vector<string>& tokens, int pos, const string& action, ofstream& outFile) {
 
-    // ----- Convert stack to string (bottom to top) -----
-    Stack<string> st1 = stk;
-    Stack<string> st2;
-    string stackStr = "";
-    // Reversing stack
-    while (!st1.empty()) {
-        st2.push(st1.top());
-        st1.pop();
+bool parse(const vector<string>& tokens, const Grammar& g, const string& parserName, bool isFirstFile, bool firstLine, const string& inputStr, const string& filename)
+{
+    // Open the file for writing (overwrite if first line, append otherwise)
+    ofstream outFile;
+    if (isFirstFile) {
+        outFile.open(filename);
     }
-    // Appending in string
-    while (!st2.empty()) {
-        stackStr.append(st2.top());
-        st2.pop();
-        if (!st2.empty())
-            stackStr.append(" ");
+    else {
+        outFile.open(filename, ios::app);
     }
 
-    // ----- Convert remaining tokens to string -----
-    string inputStr = "";
-    for (int i = pos; i < tokens.size(); ++i) {
-        inputStr.append(tokens[i]);
-        if (i < tokens.size() - 1)
-            inputStr.append(" ");
-    }
-
-    // ----- Print formatted row -----
-    cout << left
-        << setw(5) << step
-        << "| " << setw(stackStr_gap) << stackStr
-        << "| " << setw(inputStr_gap) << inputStr
-        << "| " << action << "\n";
-    if (outFile.is_open()) outFile << left
-        << setw(5) << step
-        << "| " << setw(stackStr_gap) << stackStr
-        << "| " << setw(inputStr_gap) << inputStr
-		<< "| " << action << "\n";
-}
-
-void parse(vector<string> input, const Grammar& g, int trace_no) {
-	string filename = "output/parsing_trace" + to_string(trace_no) + ".txt";
-
-    // Open the file for writing
-    ofstream outFile(filename);
     if (!outFile.is_open()) {
         cout << "Error: Could not open " << filename << " for writing.\n";
     }
 
-    cout << "\n\n======= PARSING TRACE " << trace_no << " =======\n\n";
-    cout << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
-	if (outFile.is_open()) outFile << left << "Step | " << setw(stackStr_gap) << "Stack" << "| " << setw(inputStr_gap) << "Input" << "| Action\n";
-    cout << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(25, '-') << endl;
-	if (outFile.is_open()) outFile << "-----|-" << string(stackStr_gap, '-') << "|-" << string(inputStr_gap, '-') << "|" << string(25, '-') << endl;
+    if (firstLine) {
+        cout << "\n========== " << parserName << " Parsing ==========\n";
+        if (outFile.is_open()) outFile << "\n========== " << parserName << " Parsing ==========\n";
+    }
 
-    Stack<string> st;
-    int ind = 0;
-    string action;
+    cout << "\n\nInput: " << inputStr << "\n\n";
+    if (outFile.is_open()) outFile << "\n\nInput: " << inputStr << "\n\n";
+
+    cout << left << setw(6) << "Step"
+        << "| Stack                          "
+        << "| Input               "
+        << "| Action\n";
+    cout << string(80, '-') << endl;
+
+    if (outFile.is_open()) {
+        outFile << left << setw(6) << "Step"
+            << "| Stack                          "
+            << "| Input               "
+            << "| Action\n";
+        outFile << string(80, '-') << endl;
+    }
+
+    // Stack: (symbol, state) pairs
+    // Bottom of stack: ("$", 0)
+    vector<pair<string, int>> stk;
+    stk.push_back({ "$", 0 });
+
+    int inputPos = 0;
     int step = 1;
-    int errorCount = 0;
-    bool isAbort = false;
 
-    st.push("$");
-    st.push(g.startSymbol);
+    // For parse tree
+    // Each stack entry also needs a tree node ... we'll use a parallel node stack
+    // (integrate with tree.cpp here)
+    // TODO
 
-    while (!st.empty()) {
-        string tos = st.top();  // Top of Stack
-        string lookahead = input[ind];
-        Stack<string> tempSt = st;
+    while (true) {
+        int  s = stk.back().second;          // top of stack
+        string a = tokens[inputPos];         // current input symbol
 
-        // Case 1: Both are $ (Accept)
-        if (tos == "$" && lookahead == "$") {
-            action = "Accept";
-            printStep(step, st, input, ind, action, outFile);
-            cout << "\nResult: String accepted!\n";
-            break;
+        // Look up ACTION[s][a]
+        if (ACTION.find(s) == ACTION.end() || ACTION[s].find(a) == ACTION[s].end()) {
+            printStep(step, stk, tokens, inputPos, "ERROR: no action for [" + to_string(s) + ", " + a + "]", outFile);
+
+            cout << "Result: REJECTED\n";
+            if (outFile.is_open()) outFile << "Result: REJECTED\n";
+
+            return false;
         }
 
-        // Stack is empty, but input still has tokens (Extra garbage at the end)
-        if (tos == "$" && lookahead != "$") {
-            errorCount++;
-            action = "ERROR: Extra input remaining. Unexpected trailing '" + lookahead + "'";
-            printStep(step, st, input, ind, action, outFile);
-            isAbort = true;
-            break;
+        string action = ACTION[s][a];
+
+        // ?????????????????????? SHIFT ??????????????????????
+        if (action[0] == 's') {
+            int t = stoi(action.substr(1));   // target state
+            printStep(step++, stk, tokens, inputPos, "Shift " + to_string(t), outFile);
+            stk.push_back({ a, t });
+            inputPos++;
         }
 
-        // Case 2: tos is a Terminal or $
-        if (isTerminal(tos) || tos == "$") {
-            if (tos == lookahead) {
-                action = "Match " + lookahead;
-                st.pop();
-                ind++;
-            }
-            else {
-                errorCount++;
-                action = "ERROR: Unexpected \'" + lookahead + "\'\t";
-                action.append("Expected: " + tos + "\t");
-                action.append("Skipping \'" + lookahead + "\'");
-                ind++; // skip input
-            }
-        }
-        // Case 3: tos is a Non-Terminal
-        else {
-            GrammarRule rule = ll1table[tos][lookahead];
+        // ?????????????????????? REDUCE ??????????????????????
+        else if (action[0] == 'r') {
+            // Action format: "r(A->XYZ)"
+            string inner = action.substr(2, action.size() - 3); // "A->XYZ"
+            int arrow = inner.find("->");
+            string lhs = inner.substr(0, arrow);
+            string rhsStr = inner.substr(arrow + 2);
 
-            if (rule.prods.empty()) {
-                errorCount++;
-                action = "ERROR: No production for M[" + tos + ", " + lookahead + "]\t";
-                // Pop the stack for error recovery
-                st.pop();
-            }
-            else {
-                // Expand the production
-                action = "Gen " + rule.nonTerminal + " ->";
-                int size = rule.prods[0].symbols.size();
-                st.pop();
+            // We need to get symbol count to pop 2x times the count
+            // So we check in grammar
+            int rhsLen = 0;
+            vector<string> rhsSymbols;
 
-                // Push the right side in reverse order
-                for (int i = size - 1; i >= 0; --i) {
-                    string sym = rule.prods[0].symbols[i];
-                    if (!isEpsilon(sym)) {
-                        st.push(sym);
+            // Finding matching production in grammar
+            if (g.rules.count(lhs)) {
+                for (auto& prod : g.rules.at(lhs).prods) {
+                    // Reconstructing it as a string to compare with rhsStr
+                    string concat = "";
+                    for (auto& sym : prod.symbols)
+                        concat += sym;
+                    if (concat == rhsStr) {
+                        rhsLen = prod.symbols.size();
+                        rhsSymbols = prod.symbols;
+                        break;
                     }
-                    action.append(" " + rule.prods[0].symbols[size - 1 - i]);
                 }
             }
+
+            // Handle epsilon — pop 0
+            if (rhsStr == "epsilon") rhsLen = 0;
+
+            printStep(step++, stk, tokens, inputPos, "Reduce " + lhs + " -> " + rhsStr, outFile);
+
+            // Pop (2 * rhsLen) entries (symbol + state = 1 pair/entry)
+            for (int i = 0; i < rhsLen; i++)
+                stk.pop_back();
+
+            // After popping, top state tells us where to go
+            int topState = stk.back().second;
+
+            if (GOTO.find(topState) == GOTO.end() || GOTO[topState].find(lhs) == GOTO[topState].end()) {
+                cout << "ERROR: no GOTO for [" << topState << ", " << lhs << "]\n";
+                if (outFile.is_open()) outFile << "ERROR: no GOTO for [" << topState << ", " << lhs << "]\n";
+
+                cout << "Result: REJECTED\n";
+                if (outFile.is_open()) outFile << "Result: REJECTED\n";
+                return false;
+            }
+
+            int gotoSt = GOTO[topState][lhs];
+            stk.push_back({ lhs, gotoSt });
         }
 
-        printStep(step, tempSt, input, ind, action, outFile);
-        ++step;
+        // ?????????????????????? ACCEPT ??????????????????????
+        else if (action == "accept") {
+            printStep(step++, stk, tokens, inputPos, "ACCEPT", outFile);
 
-        if (ind >= input.size()) {
-            isAbort = true;
-            break;
+            cout << "Result: ACCEPTED\n";
+            if (outFile.is_open()) outFile << "Result: ACCEPTED\n";
+            return true;
         }
-    }
-    if (errorCount > 0) {
-        if (!isAbort)
-            cout << "\nResult: Parsing completed with " << errorCount << " error.\n";
-        else
-            cout << "\nResult: Parsing aborted with " << errorCount << " error.\n";
-    }
 
-    // Close the file and confirm
-    if (outFile.is_open()) {
-        outFile << endl;
-        outFile.close();
-        cout << "\n[Success] Parsing table safely saved to " << filename << "\n\n";
+        // ?????????????????????? ERROR ??????????????????????
+        else {
+            printStep(step, stk, tokens, inputPos, "ERROR: unknown action " + action, outFile);
+
+            cout << "Result: REJECTED\n";
+            if (outFile.is_open()) outFile << "Result: REJECTED\n";
+            return false;
+        }
     }
 }

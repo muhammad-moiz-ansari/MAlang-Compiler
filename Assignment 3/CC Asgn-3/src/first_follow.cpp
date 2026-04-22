@@ -8,11 +8,8 @@ set<string> computeFirstOfSymbol(const string& symbol, const Grammar& g, map<str
 {
 	if (isEpsilon(symbol) || isTerminal(symbol))
 		return { symbol };
-	else	// if non-terminal
+	else    // if non-terminal
 	{
-		auto it = first.find(symbol);
-		if (it == first.end() || (it != first.end() && !first[symbol].empty())) // First set doesnt exist for nt
-			computeFirstOfNT(first, symbol, g);
 		return first.at(symbol);
 	}
 }
@@ -66,11 +63,25 @@ void computeFirstOfNTll1TableEdition(map<string, set<string>>& first, string nt,
 map<string, set<string>> computeFirst(const Grammar& g)
 {
 	map<string, set<string>> first;
+
+	// 1. Initialize empty sets for all Non-Terminals
 	for (const auto& nt : g.nonTerminals) {
-		auto it = first.find(nt);
-		if (it == first.end() || (it != first.end() && first[nt].empty())) // First set doesnt exist for nt
-		{
+		first[nt] = set<string>();
+	}
+
+	// 2. Iteratively compute FIRST sets until nothing changes
+	bool changed = true;
+	while (changed) {
+		changed = false;
+		for (const auto& nt : g.nonTerminals) {
+			int originalSize = first[nt].size();
+
 			computeFirstOfNT(first, nt, g);
+
+			// If the size of the set increased, we found new symbols
+			if (first[nt].size() > originalSize) {
+				changed = true;
+			}
 		}
 	}
 	return first;

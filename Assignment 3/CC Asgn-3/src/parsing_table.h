@@ -7,4 +7,4 @@ extern map<int, map<string, int>> GOTO;
 
 void buildParsingTable(vector<ItemState>& C, const Grammar& g, map<string, set<string>>& FOLLOW, int type, map<string, set<string>>& first);
 
-void printLRParseTable();
+void printNsaveLRParseTable(const string& filename);

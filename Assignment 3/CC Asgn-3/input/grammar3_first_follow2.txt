@@ -1,4 +1,0 @@
-Start -> Any
-Any -> a Bus | Any d
-Bus -> b
-Credit -> g

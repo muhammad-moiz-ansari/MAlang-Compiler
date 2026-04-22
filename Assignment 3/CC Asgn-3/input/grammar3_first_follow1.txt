@@ -1,6 +1,0 @@
-Start -> a Bus Daisy h
-Bus -> c Cry
-Cry -> b Cry | epsilon
-Daisy -> End Fuel
-End -> g | epsilon
-Fuel -> f | epsilon

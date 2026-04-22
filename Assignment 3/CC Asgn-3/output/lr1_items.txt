@@ -1,0 +1,207 @@
+I0:
+S' -> .Expr'  , $
+Expr' -> .Expr  , $
+Expr -> .Expr + Term  , $
+Expr -> .Term  , $
+Expr -> .Expr + Term  , +
+Expr -> .Term  , +
+Term -> .Term * Factor  , $
+Term -> .Factor  , $
+Term -> .Term * Factor  , +
+Term -> .Factor  , +
+Term -> .Term * Factor  , *
+Term -> .Factor  , *
+Factor -> .( Expr )  , $
+Factor -> .id  , $
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I1:
+Factor -> ( .Expr )  , $
+Factor -> ( .Expr )  , +
+Factor -> ( .Expr )  , *
+Expr -> .Expr + Term  , )
+Expr -> .Term  , )
+Expr -> .Expr + Term  , +
+Expr -> .Term  , +
+Term -> .Term * Factor  , )
+Term -> .Factor  , )
+Term -> .Term * Factor  , +
+Term -> .Factor  , +
+Term -> .Term * Factor  , *
+Term -> .Factor  , *
+Factor -> .( Expr )  , )
+Factor -> .id  , )
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I2:
+Factor -> id . , $
+Factor -> id . , +
+Factor -> id . , *
+
+I3:
+S' -> Expr' . , $
+
+I4:
+Expr' -> Expr . , $
+Expr -> Expr .+ Term  , $
+Expr -> Expr .+ Term  , +
+
+I5:
+Expr -> Term . , $
+Expr -> Term . , +
+Term -> Term .* Factor  , $
+Term -> Term .* Factor  , +
+Term -> Term .* Factor  , *
+
+I6:
+Term -> Factor . , $
+Term -> Factor . , +
+Term -> Factor . , *
+
+I7:
+Factor -> ( .Expr )  , )
+Factor -> ( .Expr )  , +
+Factor -> ( .Expr )  , *
+Expr -> .Expr + Term  , )
+Expr -> .Term  , )
+Expr -> .Expr + Term  , +
+Expr -> .Term  , +
+Term -> .Term * Factor  , )
+Term -> .Factor  , )
+Term -> .Term * Factor  , +
+Term -> .Factor  , +
+Term -> .Term * Factor  , *
+Term -> .Factor  , *
+Factor -> .( Expr )  , )
+Factor -> .id  , )
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I8:
+Factor -> id . , )
+Factor -> id . , +
+Factor -> id . , *
+
+I9:
+Factor -> ( Expr .)  , $
+Factor -> ( Expr .)  , +
+Factor -> ( Expr .)  , *
+Expr -> Expr .+ Term  , )
+Expr -> Expr .+ Term  , +
+
+I10:
+Expr -> Term . , )
+Expr -> Term . , +
+Term -> Term .* Factor  , )
+Term -> Term .* Factor  , +
+Term -> Term .* Factor  , *
+
+I11:
+Term -> Factor . , )
+Term -> Factor . , +
+Term -> Factor . , *
+
+I12:
+Expr -> Expr + .Term  , $
+Expr -> Expr + .Term  , +
+Term -> .Term * Factor  , $
+Term -> .Factor  , $
+Term -> .Term * Factor  , +
+Term -> .Factor  , +
+Term -> .Term * Factor  , *
+Term -> .Factor  , *
+Factor -> .( Expr )  , $
+Factor -> .id  , $
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I13:
+Term -> Term * .Factor  , $
+Term -> Term * .Factor  , +
+Term -> Term * .Factor  , *
+Factor -> .( Expr )  , $
+Factor -> .id  , $
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I14:
+Factor -> ( Expr .)  , )
+Factor -> ( Expr .)  , +
+Factor -> ( Expr .)  , *
+Expr -> Expr .+ Term  , )
+Expr -> Expr .+ Term  , +
+
+I15:
+Expr -> Expr + .Term  , )
+Expr -> Expr + .Term  , +
+Term -> .Term * Factor  , )
+Term -> .Factor  , )
+Term -> .Term * Factor  , +
+Term -> .Factor  , +
+Term -> .Term * Factor  , *
+Term -> .Factor  , *
+Factor -> .( Expr )  , )
+Factor -> .id  , )
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I16:
+Factor -> ( Expr ) . , $
+Factor -> ( Expr ) . , +
+Factor -> ( Expr ) . , *
+
+I17:
+Term -> Term * .Factor  , )
+Term -> Term * .Factor  , +
+Term -> Term * .Factor  , *
+Factor -> .( Expr )  , )
+Factor -> .id  , )
+Factor -> .( Expr )  , +
+Factor -> .id  , +
+Factor -> .( Expr )  , *
+Factor -> .id  , *
+
+I18:
+Expr -> Expr + Term . , $
+Expr -> Expr + Term . , +
+Term -> Term .* Factor  , $
+Term -> Term .* Factor  , +
+Term -> Term .* Factor  , *
+
+I19:
+Term -> Term * Factor . , $
+Term -> Term * Factor . , +
+Term -> Term * Factor . , *
+
+I20:
+Factor -> ( Expr ) . , )
+Factor -> ( Expr ) . , +
+Factor -> ( Expr ) . , *
+
+I21:
+Expr -> Expr + Term . , )
+Expr -> Expr + Term . , +
+Term -> Term .* Factor  , )
+Term -> Term .* Factor  , +
+Term -> Term .* Factor  , *
+
+I22:
+Term -> Term * Factor . , )
+Term -> Term * Factor . , +
+Term -> Term * Factor . , *
+
+
