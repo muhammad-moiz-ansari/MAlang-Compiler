@@ -19,8 +19,12 @@ vector<string> tokenizeInput(const string& line) {
     string token;
     stringstream ss(line);
 
-    while (ss >> token)
-        tokens.push_back(token);
+    while (ss >> token) {
+        // Skiping literal 'epsilon'
+        if (token != "epsilon") {
+            tokens.push_back(token);
+        }
+    }
     tokens.push_back("$");  // Append end marker
     return tokens;
 }

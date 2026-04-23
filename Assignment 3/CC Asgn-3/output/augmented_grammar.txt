@@ -1,5 +1,5 @@
-BExpr' -> BExpr 
-BExpr -> BExpr or BTerm | BTerm 
-BTerm -> BTerm and BFactor | BFactor 
-BFactor -> not BFactor | ( BExpr ) | true | false 
+Start' -> Start 
+Start -> Left = Right | Right 
+Left -> * Right | id 
+Right -> Left 
 

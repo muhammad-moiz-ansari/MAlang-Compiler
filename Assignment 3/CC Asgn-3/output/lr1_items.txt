@@ -1,303 +1,71 @@
 I0:
-S' -> .BExpr'  , $
-BExpr' -> .BExpr  , $
-BExpr -> .BExpr or BTerm  , $
-BExpr -> .BTerm  , $
-BExpr -> .BExpr or BTerm  , or
-BExpr -> .BTerm  , or
-BTerm -> .BTerm and BFactor  , $
-BTerm -> .BFactor  , $
-BTerm -> .BTerm and BFactor  , or
-BTerm -> .BFactor  , or
-BTerm -> .BTerm and BFactor  , and
-BTerm -> .BFactor  , and
-BFactor -> .not BFactor  , $
-BFactor -> .( BExpr )  , $
-BFactor -> .true  , $
-BFactor -> .false  , $
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
+S' -> .Start'  , $
+Start' -> .Start  , $
+Start -> .Left = Right  , $
+Start -> .Right  , $
+Left -> .* Right  , =
+Left -> .id  , =
+Right -> .Left  , $
+Left -> .* Right  , $
+Left -> .id  , $
 
 I1:
-BFactor -> not .BFactor  , $
-BFactor -> not .BFactor  , or
-BFactor -> not .BFactor  , and
-BFactor -> .not BFactor  , $
-BFactor -> .( BExpr )  , $
-BFactor -> .true  , $
-BFactor -> .false  , $
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
+Left -> * .Right  , =
+Left -> * .Right  , $
+Right -> .Left  , =
+Right -> .Left  , $
+Left -> .* Right  , =
+Left -> .id  , =
+Left -> .* Right  , $
+Left -> .id  , $
 
 I2:
-BFactor -> ( .BExpr )  , $
-BFactor -> ( .BExpr )  , or
-BFactor -> ( .BExpr )  , and
-BExpr -> .BExpr or BTerm  , )
-BExpr -> .BTerm  , )
-BExpr -> .BExpr or BTerm  , or
-BExpr -> .BTerm  , or
-BTerm -> .BTerm and BFactor  , )
-BTerm -> .BFactor  , )
-BTerm -> .BTerm and BFactor  , or
-BTerm -> .BFactor  , or
-BTerm -> .BTerm and BFactor  , and
-BTerm -> .BFactor  , and
-BFactor -> .not BFactor  , )
-BFactor -> .( BExpr )  , )
-BFactor -> .true  , )
-BFactor -> .false  , )
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
+Left -> id . , =
+Left -> id . , $
 
 I3:
-BFactor -> true . , $
-BFactor -> true . , or
-BFactor -> true . , and
+S' -> Start' . , $
 
 I4:
-BFactor -> false . , $
-BFactor -> false . , or
-BFactor -> false . , and
+Start' -> Start . , $
 
 I5:
-S' -> BExpr' . , $
+Start -> Left .= Right  , $
+Right -> Left . , $
 
 I6:
-BExpr' -> BExpr . , $
-BExpr -> BExpr .or BTerm  , $
-BExpr -> BExpr .or BTerm  , or
+Start -> Right . , $
 
 I7:
-BExpr -> BTerm . , $
-BExpr -> BTerm . , or
-BTerm -> BTerm .and BFactor  , $
-BTerm -> BTerm .and BFactor  , or
-BTerm -> BTerm .and BFactor  , and
+Right -> Left . , =
+Right -> Left . , $
 
 I8:
-BTerm -> BFactor . , $
-BTerm -> BFactor . , or
-BTerm -> BFactor . , and
+Left -> * Right . , =
+Left -> * Right . , $
 
 I9:
-BFactor -> not BFactor . , $
-BFactor -> not BFactor . , or
-BFactor -> not BFactor . , and
+Start -> Left = .Right  , $
+Right -> .Left  , $
+Left -> .* Right  , $
+Left -> .id  , $
 
 I10:
-BFactor -> not .BFactor  , )
-BFactor -> not .BFactor  , or
-BFactor -> not .BFactor  , and
-BFactor -> .not BFactor  , )
-BFactor -> .( BExpr )  , )
-BFactor -> .true  , )
-BFactor -> .false  , )
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
+Left -> * .Right  , $
+Right -> .Left  , $
+Left -> .* Right  , $
+Left -> .id  , $
 
 I11:
-BFactor -> ( .BExpr )  , )
-BFactor -> ( .BExpr )  , or
-BFactor -> ( .BExpr )  , and
-BExpr -> .BExpr or BTerm  , )
-BExpr -> .BTerm  , )
-BExpr -> .BExpr or BTerm  , or
-BExpr -> .BTerm  , or
-BTerm -> .BTerm and BFactor  , )
-BTerm -> .BFactor  , )
-BTerm -> .BTerm and BFactor  , or
-BTerm -> .BFactor  , or
-BTerm -> .BTerm and BFactor  , and
-BTerm -> .BFactor  , and
-BFactor -> .not BFactor  , )
-BFactor -> .( BExpr )  , )
-BFactor -> .true  , )
-BFactor -> .false  , )
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
+Left -> id . , $
 
 I12:
-BFactor -> true . , )
-BFactor -> true . , or
-BFactor -> true . , and
+Right -> Left . , $
 
 I13:
-BFactor -> false . , )
-BFactor -> false . , or
-BFactor -> false . , and
+Start -> Left = Right . , $
 
 I14:
-BFactor -> ( BExpr .)  , $
-BFactor -> ( BExpr .)  , or
-BFactor -> ( BExpr .)  , and
-BExpr -> BExpr .or BTerm  , )
-BExpr -> BExpr .or BTerm  , or
-
-I15:
-BExpr -> BTerm . , )
-BExpr -> BTerm . , or
-BTerm -> BTerm .and BFactor  , )
-BTerm -> BTerm .and BFactor  , or
-BTerm -> BTerm .and BFactor  , and
-
-I16:
-BTerm -> BFactor . , )
-BTerm -> BFactor . , or
-BTerm -> BFactor . , and
-
-I17:
-BExpr -> BExpr or .BTerm  , $
-BExpr -> BExpr or .BTerm  , or
-BTerm -> .BTerm and BFactor  , $
-BTerm -> .BFactor  , $
-BTerm -> .BTerm and BFactor  , or
-BTerm -> .BFactor  , or
-BTerm -> .BTerm and BFactor  , and
-BTerm -> .BFactor  , and
-BFactor -> .not BFactor  , $
-BFactor -> .( BExpr )  , $
-BFactor -> .true  , $
-BFactor -> .false  , $
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
-
-I18:
-BTerm -> BTerm and .BFactor  , $
-BTerm -> BTerm and .BFactor  , or
-BTerm -> BTerm and .BFactor  , and
-BFactor -> .not BFactor  , $
-BFactor -> .( BExpr )  , $
-BFactor -> .true  , $
-BFactor -> .false  , $
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
-
-I19:
-BFactor -> not BFactor . , )
-BFactor -> not BFactor . , or
-BFactor -> not BFactor . , and
-
-I20:
-BFactor -> ( BExpr .)  , )
-BFactor -> ( BExpr .)  , or
-BFactor -> ( BExpr .)  , and
-BExpr -> BExpr .or BTerm  , )
-BExpr -> BExpr .or BTerm  , or
-
-I21:
-BExpr -> BExpr or .BTerm  , )
-BExpr -> BExpr or .BTerm  , or
-BTerm -> .BTerm and BFactor  , )
-BTerm -> .BFactor  , )
-BTerm -> .BTerm and BFactor  , or
-BTerm -> .BFactor  , or
-BTerm -> .BTerm and BFactor  , and
-BTerm -> .BFactor  , and
-BFactor -> .not BFactor  , )
-BFactor -> .( BExpr )  , )
-BFactor -> .true  , )
-BFactor -> .false  , )
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
-
-I22:
-BFactor -> ( BExpr ) . , $
-BFactor -> ( BExpr ) . , or
-BFactor -> ( BExpr ) . , and
-
-I23:
-BTerm -> BTerm and .BFactor  , )
-BTerm -> BTerm and .BFactor  , or
-BTerm -> BTerm and .BFactor  , and
-BFactor -> .not BFactor  , )
-BFactor -> .( BExpr )  , )
-BFactor -> .true  , )
-BFactor -> .false  , )
-BFactor -> .not BFactor  , or
-BFactor -> .( BExpr )  , or
-BFactor -> .true  , or
-BFactor -> .false  , or
-BFactor -> .not BFactor  , and
-BFactor -> .( BExpr )  , and
-BFactor -> .true  , and
-BFactor -> .false  , and
-
-I24:
-BExpr -> BExpr or BTerm . , $
-BExpr -> BExpr or BTerm . , or
-BTerm -> BTerm .and BFactor  , $
-BTerm -> BTerm .and BFactor  , or
-BTerm -> BTerm .and BFactor  , and
-
-I25:
-BTerm -> BTerm and BFactor . , $
-BTerm -> BTerm and BFactor . , or
-BTerm -> BTerm and BFactor . , and
-
-I26:
-BFactor -> ( BExpr ) . , )
-BFactor -> ( BExpr ) . , or
-BFactor -> ( BExpr ) . , and
-
-I27:
-BExpr -> BExpr or BTerm . , )
-BExpr -> BExpr or BTerm . , or
-BTerm -> BTerm .and BFactor  , )
-BTerm -> BTerm .and BFactor  , or
-BTerm -> BTerm .and BFactor  , and
-
-I28:
-BTerm -> BTerm and BFactor . , )
-BTerm -> BTerm and BFactor . , or
-BTerm -> BTerm and BFactor . , and
+Left -> * Right . , $
 
 

@@ -1,13 +1,13 @@
 --- First() Sets ---
-BExpr':	{ (, false, not, true, }
-BExpr:	{ (, false, not, true, }
-BTerm:	{ (, false, not, true, }
-BFactor:	{ (, false, not, true, }
+Start':	{ *, id, }
+Start:	{ *, id, }
+Left:	{ *, id, }
+Right:	{ *, id, }
 
 --- Follow() Sets ---
-BExpr':	{ $,}
-BExpr:	{ $, ), or,}
-BTerm:	{ $, ), and, or,}
-BFactor:	{ $, ), and, or,}
+Start':	{ $,}
+Start:	{ $,}
+Left:	{ $, =,}
+Right:	{ $, =,}
 
 

@@ -2,159 +2,125 @@
 ========== SLR(1) - Valid Parsing ==========
 
 
-Input: true
+Input: id = id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | true $                     | Shift 3
-2     | $ true                           | $                     | Reduce BFactor -> true
-3     | $ BFactor                           | $                     | Reduce BTerm -> BFactor
-4     | $ BTerm                           | $                     | Reduce BExpr -> BTerm
-5     | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
-6     | $ BExpr'                           | $                     | ACCEPT
-Result: ACCEPTED
+1     | $                             | id = id $                     | Shift 2
+2     | $ id                           | = id $                     | Reduce Left -> id
+3     | $ Left                           | = id $                     | Reduce Right -> Left
+4     | $ Right                           | = id $                     | ERROR: no action for [6, =]
+Result: REJECTED
 
 
-Input: true and false
+Input: * id = * id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | true and false $                     | Shift 3
-2     | $ true                           | and false $                     | Reduce BFactor -> true
-3     | $ BFactor                           | and false $                     | Reduce BTerm -> BFactor
-4     | $ BTerm                           | and false $                     | Shift 12
-5     | $ BTerm and                         | false $                     | Shift 4
-6     | $ BTerm and false                       | $                     | Reduce BFactor -> false
-7     | $ BTerm and BFactor                       | $                     | Reduce BTerm -> BTermandBFactor
-8     | $ BTerm                           | $                     | Reduce BExpr -> BTerm
-9     | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
-10    | $ BExpr'                           | $                     | ACCEPT
-Result: ACCEPTED
+1     | $                             | * id = * id $                     | Shift 1
+2     | $ *                           | id = * id $                     | Shift 2
+3     | $ * id                         | = * id $                     | Reduce Left -> id
+4     | $ * Left                         | = * id $                     | Reduce Right -> Left
+5     | $ * Right                         | = * id $                     | Reduce Left -> *Right
+6     | $ Left                           | = * id $                     | Reduce Right -> Left
+7     | $ Right                           | = * id $                     | ERROR: no action for [6, =]
+Result: REJECTED
 
 
-Input: not true or false
+Input: id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | not true or false $                     | Shift 1
-2     | $ not                           | true or false $                     | Shift 3
-3     | $ not true                         | or false $                     | Reduce BFactor -> true
-4     | $ not BFactor                         | or false $                     | Reduce BFactor -> notBFactor
-5     | $ BFactor                           | or false $                     | Reduce BTerm -> BFactor
-6     | $ BTerm                           | or false $                     | Reduce BExpr -> BTerm
-7     | $ BExpr                           | or false $                     | Shift 11
-8     | $ BExpr or                         | false $                     | Shift 4
-9     | $ BExpr or false                       | $                     | Reduce BFactor -> false
-10    | $ BExpr or BFactor                       | $                     | Reduce BTerm -> BFactor
-11    | $ BExpr or BTerm                       | $                     | Reduce BExpr -> BExprorBTerm
-12    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
-13    | $ BExpr'                           | $                     | ACCEPT
+1     | $                             | id $                     | Shift 2
+2     | $ id                           | $                     | Reduce Left -> id
+3     | $ Left                           | $                     | Reduce Right -> Left
+4     | $ Right                           | $                     | Reduce Start -> Right
+5     | $ Start                           | $                     | Reduce Start' -> Start
+6     | $ Start'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: ( true or false ) and true
+Input: * * id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | ( true or false ) and true $                     | Shift 2
-2     | $ (                           | true or false ) and true $                     | Shift 3
-3     | $ ( true                         | or false ) and true $                     | Reduce BFactor -> true
-4     | $ ( BFactor                         | or false ) and true $                     | Reduce BTerm -> BFactor
-5     | $ ( BTerm                         | or false ) and true $                     | Reduce BExpr -> BTerm
-6     | $ ( BExpr                         | or false ) and true $                     | Shift 11
-7     | $ ( BExpr or                       | false ) and true $                     | Shift 4
-8     | $ ( BExpr or false                     | ) and true $                     | Reduce BFactor -> false
-9     | $ ( BExpr or BFactor                     | ) and true $                     | Reduce BTerm -> BFactor
-10    | $ ( BExpr or BTerm                     | ) and true $                     | Reduce BExpr -> BExprorBTerm
-11    | $ ( BExpr                         | ) and true $                     | Shift 13
-12    | $ ( BExpr )                       | and true $                     | Reduce BFactor -> (BExpr)
-13    | $ BFactor                           | and true $                     | Reduce BTerm -> BFactor
-14    | $ BTerm                           | and true $                     | Shift 12
-15    | $ BTerm and                         | true $                     | Shift 3
-16    | $ BTerm and true                       | $                     | Reduce BFactor -> true
-17    | $ BTerm and BFactor                       | $                     | Reduce BTerm -> BTermandBFactor
-18    | $ BTerm                           | $                     | Reduce BExpr -> BTerm
-19    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
-20    | $ BExpr'                           | $                     | ACCEPT
+1     | $                             | * * id $                     | Shift 1
+2     | $ *                           | * id $                     | Shift 1
+3     | $ * *                         | id $                     | Shift 2
+4     | $ * * id                       | $                     | Reduce Left -> id
+5     | $ * * Left                       | $                     | Reduce Right -> Left
+6     | $ * * Right                       | $                     | Reduce Left -> *Right
+7     | $ * Left                         | $                     | Reduce Right -> Left
+8     | $ * Right                         | $                     | Reduce Left -> *Right
+9     | $ Left                           | $                     | Reduce Right -> Left
+10    | $ Right                           | $                     | Reduce Start -> Right
+11    | $ Start                           | $                     | Reduce Start' -> Start
+12    | $ Start'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: not ( not true )
+Input: * id = id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | not ( not true ) $                     | Shift 1
-2     | $ not                           | ( not true ) $                     | Shift 2
-3     | $ not (                         | not true ) $                     | Shift 1
-4     | $ not ( not                       | true ) $                     | Shift 3
-5     | $ not ( not true                     | ) $                     | Reduce BFactor -> true
-6     | $ not ( not BFactor                     | ) $                     | Reduce BFactor -> notBFactor
-7     | $ not ( BFactor                       | ) $                     | Reduce BTerm -> BFactor
-8     | $ not ( BTerm                       | ) $                     | Reduce BExpr -> BTerm
-9     | $ not ( BExpr                       | ) $                     | Shift 13
-10    | $ not ( BExpr )                     | $                     | Reduce BFactor -> (BExpr)
-11    | $ not BFactor                         | $                     | Reduce BFactor -> notBFactor
-12    | $ BFactor                           | $                     | Reduce BTerm -> BFactor
-13    | $ BTerm                           | $                     | Reduce BExpr -> BTerm
-14    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
-15    | $ BExpr'                           | $                     | ACCEPT
-Result: ACCEPTED
+1     | $                             | * id = id $                     | Shift 1
+2     | $ *                           | id = id $                     | Shift 2
+3     | $ * id                         | = id $                     | Reduce Left -> id
+4     | $ * Left                         | = id $                     | Reduce Right -> Left
+5     | $ * Right                         | = id $                     | Reduce Left -> *Right
+6     | $ Left                           | = id $                     | Reduce Right -> Left
+7     | $ Right                           | = id $                     | ERROR: no action for [6, =]
+Result: REJECTED
 
 ========== SLR(1) - Invalid Parsing ==========
 
 
-Input: true or
+Input: id = = id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | true or $                     | Shift 3
-2     | $ true                           | or $                     | Reduce BFactor -> true
-3     | $ BFactor                           | or $                     | Reduce BTerm -> BFactor
-4     | $ BTerm                           | or $                     | Reduce BExpr -> BTerm
-5     | $ BExpr                           | or $                     | Shift 11
-6     | $ BExpr or                         | $                     | ERROR: no action for [11, $]
+1     | $                             | id = = id $                     | Shift 2
+2     | $ id                           | = = id $                     | Reduce Left -> id
+3     | $ Left                           | = = id $                     | Reduce Right -> Left
+4     | $ Right                           | = = id $                     | ERROR: no action for [6, =]
 Result: REJECTED
 
 
-Input: and false
+Input: * = id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | and false $                     | ERROR: no action for [0, and]
+1     | $                             | * = id $                     | Shift 1
+2     | $ *                           | = id $                     | ERROR: no action for [1, =]
 Result: REJECTED
 
 
-Input: not not
+Input: id id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | not not $                     | Shift 1
-2     | $ not                           | not $                     | Shift 1
-3     | $ not not                         | $                     | ERROR: no action for [1, $]
+1     | $                             | id id $                     | Shift 2
+2     | $ id                           | id $                     | ERROR: no action for [2, id]
 Result: REJECTED
 
 
-Input: true true
+Input: = id
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | true true $                     | Shift 3
-2     | $ true                           | true $                     | ERROR: no action for [3, true]
+1     | $                             | = id $                     | ERROR: no action for [0, =]
 Result: REJECTED
 
 
-Input: ( true and false
+Input: * id =
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | ( true and false $                     | Shift 2
-2     | $ (                           | true and false $                     | Shift 3
-3     | $ ( true                         | and false $                     | Reduce BFactor -> true
-4     | $ ( BFactor                         | and false $                     | Reduce BTerm -> BFactor
-5     | $ ( BTerm                         | and false $                     | Shift 12
-6     | $ ( BTerm and                       | false $                     | Shift 4
-7     | $ ( BTerm and false                     | $                     | Reduce BFactor -> false
-8     | $ ( BTerm and BFactor                     | $                     | Reduce BTerm -> BTermandBFactor
-9     | $ ( BTerm                         | $                     | Reduce BExpr -> BTerm
-10    | $ ( BExpr                         | $                     | ERROR: no action for [10, $]
+1     | $                             | * id = $                     | Shift 1
+2     | $ *                           | id = $                     | Shift 2
+3     | $ * id                         | = $                     | Reduce Left -> id
+4     | $ * Left                         | = $                     | Reduce Right -> Left
+5     | $ * Right                         | = $                     | Reduce Left -> *Right
+6     | $ Left                           | = $                     | Reduce Right -> Left
+7     | $ Right                           | = $                     | ERROR: no action for [6, =]
 Result: REJECTED

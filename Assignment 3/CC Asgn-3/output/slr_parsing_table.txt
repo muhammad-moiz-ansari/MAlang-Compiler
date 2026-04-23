@@ -1,94 +1,45 @@
 
 ACTION TABLE
 State 0:
-  ( -> s2
-  false -> s4
-  not -> s1
-  true -> s3
+  * -> s1
+  id -> s2
 State 1:
-  ( -> s2
-  false -> s4
-  not -> s1
-  true -> s3
+  * -> s1
+  id -> s2
 State 2:
-  ( -> s2
-  false -> s4
-  not -> s1
-  true -> s3
+  $ -> r(Left->id)
+  = -> r(Left->id)
 State 3:
-  $ -> r(BFactor->true)
-  ) -> r(BFactor->true)
-  and -> r(BFactor->true)
-  or -> r(BFactor->true)
-State 4:
-  $ -> r(BFactor->false)
-  ) -> r(BFactor->false)
-  and -> r(BFactor->false)
-  or -> r(BFactor->false)
-State 5:
   $ -> accept
+State 4:
+  $ -> r(Start'->Start)
+State 5:
+  $ -> r(Right->Left)
+  = -> r(Right->Left)
 State 6:
-  $ -> r(BExpr'->BExpr)
-  or -> s11
+  $ -> r(Start->Right)
 State 7:
-  $ -> r(BExpr->BTerm)
-  ) -> r(BExpr->BTerm)
-  and -> s12
-  or -> r(BExpr->BTerm)
+  $ -> r(Right->Left)
+  = -> r(Right->Left)
 State 8:
-  $ -> r(BTerm->BFactor)
-  ) -> r(BTerm->BFactor)
-  and -> r(BTerm->BFactor)
-  or -> r(BTerm->BFactor)
+  $ -> r(Left->*Right)
+  = -> r(Left->*Right)
 State 9:
-  $ -> r(BFactor->notBFactor)
-  ) -> r(BFactor->notBFactor)
-  and -> r(BFactor->notBFactor)
-  or -> r(BFactor->notBFactor)
+  * -> s1
+  id -> s2
 State 10:
-  ) -> s13
-  or -> s11
-State 11:
-  ( -> s2
-  false -> s4
-  not -> s1
-  true -> s3
-State 12:
-  ( -> s2
-  false -> s4
-  not -> s1
-  true -> s3
-State 13:
-  $ -> r(BFactor->(BExpr))
-  ) -> r(BFactor->(BExpr))
-  and -> r(BFactor->(BExpr))
-  or -> r(BFactor->(BExpr))
-State 14:
-  $ -> r(BExpr->BExprorBTerm)
-  ) -> r(BExpr->BExprorBTerm)
-  and -> s12
-  or -> r(BExpr->BExprorBTerm)
-State 15:
-  $ -> r(BTerm->BTermandBFactor)
-  ) -> r(BTerm->BTermandBFactor)
-  and -> r(BTerm->BTermandBFactor)
-  or -> r(BTerm->BTermandBFactor)
+  $ -> r(Start->Left=Right)
 
 GOTO TABLE
 State 0:
-  BExpr -> 6
-  BExpr' -> 5
-  BFactor -> 8
-  BTerm -> 7
+  Left -> 5
+  Right -> 6
+  Start -> 4
+  Start' -> 3
 State 1:
-  BFactor -> 9
-State 2:
-  BExpr -> 10
-  BFactor -> 8
-  BTerm -> 7
-State 11:
-  BFactor -> 8
-  BTerm -> 14
-State 12:
-  BFactor -> 15
+  Left -> 7
+  Right -> 8
+State 9:
+  Left -> 7
+  Right -> 10
 

@@ -1,84 +1,47 @@
 I0:
-S' -> .BExpr'  , x
-BExpr' -> .BExpr  , x
-BExpr -> .BExpr or BTerm  , x
-BExpr -> .BTerm  , x
-BTerm -> .BTerm and BFactor  , x
-BTerm -> .BFactor  , x
-BFactor -> .not BFactor  , x
-BFactor -> .( BExpr )  , x
-BFactor -> .true  , x
-BFactor -> .false  , x
+S' -> .Start'  , x
+Start' -> .Start  , x
+Start -> .Left = Right  , x
+Start -> .Right  , x
+Left -> .* Right  , x
+Left -> .id  , x
+Right -> .Left  , x
 
 I1:
-BFactor -> not .BFactor  , x
-BFactor -> .not BFactor  , x
-BFactor -> .( BExpr )  , x
-BFactor -> .true  , x
-BFactor -> .false  , x
+Left -> * .Right  , x
+Right -> .Left  , x
+Left -> .* Right  , x
+Left -> .id  , x
 
 I2:
-BFactor -> ( .BExpr )  , x
-BExpr -> .BExpr or BTerm  , x
-BExpr -> .BTerm  , x
-BTerm -> .BTerm and BFactor  , x
-BTerm -> .BFactor  , x
-BFactor -> .not BFactor  , x
-BFactor -> .( BExpr )  , x
-BFactor -> .true  , x
-BFactor -> .false  , x
+Left -> id . , x
 
 I3:
-BFactor -> true . , x
+S' -> Start' . , x
 
 I4:
-BFactor -> false . , x
+Start' -> Start . , x
 
 I5:
-S' -> BExpr' . , x
+Start -> Left .= Right  , x
+Right -> Left . , x
 
 I6:
-BExpr' -> BExpr . , x
-BExpr -> BExpr .or BTerm  , x
+Start -> Right . , x
 
 I7:
-BExpr -> BTerm . , x
-BTerm -> BTerm .and BFactor  , x
+Right -> Left . , x
 
 I8:
-BTerm -> BFactor . , x
+Left -> * Right . , x
 
 I9:
-BFactor -> not BFactor . , x
+Start -> Left = .Right  , x
+Right -> .Left  , x
+Left -> .* Right  , x
+Left -> .id  , x
 
 I10:
-BFactor -> ( BExpr .)  , x
-BExpr -> BExpr .or BTerm  , x
-
-I11:
-BExpr -> BExpr or .BTerm  , x
-BTerm -> .BTerm and BFactor  , x
-BTerm -> .BFactor  , x
-BFactor -> .not BFactor  , x
-BFactor -> .( BExpr )  , x
-BFactor -> .true  , x
-BFactor -> .false  , x
-
-I12:
-BTerm -> BTerm and .BFactor  , x
-BFactor -> .not BFactor  , x
-BFactor -> .( BExpr )  , x
-BFactor -> .true  , x
-BFactor -> .false  , x
-
-I13:
-BFactor -> ( BExpr ) . , x
-
-I14:
-BExpr -> BExpr or BTerm . , x
-BTerm -> BTerm .and BFactor  , x
-
-I15:
-BTerm -> BTerm and BFactor . , x
+Start -> Left = Right . , x
 
 

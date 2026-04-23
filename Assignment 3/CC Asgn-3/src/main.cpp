@@ -13,7 +13,7 @@
 #include "tree.h"
 using namespace std;
 
-void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Time, const string& filename); 
+void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Time, long long slrMemory, long long lr1Memory, const string& filename);
 void parse_input_file(const Grammar& g, const string& inputFileType, const int& langNum, const string& displayTitle, const string& outFileName, bool isFirstFile);
 
 int main() {
@@ -76,6 +76,13 @@ int main() {
     auto slr_time = chrono::duration_cast<chrono::microseconds>(slr_end - slr_start).count() / 1000;
     cout << "Time to construct SLR(1) table: " << slr_time << " milliseconds\n";
 
+    // Memory calculation
+    int slrActionCount = 0, slrGotoCount = 0;
+    for (auto& r : ACTION) slrActionCount += r.second.size();
+    for (auto& r : GOTO)   slrGotoCount += r.second.size();
+    long long slrMemory = slrActionCount * 14LL + slrGotoCount * 8LL;
+    cout << "SLR(1) approx. memory: " << slrMemory << " bytes\n";
+
     cout << "\n--- LR(0) Item Sets ---\n";
     printNsaveItemSets(slrStates, "output/slr_items.txt");
 
@@ -104,6 +111,13 @@ int main() {
     auto lr1_time = chrono::duration_cast<chrono::microseconds>(lr1_end - lr1_start).count() / 1000;
     cout << "Time to construct LR(1) table: " << lr1_time << " milliseconds\n";
 
+    // Memory calculation
+    int lr1ActionCount = 0, lr1GotoCount = 0;
+    for (auto& r : ACTION) lr1ActionCount += r.second.size();
+    for (auto& r : GOTO)   lr1GotoCount += r.second.size();
+    long long lr1Memory = lr1ActionCount * 14LL + lr1GotoCount * 8LL;
+    cout << "LR(1) approx. memory: " << lr1Memory << " bytes\n";
+
     cout << "\n--- LR(1) Item Sets ---\n";
     printNsaveItemSets(lr1States, "output/lr1_items.txt");
 
@@ -119,12 +133,28 @@ int main() {
 
     // ====================== 8. Comparison ======================
     cout << "\n========== Comparison ==========\n";
-    cout << "SLR(1) states : " << slrStates.size() << "\n";
-    cout << "LR(1)  states : " << lr1States.size() << "\n";
-    cout << "Extra states in LR(1): " << (lr1States.size() - slrStates.size()) << "\n";
-    cout << "SLR(1) Table Construction Time: " << slr_time << " milliseconds\n";
-    cout << "LR(1)  Table Construction Time: " << lr1_time << " milliseconds\n";
-    saveComparison(slrStates.size(), lr1States.size(), slr_time, lr1_time, "output/comparison.txt");
+	int slrSize = slrStates.size(), lr1Size = lr1States.size();
+
+    // States
+    cout << "--- States ---\n";
+    cout << "SLR(1) states        : " << slrSize << "\n";
+    cout << "LR(1)  states        : " << lr1Size << "\n";
+    cout << "Extra states in LR(1): " << (lr1Size - slrSize) << "\n\n";
+
+    // Time
+    cout << "--- Table Construction Time ---\n";
+    cout << "SLR(1) time : " << slr_time << " ms\n";
+    cout << "LR(1)  time : " << lr1_time << " ms\n";
+    cout << "LR(1) is    : " << (slr_time > 0 ? to_string(lr1_time / max(slr_time, 1LL)) : "N/A") << "x slower\n\n";
+
+    // Memory
+    cout << "--- Approximate Memory Usage (table entries only) ---\n";
+    cout << "SLR(1) memory : " << slrMemory << " bytes (" << slrMemory / 1024 << " KB)\n";
+    cout << "LR(1)  memory : " << lr1Memory << " bytes (" << lr1Memory / 1024 << " KB)\n";
+    cout << "LR(1) uses    : " << (lr1Memory - slrMemory) << " bytes more than SLR(1)\n";
+    cout << "(Note: actual memory is higher due to std::map node overhead ~40 bytes/entry)\n\n";
+
+    saveComparison(slrSize, lr1Size, slr_time, lr1_time, slrMemory, lr1Memory, "output/comparison.txt");
 
     return 0;
 }
@@ -151,7 +181,7 @@ void parse_input_file(const Grammar& g, const string& inputFileType, const int& 
     }
 }
 
-void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Time, const string& filename) {
+void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Time, long long slrMemory, long long lr1Memory, const string& filename) {
     // Open the file for writing
     ofstream outFile(filename);
     if (!outFile.is_open()) {
@@ -159,12 +189,24 @@ void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Ti
     }
 
     outFile << "\n========== Comparison ==========\n";
-    outFile << "SLR(1) states : " << slrSize << "\n";
-    outFile << "LR(1)  states : " << lr1Size << "\n";
-    outFile << "Extra states in LR(1): " << (lr1Size - slrSize) << "\n";
+    // States
+    outFile << "--- States ---\n";
+    outFile << "SLR(1) states        : " << slrSize << "\n";
+    outFile << "LR(1)  states        : " << lr1Size << "\n";
+    outFile << "Extra states in LR(1): " << (lr1Size - slrSize) << "\n\n";
 
-    outFile << "SLR(1) Table Construction Time: " << slrTime << " milliseconds\n";
-    outFile << "LR(1)  Table Construction Time: " << lr1Time << " milliseconds\n";
+    // Time
+    outFile << "--- Table Construction Time ---\n";
+    outFile << "SLR(1) time : " << slrTime << " ms\n";
+    outFile << "LR(1)  time : " << lr1Time << " ms\n";
+    outFile << "LR(1) is    : " << (slrTime > 0 ? to_string(lr1Time / max(slrTime, 1LL)) : "N/A") << "x slower\n\n";
+
+    // Memory
+    outFile << "--- Approximate Memory Usage (table entries only) ---\n";
+    outFile << "SLR(1) memory : " << slrMemory << " bytes (" << slrMemory / 1024 << " KB)\n";
+    outFile << "LR(1)  memory : " << lr1Memory << " bytes (" << lr1Memory / 1024 << " KB)\n";
+    outFile << "LR(1) uses    : " << (lr1Memory - slrMemory) << " bytes more than SLR(1)\n";
+    outFile << "(Note: actual memory is higher due to std::map node overhead ~40 bytes/entry)\n\n";
     
     if (outFile.is_open()) {
         outFile << endl;

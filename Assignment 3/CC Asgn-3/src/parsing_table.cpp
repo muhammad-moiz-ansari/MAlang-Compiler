@@ -12,19 +12,13 @@ void buildParsingTable(vector<ItemState>& C, const Grammar& g, map<string, set<s
         ItemState I = C[i];
 
         for (int j = 0; j < I.items.size(); j++) {
-            // Shift Case
-            if (I.items[j].dotPos < I.items[j].rhs.size()) {
-                string sym = I.items[j].rhs[I.items[j].dotPos];
 
-                if (isTerminal(sym)) {
-                    int j = getGotoState(I, sym, C, type, g, first);
+            bool isEpsilonRule = (I.items[j].rhs.size() == 1 && I.items[j].rhs[0] == "epsilon");
 
-                    if (j != -1)
-                        ACTION[i][sym] = "s" + to_string(j);
-                }
-            }
-            // Reduce Case
-            else {
+            // ---------------------- REDUCE CASE ----------------------
+            // If the dot is at the end, OR it's an epsilon rule, it's a reduction.
+            if (I.items[j].dotPos == I.items[j].rhs.size() || isEpsilonRule) {
+
                 string A = I.items[j].lhs;
                 string production = A + "->";
 
@@ -33,27 +27,64 @@ void buildParsingTable(vector<ItemState>& C, const Grammar& g, map<string, set<s
 
                 // SLR(1) reduce
                 if (type == 0) {
-                    // S' is the augmented start, skiping it here, accept case handles it
-                    if (FOLLOW.count(A))
-                        for (auto& t : FOLLOW.at(A))
-                            ACTION[i][t] = "r(" + production + ")";
+                    if (FOLLOW.count(A)) {
+                        for (auto& t : FOLLOW.at(A)) {
+                            // Do not put S' -> S in the reduce table. That's for ACCEPT only.
+                            if (A == "S'") continue;
+
+                            string newAction = "r(" + production + ")";
+                            // --- CONFLICT CHECK ---
+                            if (ACTION[i].count(t) && ACTION[i][t] != newAction) {
+                                cout << "CONFLICT DETECTED in SLR(1) State " << i << " on symbol '" << t << "': "
+                                    << ACTION[i][t] << " vs " << newAction << endl;
+                            }
+                            ACTION[i][t] = newAction;
+                        }
+                    }
                 }
 
                 // LR(1) reduce
                 else if (type == 1) {
-
                     for (auto& it : I.items) {
-                        if (it.lhs == A &&
-                            it.rhs == I.items[j].rhs &&
-                            it.dotPos == I.items[j].dotPos) {
+                        if (it.lhs == A && it.rhs == I.items[j].rhs &&
+                            (it.dotPos == I.items[j].dotPos || isEpsilonRule)) {
 
-                            ACTION[i][it.look] = "r(" + production + ")";
+                            if (A == "S'") continue;
+
+                            string newAction = "r(" + production + ")";
+                            // --- CONFLICT CHECK ---
+                            if (ACTION[i].count(it.look) && ACTION[i][it.look] != newAction) {
+                                cout << "CONFLICT DETECTED in LR(1) State " << i << " on symbol '" << it.look << "': "
+                                    << ACTION[i][it.look] << " vs " << newAction << endl;
+                            }
+                            ACTION[i][it.look] = newAction;
                         }
                     }
                 }
             }
 
-            // Accept Case
+            // ---------------------- SHIFT CASE ----------------------
+            // It can ONLY be a shift if it is NOT an epsilon rule, and the dot is not at the end.
+            else if (!isEpsilonRule && I.items[j].dotPos < I.items[j].rhs.size()) {
+
+                string sym = I.items[j].rhs[I.items[j].dotPos];
+
+                if (isTerminal(sym)) {
+                    int targetState = getGotoState(I, sym, C, type, g, first);
+
+                    if (targetState != -1) {
+                        string newAction = "s" + to_string(targetState);
+                        // --- CONFLICT CHECK ---
+                        if (ACTION[i].count(sym) && ACTION[i][sym] != newAction) {
+                            cout << "CONFLICT DETECTED in State " << i << " on symbol '" << sym << "': "
+                                << ACTION[i][sym] << " vs " << newAction << endl;
+                        }
+                        ACTION[i][sym] = newAction;
+                    }
+                }
+            }
+
+            // ---------------------- ACCEPT CASE ----------------------
             if (I.items[j].lhs == "S'" &&
                 I.items[j].dotPos == I.items[j].rhs.size() &&
                 (I.items[j].look == "$" || I.items[j].look == "x")) {

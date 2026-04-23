@@ -1,8 +1,19 @@
 
 ========== Comparison ==========
-SLR(1) states : 16
-LR(1)  states : 29
-Extra states in LR(1): 13
-SLR(1) Table Construction Time: 26 milliseconds
-LR(1)  Table Construction Time: 203 milliseconds
+--- States ---
+SLR(1) states        : 11
+LR(1)  states        : 15
+Extra states in LR(1): 4
+
+--- Table Construction Time ---
+SLR(1) time : 7 ms
+LR(1)  time : 15 ms
+LR(1) is    : 2x slower
+
+--- Approximate Memory Usage (table entries only) ---
+SLR(1) memory : 316 bytes (0 KB)
+LR(1)  memory : 402 bytes (0 KB)
+LR(1) uses    : 86 bytes more than SLR(1)
+(Note: actual memory is higher due to std::map node overhead ~40 bytes/entry)
+
 
