@@ -2,258 +2,156 @@
 ========== LR(1) - Valid Parsing ==========
 
 
-Input: id
+Input: true
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id $                     | Shift 2
-2     | $ id                           | $                     | Reduce Factor -> id
-3     | $ Factor                           | $                     | Reduce Term -> Factor
-4     | $ Term                           | $                     | Reduce Expr -> Term
-5     | $ Expr                           | $                     | Reduce Expr' -> Expr
-6     | $ Expr'                           | $                     | ACCEPT
+1     | $                             | true $                     | Shift 3
+2     | $ true                           | $                     | Reduce BFactor -> true
+3     | $ BFactor                           | $                     | Reduce BTerm -> BFactor
+4     | $ BTerm                           | $                     | Reduce BExpr -> BTerm
+5     | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
+6     | $ BExpr'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: id + id
+Input: true and false
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id + id $                     | Shift 2
-2     | $ id                           | + id $                     | Reduce Factor -> id
-3     | $ Factor                           | + id $                     | Reduce Term -> Factor
-4     | $ Term                           | + id $                     | Reduce Expr -> Term
-5     | $ Expr                           | + id $                     | Shift 12
-6     | $ Expr +                         | id $                     | Shift 2
-7     | $ Expr + id                       | $                     | Reduce Factor -> id
-8     | $ Expr + Factor                       | $                     | Reduce Term -> Factor
-9     | $ Expr + Term                       | $                     | Reduce Expr -> Expr+Term
-10    | $ Expr                           | $                     | Reduce Expr' -> Expr
-11    | $ Expr'                           | $                     | ACCEPT
+1     | $                             | true and false $                     | Shift 3
+2     | $ true                           | and false $                     | Reduce BFactor -> true
+3     | $ BFactor                           | and false $                     | Reduce BTerm -> BFactor
+4     | $ BTerm                           | and false $                     | Shift 18
+5     | $ BTerm and                         | false $                     | Shift 4
+6     | $ BTerm and false                       | $                     | Reduce BFactor -> false
+7     | $ BTerm and BFactor                       | $                     | Reduce BTerm -> BTermandBFactor
+8     | $ BTerm                           | $                     | Reduce BExpr -> BTerm
+9     | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
+10    | $ BExpr'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: id * id
+Input: not true or false
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id * id $                     | Shift 2
-2     | $ id                           | * id $                     | Reduce Factor -> id
-3     | $ Factor                           | * id $                     | Reduce Term -> Factor
-4     | $ Term                           | * id $                     | Shift 13
-5     | $ Term *                         | id $                     | Shift 2
-6     | $ Term * id                       | $                     | Reduce Factor -> id
-7     | $ Term * Factor                       | $                     | Reduce Term -> Term*Factor
-8     | $ Term                           | $                     | Reduce Expr -> Term
-9     | $ Expr                           | $                     | Reduce Expr' -> Expr
-10    | $ Expr'                           | $                     | ACCEPT
+1     | $                             | not true or false $                     | Shift 1
+2     | $ not                           | true or false $                     | Shift 3
+3     | $ not true                         | or false $                     | Reduce BFactor -> true
+4     | $ not BFactor                         | or false $                     | Reduce BFactor -> notBFactor
+5     | $ BFactor                           | or false $                     | Reduce BTerm -> BFactor
+6     | $ BTerm                           | or false $                     | Reduce BExpr -> BTerm
+7     | $ BExpr                           | or false $                     | Shift 17
+8     | $ BExpr or                         | false $                     | Shift 4
+9     | $ BExpr or false                       | $                     | Reduce BFactor -> false
+10    | $ BExpr or BFactor                       | $                     | Reduce BTerm -> BFactor
+11    | $ BExpr or BTerm                       | $                     | Reduce BExpr -> BExprorBTerm
+12    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
+13    | $ BExpr'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: id + id * id
+Input: ( true or false ) and true
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id + id * id $                     | Shift 2
-2     | $ id                           | + id * id $                     | Reduce Factor -> id
-3     | $ Factor                           | + id * id $                     | Reduce Term -> Factor
-4     | $ Term                           | + id * id $                     | Reduce Expr -> Term
-5     | $ Expr                           | + id * id $                     | Shift 12
-6     | $ Expr +                         | id * id $                     | Shift 2
-7     | $ Expr + id                       | * id $                     | Reduce Factor -> id
-8     | $ Expr + Factor                       | * id $                     | Reduce Term -> Factor
-9     | $ Expr + Term                       | * id $                     | Shift 13
-10    | $ Expr + Term *                     | id $                     | Shift 2
-11    | $ Expr + Term * id                   | $                     | Reduce Factor -> id
-12    | $ Expr + Term * Factor                   | $                     | Reduce Term -> Term*Factor
-13    | $ Expr + Term                       | $                     | Reduce Expr -> Expr+Term
-14    | $ Expr                           | $                     | Reduce Expr' -> Expr
-15    | $ Expr'                           | $                     | ACCEPT
+1     | $                             | ( true or false ) and true $                     | Shift 2
+2     | $ (                           | true or false ) and true $                     | Shift 12
+3     | $ ( true                         | or false ) and true $                     | Reduce BFactor -> true
+4     | $ ( BFactor                         | or false ) and true $                     | Reduce BTerm -> BFactor
+5     | $ ( BTerm                         | or false ) and true $                     | Reduce BExpr -> BTerm
+6     | $ ( BExpr                         | or false ) and true $                     | Shift 21
+7     | $ ( BExpr or                       | false ) and true $                     | Shift 13
+8     | $ ( BExpr or false                     | ) and true $                     | Reduce BFactor -> false
+9     | $ ( BExpr or BFactor                     | ) and true $                     | Reduce BTerm -> BFactor
+10    | $ ( BExpr or BTerm                     | ) and true $                     | Reduce BExpr -> BExprorBTerm
+11    | $ ( BExpr                         | ) and true $                     | Shift 22
+12    | $ ( BExpr )                       | and true $                     | Reduce BFactor -> (BExpr)
+13    | $ BFactor                           | and true $                     | Reduce BTerm -> BFactor
+14    | $ BTerm                           | and true $                     | Shift 18
+15    | $ BTerm and                         | true $                     | Shift 3
+16    | $ BTerm and true                       | $                     | Reduce BFactor -> true
+17    | $ BTerm and BFactor                       | $                     | Reduce BTerm -> BTermandBFactor
+18    | $ BTerm                           | $                     | Reduce BExpr -> BTerm
+19    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
+20    | $ BExpr'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 
-Input: ( id + id ) * id
+Input: not ( not true )
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | ( id + id ) * id $                     | Shift 1
-2     | $ (                           | id + id ) * id $                     | Shift 8
-3     | $ ( id                         | + id ) * id $                     | Reduce Factor -> id
-4     | $ ( Factor                         | + id ) * id $                     | Reduce Term -> Factor
-5     | $ ( Term                         | + id ) * id $                     | Reduce Expr -> Term
-6     | $ ( Expr                         | + id ) * id $                     | Shift 15
-7     | $ ( Expr +                       | id ) * id $                     | Shift 8
-8     | $ ( Expr + id                     | ) * id $                     | Reduce Factor -> id
-9     | $ ( Expr + Factor                     | ) * id $                     | Reduce Term -> Factor
-10    | $ ( Expr + Term                     | ) * id $                     | Reduce Expr -> Expr+Term
-11    | $ ( Expr                         | ) * id $                     | Shift 16
-12    | $ ( Expr )                       | * id $                     | Reduce Factor -> (Expr)
-13    | $ Factor                           | * id $                     | Reduce Term -> Factor
-14    | $ Term                           | * id $                     | Shift 13
-15    | $ Term *                         | id $                     | Shift 2
-16    | $ Term * id                       | $                     | Reduce Factor -> id
-17    | $ Term * Factor                       | $                     | Reduce Term -> Term*Factor
-18    | $ Term                           | $                     | Reduce Expr -> Term
-19    | $ Expr                           | $                     | Reduce Expr' -> Expr
-20    | $ Expr'                           | $                     | ACCEPT
-Result: ACCEPTED
-
-
-Input: id * ( id + ( id * id ) ) + id
-
-Step  | Stack                          | Input               | Action
---------------------------------------------------------------------------------
-1     | $                             | id * ( id + ( id * id ) ) + id $                     | Shift 2
-2     | $ id                           | * ( id + ( id * id ) ) + id $                     | Reduce Factor -> id
-3     | $ Factor                           | * ( id + ( id * id ) ) + id $                     | Reduce Term -> Factor
-4     | $ Term                           | * ( id + ( id * id ) ) + id $                     | Shift 13
-5     | $ Term *                         | ( id + ( id * id ) ) + id $                     | Shift 1
-6     | $ Term * (                       | id + ( id * id ) ) + id $                     | Shift 8
-7     | $ Term * ( id                     | + ( id * id ) ) + id $                     | Reduce Factor -> id
-8     | $ Term * ( Factor                     | + ( id * id ) ) + id $                     | Reduce Term -> Factor
-9     | $ Term * ( Term                     | + ( id * id ) ) + id $                     | Reduce Expr -> Term
-10    | $ Term * ( Expr                     | + ( id * id ) ) + id $                     | Shift 15
-11    | $ Term * ( Expr +                   | ( id * id ) ) + id $                     | Shift 7
-12    | $ Term * ( Expr + (                 | id * id ) ) + id $                     | Shift 8
-13    | $ Term * ( Expr + ( id               | * id ) ) + id $                     | Reduce Factor -> id
-14    | $ Term * ( Expr + ( Factor               | * id ) ) + id $                     | Reduce Term -> Factor
-15    | $ Term * ( Expr + ( Term               | * id ) ) + id $                     | Shift 17
-16    | $ Term * ( Expr + ( Term *             | id ) ) + id $                     | Shift 8
-17    | $ Term * ( Expr + ( Term * id           | ) ) + id $                     | Reduce Factor -> id
-18    | $ Term * ( Expr + ( Term * Factor           | ) ) + id $                     | Reduce Term -> Term*Factor
-19    | $ Term * ( Expr + ( Term               | ) ) + id $                     | Reduce Expr -> Term
-20    | $ Term * ( Expr + ( Expr               | ) ) + id $                     | Shift 20
-21    | $ Term * ( Expr + ( Expr )             | ) + id $                     | Reduce Factor -> (Expr)
-22    | $ Term * ( Expr + Factor                 | ) + id $                     | Reduce Term -> Factor
-23    | $ Term * ( Expr + Term                 | ) + id $                     | Reduce Expr -> Expr+Term
-24    | $ Term * ( Expr                     | ) + id $                     | Shift 16
-25    | $ Term * ( Expr )                   | + id $                     | Reduce Factor -> (Expr)
-26    | $ Term * Factor                       | + id $                     | Reduce Term -> Term*Factor
-27    | $ Term                           | + id $                     | Reduce Expr -> Term
-28    | $ Expr                           | + id $                     | Shift 12
-29    | $ Expr +                         | id $                     | Shift 2
-30    | $ Expr + id                       | $                     | Reduce Factor -> id
-31    | $ Expr + Factor                       | $                     | Reduce Term -> Factor
-32    | $ Expr + Term                       | $                     | Reduce Expr -> Expr+Term
-33    | $ Expr                           | $                     | Reduce Expr' -> Expr
-34    | $ Expr'                           | $                     | ACCEPT
-Result: ACCEPTED
-
-
-Input: ( ( id ) )
-
-Step  | Stack                          | Input               | Action
---------------------------------------------------------------------------------
-1     | $                             | ( ( id ) ) $                     | Shift 1
-2     | $ (                           | ( id ) ) $                     | Shift 7
-3     | $ ( (                         | id ) ) $                     | Shift 8
-4     | $ ( ( id                       | ) ) $                     | Reduce Factor -> id
-5     | $ ( ( Factor                       | ) ) $                     | Reduce Term -> Factor
-6     | $ ( ( Term                       | ) ) $                     | Reduce Expr -> Term
-7     | $ ( ( Expr                       | ) ) $                     | Shift 20
-8     | $ ( ( Expr )                     | ) $                     | Reduce Factor -> (Expr)
-9     | $ ( Factor                         | ) $                     | Reduce Term -> Factor
-10    | $ ( Term                         | ) $                     | Reduce Expr -> Term
-11    | $ ( Expr                         | ) $                     | Shift 16
-12    | $ ( Expr )                       | $                     | Reduce Factor -> (Expr)
-13    | $ Factor                           | $                     | Reduce Term -> Factor
-14    | $ Term                           | $                     | Reduce Expr -> Term
-15    | $ Expr                           | $                     | Reduce Expr' -> Expr
-16    | $ Expr'                           | $                     | ACCEPT
+1     | $                             | not ( not true ) $                     | Shift 1
+2     | $ not                           | ( not true ) $                     | Shift 2
+3     | $ not (                         | not true ) $                     | Shift 10
+4     | $ not ( not                       | true ) $                     | Shift 12
+5     | $ not ( not true                     | ) $                     | Reduce BFactor -> true
+6     | $ not ( not BFactor                     | ) $                     | Reduce BFactor -> notBFactor
+7     | $ not ( BFactor                       | ) $                     | Reduce BTerm -> BFactor
+8     | $ not ( BTerm                       | ) $                     | Reduce BExpr -> BTerm
+9     | $ not ( BExpr                       | ) $                     | Shift 22
+10    | $ not ( BExpr )                     | $                     | Reduce BFactor -> (BExpr)
+11    | $ not BFactor                         | $                     | Reduce BFactor -> notBFactor
+12    | $ BFactor                           | $                     | Reduce BTerm -> BFactor
+13    | $ BTerm                           | $                     | Reduce BExpr -> BTerm
+14    | $ BExpr                           | $                     | Reduce BExpr' -> BExpr
+15    | $ BExpr'                           | $                     | ACCEPT
 Result: ACCEPTED
 
 ========== LR(1) - Invalid Parsing ==========
 
 
-Input: id +
+Input: true or
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id + $                     | Shift 2
-2     | $ id                           | + $                     | Reduce Factor -> id
-3     | $ Factor                           | + $                     | Reduce Term -> Factor
-4     | $ Term                           | + $                     | Reduce Expr -> Term
-5     | $ Expr                           | + $                     | Shift 12
-6     | $ Expr +                         | $                     | ERROR: no action for [12, $]
+1     | $                             | true or $                     | Shift 3
+2     | $ true                           | or $                     | Reduce BFactor -> true
+3     | $ BFactor                           | or $                     | Reduce BTerm -> BFactor
+4     | $ BTerm                           | or $                     | Reduce BExpr -> BTerm
+5     | $ BExpr                           | or $                     | Shift 17
+6     | $ BExpr or                         | $                     | ERROR: no action for [17, $]
 Result: REJECTED
 
 
-Input: * id
+Input: and false
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | * id $                     | ERROR: no action for [0, *]
+1     | $                             | and false $                     | ERROR: no action for [0, and]
 Result: REJECTED
 
 
-Input: id id
+Input: not not
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id id $                     | Shift 2
-2     | $ id                           | id $                     | ERROR: no action for [2, id]
+1     | $                             | not not $                     | Shift 1
+2     | $ not                           | not $                     | Shift 1
+3     | $ not not                         | $                     | ERROR: no action for [1, $]
 Result: REJECTED
 
 
-Input: id + * id
+Input: true true
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | id + * id $                     | Shift 2
-2     | $ id                           | + * id $                     | Reduce Factor -> id
-3     | $ Factor                           | + * id $                     | Reduce Term -> Factor
-4     | $ Term                           | + * id $                     | Reduce Expr -> Term
-5     | $ Expr                           | + * id $                     | Shift 12
-6     | $ Expr +                         | * id $                     | ERROR: no action for [12, *]
+1     | $                             | true true $                     | Shift 3
+2     | $ true                           | true $                     | ERROR: no action for [3, true]
 Result: REJECTED
 
 
-Input: ( id + id
+Input: ( true and false
 
 Step  | Stack                          | Input               | Action
 --------------------------------------------------------------------------------
-1     | $                             | ( id + id $                     | Shift 1
-2     | $ (                           | id + id $                     | Shift 8
-3     | $ ( id                         | + id $                     | Reduce Factor -> id
-4     | $ ( Factor                         | + id $                     | Reduce Term -> Factor
-5     | $ ( Term                         | + id $                     | Reduce Expr -> Term
-6     | $ ( Expr                         | + id $                     | Shift 15
-7     | $ ( Expr +                       | id $                     | Shift 8
-8     | $ ( Expr + id                     | $                     | ERROR: no action for [8, $]
-Result: REJECTED
-
-
-Input: id + id )
-
-Step  | Stack                          | Input               | Action
---------------------------------------------------------------------------------
-1     | $                             | id + id ) $                     | Shift 2
-2     | $ id                           | + id ) $                     | Reduce Factor -> id
-3     | $ Factor                           | + id ) $                     | Reduce Term -> Factor
-4     | $ Term                           | + id ) $                     | Reduce Expr -> Term
-5     | $ Expr                           | + id ) $                     | Shift 12
-6     | $ Expr +                         | id ) $                     | Shift 2
-7     | $ Expr + id                       | ) $                     | ERROR: no action for [2, )]
-Result: REJECTED
-
-
-Input: ( )
-
-Step  | Stack                          | Input               | Action
---------------------------------------------------------------------------------
-1     | $                             | ( ) $                     | Shift 1
-2     | $ (                           | ) $                     | ERROR: no action for [1, )]
-Result: REJECTED
-
-
-Input: id + 5
-
-Step  | Stack                          | Input               | Action
---------------------------------------------------------------------------------
-1     | $                             | id + 5 $                     | Shift 2
-2     | $ id                           | + 5 $                     | Reduce Factor -> id
-3     | $ Factor                           | + 5 $                     | Reduce Term -> Factor
-4     | $ Term                           | + 5 $                     | Reduce Expr -> Term
-5     | $ Expr                           | + 5 $                     | Shift 12
-6     | $ Expr +                         | 5 $                     | ERROR: no action for [12, 5]
+1     | $                             | ( true and false $                     | Shift 2
+2     | $ (                           | true and false $                     | Shift 12
+3     | $ ( true                         | and false $                     | Reduce BFactor -> true
+4     | $ ( BFactor                         | and false $                     | Reduce BTerm -> BFactor
+5     | $ ( BTerm                         | and false $                     | Shift 23
+6     | $ ( BTerm and                       | false $                     | Shift 13
+7     | $ ( BTerm and false                     | $                     | ERROR: no action for [13, $]
 Result: REJECTED

@@ -1,0 +1,5 @@
+true or
+and false
+not not
+true true
+( true and false

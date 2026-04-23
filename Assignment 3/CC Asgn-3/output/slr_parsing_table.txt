@@ -1,69 +1,94 @@
 
 ACTION TABLE
 State 0:
-  ( -> s1
-  id -> s2
+  ( -> s2
+  false -> s4
+  not -> s1
+  true -> s3
 State 1:
-  ( -> s1
-  id -> s2
+  ( -> s2
+  false -> s4
+  not -> s1
+  true -> s3
 State 2:
-  $ -> r(Factor->id)
-  ) -> r(Factor->id)
-  * -> r(Factor->id)
-  + -> r(Factor->id)
+  ( -> s2
+  false -> s4
+  not -> s1
+  true -> s3
 State 3:
-  $ -> accept
+  $ -> r(BFactor->true)
+  ) -> r(BFactor->true)
+  and -> r(BFactor->true)
+  or -> r(BFactor->true)
 State 4:
-  $ -> r(Expr'->Expr)
-  + -> s8
+  $ -> r(BFactor->false)
+  ) -> r(BFactor->false)
+  and -> r(BFactor->false)
+  or -> r(BFactor->false)
 State 5:
-  $ -> r(Expr->Term)
-  ) -> r(Expr->Term)
-  * -> s9
-  + -> r(Expr->Term)
+  $ -> accept
 State 6:
-  $ -> r(Term->Factor)
-  ) -> r(Term->Factor)
-  * -> r(Term->Factor)
-  + -> r(Term->Factor)
+  $ -> r(BExpr'->BExpr)
+  or -> s11
 State 7:
-  ) -> s10
-  + -> s8
+  $ -> r(BExpr->BTerm)
+  ) -> r(BExpr->BTerm)
+  and -> s12
+  or -> r(BExpr->BTerm)
 State 8:
-  ( -> s1
-  id -> s2
+  $ -> r(BTerm->BFactor)
+  ) -> r(BTerm->BFactor)
+  and -> r(BTerm->BFactor)
+  or -> r(BTerm->BFactor)
 State 9:
-  ( -> s1
-  id -> s2
+  $ -> r(BFactor->notBFactor)
+  ) -> r(BFactor->notBFactor)
+  and -> r(BFactor->notBFactor)
+  or -> r(BFactor->notBFactor)
 State 10:
-  $ -> r(Factor->(Expr))
-  ) -> r(Factor->(Expr))
-  * -> r(Factor->(Expr))
-  + -> r(Factor->(Expr))
+  ) -> s13
+  or -> s11
 State 11:
-  $ -> r(Expr->Expr+Term)
-  ) -> r(Expr->Expr+Term)
-  * -> s9
-  + -> r(Expr->Expr+Term)
+  ( -> s2
+  false -> s4
+  not -> s1
+  true -> s3
 State 12:
-  $ -> r(Term->Term*Factor)
-  ) -> r(Term->Term*Factor)
-  * -> r(Term->Term*Factor)
-  + -> r(Term->Term*Factor)
+  ( -> s2
+  false -> s4
+  not -> s1
+  true -> s3
+State 13:
+  $ -> r(BFactor->(BExpr))
+  ) -> r(BFactor->(BExpr))
+  and -> r(BFactor->(BExpr))
+  or -> r(BFactor->(BExpr))
+State 14:
+  $ -> r(BExpr->BExprorBTerm)
+  ) -> r(BExpr->BExprorBTerm)
+  and -> s12
+  or -> r(BExpr->BExprorBTerm)
+State 15:
+  $ -> r(BTerm->BTermandBFactor)
+  ) -> r(BTerm->BTermandBFactor)
+  and -> r(BTerm->BTermandBFactor)
+  or -> r(BTerm->BTermandBFactor)
 
 GOTO TABLE
 State 0:
-  Expr -> 4
-  Expr' -> 3
-  Factor -> 6
-  Term -> 5
+  BExpr -> 6
+  BExpr' -> 5
+  BFactor -> 8
+  BTerm -> 7
 State 1:
-  Expr -> 7
-  Factor -> 6
-  Term -> 5
-State 8:
-  Factor -> 6
-  Term -> 11
-State 9:
-  Factor -> 12
+  BFactor -> 9
+State 2:
+  BExpr -> 10
+  BFactor -> 8
+  BTerm -> 7
+State 11:
+  BFactor -> 8
+  BTerm -> 14
+State 12:
+  BFactor -> 15
 

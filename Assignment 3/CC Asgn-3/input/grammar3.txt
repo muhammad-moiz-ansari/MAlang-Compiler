@@ -1,5 +1,2 @@
-E -> T E'
-E' -> + T E' | epsilon
-T -> F T'
-T' -> * F T' | epsilon
-F -> ( E ) | id
+DeclList -> Decl DeclList | epsilon
+Decl -> type id ;

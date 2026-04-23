@@ -1,6 +1,8 @@
 
 ========== Comparison ==========
-SLR(1) states : 13
-LR(1)  states : 23
-Extra states in LR(1): 10
+SLR(1) states : 16
+LR(1)  states : 29
+Extra states in LR(1): 13
+SLR(1) Table Construction Time: 26 milliseconds
+LR(1)  Table Construction Time: 203 milliseconds
 

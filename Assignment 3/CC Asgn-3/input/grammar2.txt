@@ -1,6 +1,3 @@
-Start -> StatementList
-StatementList -> StatementList Statement | Statement
-Statement -> if Cond then Start | if Cond then Start else Start | id assign Expr
-Cond -> true | false
-Expr -> TermBlock plus id | id
-TermBlock -> Expr minus id | number
+BExpr -> BExpr or BTerm | BTerm
+BTerm -> BTerm and BFactor | BFactor
+BFactor -> not BFactor | ( BExpr ) | true | false

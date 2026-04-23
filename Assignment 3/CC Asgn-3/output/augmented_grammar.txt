@@ -1,5 +1,5 @@
-Expr' -> Expr 
-Expr -> Expr + Term | Term 
-Term -> Term * Factor | Factor 
-Factor -> ( Expr ) | id 
+BExpr' -> BExpr 
+BExpr -> BExpr or BTerm | BTerm 
+BTerm -> BTerm and BFactor | BFactor 
+BFactor -> not BFactor | ( BExpr ) | true | false 
 

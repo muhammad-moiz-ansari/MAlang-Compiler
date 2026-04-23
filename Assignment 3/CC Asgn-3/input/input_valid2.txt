@@ -1,0 +1,5 @@
+true
+true and false
+not true or false
+( true or false ) and true
+not ( not true )
