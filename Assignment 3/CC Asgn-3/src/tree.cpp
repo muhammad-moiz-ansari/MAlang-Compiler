@@ -1,8 +1,7 @@
+#include "tree.h"
 #include "grammar.h"
-#include "stack.h"
 #include <iostream>
 #include <fstream> // Included for ofstream
-
 
 // ANSI color codes (work in most terminals)
 #define RESET   "\033[0m"
@@ -10,17 +9,10 @@
 #define BLUE    "\033[34m"
 #define YELLOW  "\033[33m"
 
-struct ParseTreeNode {
-    string symbol;
-    vector<ParseTreeNode*> children;
 
-    ParseTreeNode(string s) : symbol(s) { }
-};
-
-bool isTerminal(string sym, Grammar& g) {
+bool isTerminalForTree(const string& sym, const Grammar& g) {
     return isTerminal(sym);
 }
-
 
 void deleteTree(ParseTreeNode* node) {
     if (!node) return;
@@ -28,76 +20,6 @@ void deleteTree(ParseTreeNode* node) {
         deleteTree(child);
     }
     delete node;
-}
-
-ParseTreeNode* buildParseTree(
-    Grammar& g,
-    map<string, map<string, GrammarRule>>& table,
-    vector<string> input
-) {
-    Stack<pair<string, ParseTreeNode*>> st;
-
-    // Root
-    ParseTreeNode* root = new ParseTreeNode(g.startSymbol);
-
-    // Push $ and start symbol
-    st.push({ "$", nullptr });
-    st.push({ g.startSymbol, root });
-
-    input.push_back("$");
-    int ip = 0;
-
-    while (!st.empty()) {
-        auto top = st.top();
-        st.pop();
-
-        string X = top.first;
-        ParseTreeNode* node = top.second;
-        string a = input[ip];
-
-        // Terminal or $
-        if (X == a) {
-            ip++; // match
-        }
-        else if (find(g.terminals.begin(), g.terminals.end(), X) != g.terminals.end() || X == "$") {
-            cout << "TREE ERROR: Unexpected token " << a << endl;
-            deleteTree(root);
-            return nullptr;
-        }
-        else {
-            // Non-terminal
-            auto& rule = table[X][a];
-
-            if (rule.prods.empty()) {
-                cout << "TREE ERROR: No rule for (" << X << ", " << a << ")\n";
-                deleteTree(root);
-                return nullptr;
-            }
-
-            // Take first production (LL(1))
-            auto& prod = rule.prods[0];
-
-            vector<ParseTreeNode*> children;
-
-            // Create children nodes
-            for (auto& sym : prod.symbols) {
-                ParseTreeNode* child = new ParseTreeNode(sym);
-                children.push_back(child);
-            }
-
-            // Attach to tree
-            node->children = children;
-
-            // Push in reverse order
-            for (int i = children.size() - 1; i >= 0; i--) {
-                if (children[i]->symbol != "epsilon") {
-                    st.push({ children[i]->symbol, children[i] });
-                }
-            }
-        }
-    }
-
-    return root;
 }
 
 void printParseTree(ParseTreeNode* node, int depth) {
@@ -112,7 +34,8 @@ void printParseTree(ParseTreeNode* node, int depth) {
         printParseTree(child, depth + 1);
     }
 }
-void printTreeASCII(ParseTreeNode* node, string prefix, bool isLast = true) {
+
+void printTreeASCII(ParseTreeNode* node, string prefix, bool isLast) {
     if (!node) return;
 
     cout << prefix;
@@ -133,7 +56,7 @@ void printTreeASCII(ParseTreeNode* node, string prefix, bool isLast = true) {
     }
 }
 
-void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string prefix, bool isLast = true) {
+void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string prefix, bool isLast) {
     if (!node) return;
 
     // Use append mode to stream the parsed tree continuously across invocations
@@ -170,7 +93,7 @@ void printTreeColored(ParseTreeNode* node, Grammar& g, int trace_no, string pref
     if (node->symbol == "epsilon") {
         cout << YELLOW << node->symbol << RESET << endl;
     }
-    else if (isTerminal(node->symbol, g)) {
+    else if (isTerminalForTree(node->symbol, g)) {
         cout << BLUE << node->symbol << RESET << endl;
     }
     else {
