@@ -1,7 +1,7 @@
 # 🛠️ CS4031 — Compiler Construction
 ### Spring 2026 | FAST-NUCES
 
-> A complete compiler front-end implementation in two assignments — a hand-built lexical analyzer and a full LL(1) predictive parser, built from scratch in Java and C++ respectively.
+> A complete compiler front-end implementation across three assignments — a hand-built lexical analyzer, a full LL(1) predictive parser, and a bottom-up SLR(1)/LR(1) parser, all built from scratch in Java and C++.
 
 ---
 
@@ -27,6 +27,13 @@
 │   └── README.md
 │
 ├── 📂 Assignment-02/          ← LL(1) Parser (C++)
+│   ├── src/
+│   ├── input/
+│   ├── output/
+│   ├── docs/
+│   └── README.md
+│
+├── 📂 Assignment-03/          ← Bottom-Up Parser: SLR(1) + LR(1) (C++)
 │   ├── src/
 │   ├── input/
 │   ├── output/
@@ -126,43 +133,94 @@ Step | Stack                    | Input          | Action
      | $                        | $              | Accept ✓
 ```
 
-**ASCII Parse Tree:**
-```
-\-- Expr
-    |-- Term
-    |   |-- Factor
-    |   |   \-- id
-    |   \-- NEWTerm
-    |       \-- epsilon
-    \-- NEWExpr
-        |-- +
-        |-- Term
-        ...
-```
-
 ### Quick Start
 
 ```bash
-# With g++ (MinGW)
 build.bat run
-
-# Or manually
-g++ -std=c++17 -Isrc src/main.cpp src/grammar.cpp src/left_factoring.cpp src/left_recursion.cpp src/first_follow.cpp src/parser.cpp src/tree.cpp -o ll1parser.exe
-ll1parser.exe
 ```
 
 → **[Full Assignment 02 README](./Assignment-02/README.md)**
 
 ---
 
+## 📙 Assignment 03 — Bottom-Up Parser (SLR(1) + LR(1))
+
+**Language:** C++ &nbsp;|&nbsp; **Input:** Any Context-Free Grammar
+
+A complete bottom-up parser implementing both SLR(1) and LR(1) parsing from scratch — including canonical item set construction, parsing table generation, shift-reduce simulation, conflict detection, and parse tree output.
+
+### What It Does
+
+| Step | Description |
+|------|-------------|
+| 1 | Reads a CFG from a text file |
+| 2 | **Augments** the grammar with `S' -> S` |
+| 3 | Computes **FIRST** and **FOLLOW** sets |
+| 4 | Builds **LR(0) canonical collection** (for SLR) |
+| 5 | Builds **SLR(1) parsing table** using FOLLOW sets |
+| 6 | Builds **LR(1) canonical collection** with lookaheads |
+| 7 | Builds **LR(1) parsing table** using per-item lookaheads |
+| 8 | Parses input strings with a **shift-reduce stack algorithm** |
+| 9 | Detects **shift/reduce** and **reduce/reduce** conflicts |
+| 10 | Generates **ASCII parse trees** for accepted strings |
+| 11 | Outputs a **comparison** of SLR(1) vs LR(1): states, time, memory |
+
+### Example
+
+**Input Grammar:**
+```
+Expr -> Expr + Term | Term
+Term -> Term * Factor | Factor
+Factor -> ( Expr ) | id
+```
+
+**SLR(1) Parsing Trace for `id + id * id`:**
+```
+Step  | Stack                          | Input               | Action
+----------------------------------------------------------------------
+1     | $                              | id + id * id $      | Shift 5
+2     | $ id                           | + id * id $         | Reduce Factor -> id
+3     | $ Factor                       | + id * id $         | Reduce Term -> Factor
+4     | $ Term                         | + id * id $         | Reduce Expr -> Term
+5     | $ Expr                         | + id * id $         | Shift 6
+...
+Result: ACCEPTED
+```
+
+**SLR(1) vs LR(1) at a Glance:**
+
+| Aspect | SLR(1) | LR(1) |
+|--------|--------|-------|
+| Reduce uses | FOLLOW(A) | Per-item lookahead |
+| States | Fewer | More |
+| Power | Weaker | Stronger |
+| Conflicts | Possible | Fewer |
+
+Grammar 3 (`Start -> L = R | R`) is a classic example where SLR(1) fails with a conflict but LR(1) parses it correctly — demonstrated automatically by selecting grammar 3 at runtime.
+
+### Quick Start
+
+```bash
+# Build and run
+build.bat run
+
+# Select grammar at the prompt
+> 1   (simple expressions)
+> 3   (SLR conflict demo)
+```
+
+→ **[Full Assignment 03 README](./Assignment-03/README.md)**
+
+---
+
 ## 🔧 Technologies Used
 
-| | Assignment 01 | Assignment 02 |
-|--|---------------|---------------|
-| **Language** | Java | C++ (C++17) |
-| **Build** | `javac` / JFlex | Visual Studio / g++ |
-| **Key Concepts** | DFA, NFA, Regular Expressions, Symbol Tables | CFG, LL(1) Parsing, FIRST/FOLLOW, Parse Trees |
-| **External Tools** | JFlex 1.9.1 | None (no compiler libraries used) |
+| | Assignment 01 | Assignment 02 | Assignment 03 |
+|--|---------------|---------------|---------------|
+| **Language** | Java | C++ (C++17) | C++ (C++17) |
+| **Build** | `javac` / JFlex | Visual Studio / g++ | Visual Studio / g++ |
+| **Key Concepts** | DFA, NFA, Regex, Symbol Tables | CFG, LL(1), FIRST/FOLLOW, Parse Trees | LR(0)/LR(1) Items, SLR(1), LR(1), Shift-Reduce |
+| **External Tools** | JFlex 1.9.1 | None | None |
 
 ---
 
