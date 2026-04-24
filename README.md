@@ -20,20 +20,20 @@
 
 ```
 📦 CS4031-Compiler-Construction/
-├── 📂 Assignment-01/          ← Lexical Analyzer (Java)
+├── 📂 Assignment-1/          ← Lexical Analyzer (Java)
 │   ├── src/
 │   ├── tests/
 │   ├── docs/
 │   └── README.md
 │
-├── 📂 Assignment-02/          ← LL(1) Parser (C++)
+├── 📂 Assignment-2/          ← LL(1) Parser (C++)
 │   ├── src/
 │   ├── input/
 │   ├── output/
 │   ├── docs/
 │   └── README.md
 │
-├── 📂 Assignment-03/          ← Bottom-Up Parser: SLR(1) + LR(1) (C++)
+├── 📂 Assignment-3/          ← Bottom-Up Parser: SLR(1) + LR(1) (C++)
 │   ├── src/
 │   ├── input/
 │   ├── output/
@@ -89,7 +89,7 @@ javac src/ManualScanner.java src/Token.java src/TokenType.java src/SymbolTable.j
 java -cp src ManualScanner
 ```
 
-→ **[Full Assignment 01 README](./Assignment-01/README.md)**
+→ **[Full Assignment 01 README](./Assignment-1/README.md)**
 
 ---
 
@@ -139,7 +139,7 @@ Step | Stack                    | Input          | Action
 build.bat run
 ```
 
-→ **[Full Assignment 02 README](./Assignment-02/README.md)**
+→ **[Full Assignment 02 README](./Assignment-2/README.md)**
 
 ---
 
@@ -209,7 +209,7 @@ build.bat run
 > 3   (SLR conflict demo)
 ```
 
-→ **[Full Assignment 03 README](./Assignment-03/README.md)**
+→ **[Full Assignment 03 README](./Assignment-3/README.md)**
 
 ---
 
