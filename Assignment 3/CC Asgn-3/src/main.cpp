@@ -8,7 +8,7 @@
 #include "grammar.h"
 #include "grammar_augment.h"
 #include "first_follow.h"
-#include "slr_parser.h"
+#include "build_items_table.h"
 #include "parser.h"
 #include "tree.h"
 using namespace std;
@@ -145,7 +145,7 @@ int main() {
     cout << "--- Table Construction Time ---\n";
     cout << "SLR(1) time : " << slr_time << " ms\n";
     cout << "LR(1)  time : " << lr1_time << " ms\n";
-    cout << "LR(1) is    : " << (slr_time > 0 ? to_string(lr1_time / max(slr_time, 1LL)) : "N/A") << "x slower\n\n";
+    cout << "LR(1) is    : " << (slr_time > 0 ? to_string((float)lr1_time / max(slr_time, 1LL)) : "N/A") << "x slower\n\n";
 
     // Memory
     cout << "--- Approximate Memory Usage (table entries only) ---\n";
@@ -199,7 +199,7 @@ void saveComparison(int slrSize, int lr1Size, long long slrTime, long long lr1Ti
     outFile << "--- Table Construction Time ---\n";
     outFile << "SLR(1) time : " << slrTime << " ms\n";
     outFile << "LR(1)  time : " << lr1Time << " ms\n";
-    outFile << "LR(1) is    : " << (slrTime > 0 ? to_string(lr1Time / max(slrTime, 1LL)) : "N/A") << "x slower\n\n";
+    outFile << "LR(1) is    : " << (slrTime > 0 ? to_string((float)lr1Time / max(slrTime, 1LL)) : "N/A") << "x slower\n\n";
 
     // Memory
     outFile << "--- Approximate Memory Usage (table entries only) ---\n";

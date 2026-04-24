@@ -1,4 +1,4 @@
-#include "slr_parser.h"
+#include "build_items_table.h"
 
 vector<ItemState> buildSLR(
     Grammar& g,

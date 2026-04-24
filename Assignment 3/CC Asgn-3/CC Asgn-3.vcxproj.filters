@@ -18,12 +18,6 @@
     <ClCompile Include="src\grammar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\left_factoring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\left_recursion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\first_follow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,7 +39,7 @@
     <ClCompile Include="src\parsing_table.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\slr_parser.cpp">
+    <ClCompile Include="src\build_items_table.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,12 +59,6 @@
     <ClInclude Include="src\grammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\left_factoring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\left_recursion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\grammar_augment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,7 +68,7 @@
     <ClInclude Include="src\parsing_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\slr_parser.h">
+    <ClInclude Include="src\build_items_table.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

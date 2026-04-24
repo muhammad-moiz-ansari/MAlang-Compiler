@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "parsing_table.h"
 
 // Builds SLR(1) canonical collection and fills ACTION/GOTO

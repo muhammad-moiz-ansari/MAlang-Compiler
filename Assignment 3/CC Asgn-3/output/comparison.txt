@@ -6,9 +6,9 @@ LR(1)  states        : 15
 Extra states in LR(1): 4
 
 --- Table Construction Time ---
-SLR(1) time : 7 ms
-LR(1)  time : 15 ms
-LR(1) is    : 2x slower
+SLR(1) time : 6 ms
+LR(1)  time : 10 ms
+LR(1) is    : 1.666667x slower
 
 --- Approximate Memory Usage (table entries only) ---
 SLR(1) memory : 316 bytes (0 KB)
