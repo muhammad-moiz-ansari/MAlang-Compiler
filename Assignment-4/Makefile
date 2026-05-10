@@ -18,12 +18,19 @@ parser.tab.c parser.tab.h: parser.y
 lex.yy.c: scanner.l parser.tab.h
 	flex scanner.l
 
-# Target to run all 5 test files automatically
+# Target to run all tests automatically from the tests/ folder
 run-all: $(TARGET)
+	@echo "\n========== RUNNING VALID TESTS =========="
 	@for i in 1 2 3 4 5; do \
-		echo "========== OUTPUT FOR test$$i.json =========="; \
-		./$(TARGET) < test$$i.json; \
-		printf "\n\n"; \
+		echo "--- tests/test$$i.json ---"; \
+		./$(TARGET) < tests/test$$i.json || true; \
+		printf "\n"; \
+	done
+	@echo "\n========== RUNNING ERROR TESTS =========="
+	@for i in 6 7 8; do \
+		echo "--- tests/test$${i}_e.json ---"; \
+		./$(TARGET) < tests/test$${i}_e.json || true; \
+		printf "\n"; \
 	done
 
 clean:

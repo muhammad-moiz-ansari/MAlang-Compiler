@@ -3,9 +3,12 @@
 #include <string>
 #include "ast.h"
 
-// Declare Flex functions so Bison knows they exist
 int yylex();
 void yyerror(const char *s);
+
+// Tell Bison about our tracking variables from scanner.l
+extern int line_num;
+extern int col_num;
 
 // A global variable to hold the root of our completely built tree
 ASTNode* root = nullptr;
@@ -95,5 +98,6 @@ key:
 
 // The error handling function Bison calls if the JSON is invalid
 void yyerror(const char *s) {
-    std::cerr << "Error: " << s << std::endl;
+    // Print the exact line and column where the syntax error occurred
+    std::cerr << "Syntax Error at Line " << line_num << ", Col " << col_num << ": " << s << std::endl;
 }
