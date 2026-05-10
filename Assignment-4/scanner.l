@@ -6,6 +6,8 @@
 
 /* Tell Flex not to worry about reading multiple files */
 %option noyywrap
+%option nounput
+%option noinput
 
 %%
 

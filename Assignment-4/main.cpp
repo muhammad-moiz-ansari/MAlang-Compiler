@@ -1,5 +1,6 @@
 #include "ast.h"
 #include <iostream>
+using namespace std;
 
 // Telling C++ that these exist in our Bison file (parser.y)
 extern int yyparse();
@@ -13,14 +14,14 @@ int main() {
   if (parseResult == 0 && root != nullptr) {
     // Rule 1: The final XML output must have exactly one outer wrapper: <root>
     // ... </root>
-    std::cout << "<root>\n";
+    cout << "<root>\n";
 
     // Telling the top node to print itself.
     // We pass an empty string "" so it doesn't print an extra object tag around
     // the root.
-    root->printXML("");
+    root->printXML("", 1);
 
-    std::cout << "</root>\n";
+    cout << "</root>\n";
   } else {
     // If there was a syntax error, Bison's yyerror() already printed the error
     // message, so we just exit gracefully.

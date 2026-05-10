@@ -11,10 +11,8 @@
 class ASTNode {
 public:
   virtual ~ASTNode() {}
-
-  // Every node in our tree MUST know how to print itself as XML.
-  // The "tag" parameter is used because JSON keys become XML tags!
-  virtual void printXML(const std::string &tag = "") = 0;
+  // Added 'depth' to track indentation
+  virtual void printXML(const std::string &tag = "", int depth = 0) = 0;
 };
 
 // ---------------------------------------------------------
@@ -25,7 +23,7 @@ class StringNode : public ASTNode {
 
 public:
   StringNode(std::string v) : value(v) {}
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 class NumberNode : public ASTNode {
@@ -33,7 +31,7 @@ class NumberNode : public ASTNode {
 
 public:
   NumberNode(double v) : value(v) {}
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 class BoolNode : public ASTNode {
@@ -41,7 +39,7 @@ class BoolNode : public ASTNode {
 
 public:
   BoolNode(bool v) : value(v) {}
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 // ---------------------------------------------------------
@@ -50,7 +48,7 @@ public:
 class NullNode : public ASTNode {
 public:
   NullNode() {}
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 // ---------------------------------------------------------
@@ -61,18 +59,17 @@ class ArrayNode : public ASTNode {
 
 public:
   void addElement(ASTNode *element) { elements.push_back(element); }
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 class ObjectNode : public ASTNode {
-  // A vector of Key-Value pairs preserves the exact order of the JSON!
   std::vector<std::pair<std::string, ASTNode *>> members;
 
 public:
   void addMember(const std::string &key, ASTNode *value) {
     members.push_back(std::make_pair(key, value));
   }
-  void printXML(const std::string &tag) override;
+  void printXML(const std::string &tag, int depth) override;
 };
 
 #endif

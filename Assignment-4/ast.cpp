@@ -1,10 +1,8 @@
 #include "ast.h"
-using namespace std;
 
-// Helper function to escape special XML characters as required by the
-// assignment
-string escapeXML(const string &data) {
-  string buffer;
+// Helper: Escape XML
+std::string escapeXML(const std::string &data) {
+  std::string buffer;
   for (char c : data) {
     switch (c) {
     case '&':
@@ -27,71 +25,74 @@ string escapeXML(const string &data) {
   return buffer;
 }
 
+// Helper: Generate spaces based on depth (4 spaces per level)
+std::string getIndent(int depth) { return std::string(depth * 4, ' '); }
+
 // ---------------------------------------------------------
 // Scalar Values
 // ---------------------------------------------------------
-void StringNode::printXML(const string &tag) {
+void StringNode::printXML(const std::string &tag, int depth) {
   if (!tag.empty())
-    cout << "<" << tag << ">";
-  cout << escapeXML(value);
+    std::cout << getIndent(depth) << "<" << tag << ">";
+  std::cout << escapeXML(value);
   if (!tag.empty())
-    cout << "</" << tag << ">\n";
+    std::cout << "</" << tag << ">\n";
 }
 
-void NumberNode::printXML(const string &tag) {
+void NumberNode::printXML(const std::string &tag, int depth) {
   if (!tag.empty())
-    cout << "<" << tag << ">";
-  cout << value;
+    std::cout << getIndent(depth) << "<" << tag << ">";
+  std::cout << value;
   if (!tag.empty())
-    cout << "</" << tag << ">\n";
+    std::cout << "</" << tag << ">\n";
 }
 
-void BoolNode::printXML(const string &tag) {
+void BoolNode::printXML(const std::string &tag, int depth) {
   if (!tag.empty())
-    cout << "<" << tag << ">";
-  cout << (value ? "true" : "false");
+    std::cout << getIndent(depth) << "<" << tag << ">";
+  std::cout << (value ? "true" : "false");
   if (!tag.empty())
-    cout << "</" << tag << ">\n";
+    std::cout << "</" << tag << ">\n";
 }
 
 // ---------------------------------------------------------
 // Null Value
 // ---------------------------------------------------------
-void NullNode::printXML(const string &tag) {
-  // A JSON null becomes an empty XML element
+void NullNode::printXML(const std::string &tag, int depth) {
   if (!tag.empty()) {
-    cout << "<" << tag << "/>\n";
+    std::cout << getIndent(depth) << "<" << tag << "/>\n";
   }
 }
 
 // ---------------------------------------------------------
 // Complex Structures
 // ---------------------------------------------------------
-void ArrayNode::printXML(const string &tag) {
-  if (!tag.empty())
-    cout << "<" << tag << ">\n";
+void ArrayNode::printXML(const std::string &tag, int depth) {
+  int childDepth = depth;
+  if (!tag.empty()) {
+    std::cout << getIndent(depth) << "<" << tag << ">\n";
+    childDepth++; // Increase depth for the children inside
+  }
 
-  // A JSON array becomes a sequence of repeated child elements using the tag
-  // <item>
   for (auto &element : elements) {
-    element->printXML("item");
+    element->printXML("item", childDepth);
   }
 
   if (!tag.empty())
-    cout << "</" << tag << ">\n";
+    std::cout << getIndent(depth) << "</" << tag << ">\n";
 }
 
-void ObjectNode::printXML(const string &tag) {
-  // If there is no tag (like the very top level before we add <root>), don't
-  // print empty brackets
-  if (!tag.empty())
-    cout << "<" << tag << ">\n";
+void ObjectNode::printXML(const std::string &tag, int depth) {
+  int childDepth = depth;
+  if (!tag.empty()) {
+    std::cout << getIndent(depth) << "<" << tag << ">\n";
+    childDepth++; // Increase depth for the members inside
+  }
 
   for (auto &member : members) {
-    // member.first is the key, member.second is the ASTNode pointer
-    member.second->printXML(member.first);
+    member.second->printXML(member.first, childDepth);
   }
 
   if (!tag.empty())
-    cout << "</" << tag << ">\n";
+    std::cout << getIndent(depth) << "</" << tag << ">\n";
 }
