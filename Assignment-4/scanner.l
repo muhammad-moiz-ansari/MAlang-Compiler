@@ -21,14 +21,15 @@
 "null"      { return NULL_VAL; }
 
 \"([^\"\\]|\\.)*\" { 
-    /* Matches strings and handles escaped characters. 
-       Later, we will extract this text and pass it to Bison as a C++ std::string! */
+    // Strip the quotes and pass the actual string text to Bison
+    std::string text = yytext;
+    yylval.str_val = strdup(text.substr(1, text.length() - 2).c_str());
     return STRING; 
 }
 
 -?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)? { 
-    /* Matches integers, decimals, and scientific notation (for the bonus points).
-       Later, we will convert this to a C++ double for Bison. */
+    // Convert the text to a decimal number for Bison
+    yylval.num_val = atof(yytext);
     return NUMBER; 
 }
 
