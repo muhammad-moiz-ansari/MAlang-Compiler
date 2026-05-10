@@ -26,6 +26,9 @@ run-all: $(TARGET)
 		./$(TARGET) < tests/test$$i.json || true; \
 		printf "\n"; \
 	done
+	@echo "--- tests/test9_unicode.json ---"
+	@./$(TARGET) < tests/test9_unicode.json || true
+	@printf "\n"
 	@echo "\n========== RUNNING ERROR TESTS =========="
 	@for i in 6 7 8; do \
 		echo "--- tests/test$${i}_e.json ---"; \
