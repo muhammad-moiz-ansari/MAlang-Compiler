@@ -12,17 +12,18 @@ int main() {
   int parseResult = yyparse();
 
   if (parseResult == 0 && root != nullptr) {
-    // Rule 1: The final XML output must have exactly one outer wrapper: <root>
-    // ... </root>
-    cout << "<root>\n";
+        
+        // --- NEW: Print the AST Structure ---
+        std::cout << "========== AST STRUCTURE ==========\n";
+        root->printTree(0);
+        std::cout << "\n========== XML OUTPUT =============\n";
 
-    // Telling the top node to print itself.
-    // We pass an empty string "" so it doesn't print an extra object tag around
-    // the root.
-    root->printXML("", 1);
-
-    cout << "</root>\n";
-  } else {
+        // Rule 1: Outer wrapper
+        std::cout << "<root>\n";
+        root->printXML("", 1); 
+        std::cout << "</root>\n";
+        
+    } else {
     // If there was a syntax error, Bison's yyerror() already printed the error
     // message, so we just exit gracefully.
     return 1;

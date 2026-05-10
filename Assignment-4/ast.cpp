@@ -96,3 +96,38 @@ void ObjectNode::printXML(const std::string &tag, int depth) {
   if (!tag.empty())
     std::cout << getIndent(depth) << "</" << tag << ">\n";
 }
+
+// ---------------------------------------------------------
+// AST Printing (Bonus Feature)
+// ---------------------------------------------------------
+void StringNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- StringNode: \"" << value << "\"\n";
+}
+
+void NumberNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- NumberNode: " << value << "\n";
+}
+
+void BoolNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- BoolNode: " << (value ? "true" : "false") << "\n";
+}
+
+void NullNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- NullNode\n";
+}
+
+void ArrayNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- ArrayNode\n";
+    for (auto& element : elements) {
+        element->printTree(depth + 1); // Indent children further
+    }
+}
+
+void ObjectNode::printTree(int depth) {
+    std::cout << getIndent(depth) << "- ObjectNode\n";
+    for (auto& member : members) {
+        // Print the key first, then print the value node deeper
+        std::cout << getIndent(depth + 1) << "[Key: " << member.first << "]\n";
+        member.second->printTree(depth + 2); 
+    }
+}
