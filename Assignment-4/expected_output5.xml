@@ -1,0 +1,12 @@
+<root>
+    <movie>
+        <title>Inception</title>
+        <genres>
+            <item>Action</item>
+            <item>Sci-Fi</item>
+            <item>Thriller</item>
+        </genres>
+        <published>true</published>
+        <sequel/>
+    </movie>
+</root>

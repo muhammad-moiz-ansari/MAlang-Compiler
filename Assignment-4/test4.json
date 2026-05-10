@@ -1,0 +1,11 @@
+{
+    "university": "FAST",
+    "campus": {
+        "city": "Islamabad",
+        "active": true
+    },
+    "students": [
+        { "name": "Ali" },
+        { "name": "Sara" }
+    ]
+}

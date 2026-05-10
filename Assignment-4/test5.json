@@ -1,0 +1,12 @@
+{
+    "movie": {
+        "title": "Inception",
+        "genres": [
+            "Action", 
+            "Sci-Fi", 
+            "Thriller"
+        ],
+        "published": true,
+        "sequel": null
+    }
+}

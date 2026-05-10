@@ -1,0 +1,15 @@
+<root>
+    <university>FAST</university>
+    <campus>
+        <city>Islamabad</city>
+        <active>true</active>
+    </campus>
+    <students>
+        <item>
+            <name>Ali</name>
+        </item>
+        <item>
+            <name>Sara</name>
+        </item>
+    </students>
+</root>

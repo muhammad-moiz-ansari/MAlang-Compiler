@@ -1,0 +1,12 @@
+<root>
+    <departments>
+        <item>CS</item>
+        <item>SE</item>
+        <item>AI</item>
+    </departments>
+    <codes>
+        <item>101</item>
+        <item>102</item>
+        <item>103</item>
+    </codes>
+</root>

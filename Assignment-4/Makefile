@@ -18,5 +18,13 @@ parser.tab.c parser.tab.h: parser.y
 lex.yy.c: scanner.l parser.tab.h
 	flex scanner.l
 
+# Target to run all 5 test files automatically
+run-all: $(TARGET)
+	@for i in 1 2 3 4 5; do \
+		echo "========== OUTPUT FOR test$$i.json =========="; \
+		./$(TARGET) < test$$i.json; \
+		printf "\n\n"; \
+	done
+
 clean:
 	rm -f $(TARGET) parser.tab.c parser.tab.h lex.yy.c
