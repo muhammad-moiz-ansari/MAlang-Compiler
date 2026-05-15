@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
     string filename_suffix = "5_all_accept1";
-    filename_suffix = "5_error_handle1";
+    filename_suffix = "1_left_recursion1";
 
     // load grammar
     Grammar gr = loadGrammar("input/grammar" + filename_suffix + ".txt");

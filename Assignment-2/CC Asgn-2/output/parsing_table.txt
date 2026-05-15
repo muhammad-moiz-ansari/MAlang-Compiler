@@ -1,8 +1,8 @@
-                             +              *              (              )             id              $
----------------------------------------------------------------------------------------------------------
-              E              -              -         E->TE'              -         E->TE'              -
-             E'       E'->+TE'              -              -    E'->epsilon              -    E'->epsilon
-              T              -              -         T->FT'              -         T->FT'              -
-             T'    T'->epsilon       T'->*FT'              -    T'->epsilon              -    T'->epsilon
-              F              -              -         F->(E)              -          F->id              -
+                             +              *              (              )             id        epsilon              $
+------------------------------------------------------------------------------------------------------------------------
+           Expr              -              -  Expr->Term...              -  Expr->Term...              -              -
+        NEWExpr  NEWExpr->+...              -              -  NEWExpr->e...              -              -  NEWExpr->e...
+           Term              -              -  Term->Fact...              -  Term->Fact...              -              -
+        NEWTerm  NEWTerm->e...  NEWTerm->*...              -  NEWTerm->e...              -              -  NEWTerm->e...
+         Factor              -              -  Factor->(E...              -     Factor->id              -              -
 
