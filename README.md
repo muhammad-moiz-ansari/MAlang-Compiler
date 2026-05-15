@@ -1,4 +1,4 @@
-# 🛠️ CS4031 — Compiler Construction
+# 🛠️ CS4031 - Compiler Construction
 ### Spring 2026 | FAST-NUCES
 
 > A complete compiler front-end implementation across four assignments — a hand-built lexical analyzer, a full LL(1) predictive parser, a bottom-up SLR(1)/LR(1) parser, and a JSON-to-XML translator using Flex & Bison with AST construction, all built from scratch in Java and C++.
@@ -19,7 +19,7 @@
 ## 📁 Repository Structure
 
 ```
-📦 CS4031-Compiler-Construction/
+📦 MAlang-Compiler/
 ├── 📂 Assignment-1/          ← Lexical Analyzer (Java)
 │   ├── src/
 │   ├── tests/
@@ -48,6 +48,7 @@
 │   ├── main.cpp
 │   ├── Makefile
 │   ├── tests/
+│   ├── expected_outputs/
 │   └── README.md
 │
 └── README.md                  ← You are here
