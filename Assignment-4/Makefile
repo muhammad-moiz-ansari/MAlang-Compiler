@@ -35,6 +35,14 @@ run-all: $(TARGET)
 		./$(TARGET) < tests/test$${i}_e.json || true; \
 		printf "\n"; \
 	done
+	
+run-all-TA: $(TARGET)
+	@echo "\n========== RUNNING VALID TESTS =========="
+	@for i in 1 2 3 4 5 6 7 8 9; do \
+		echo "--- tests/T$$i.json ---"; \
+		./$(TARGET) < tests/T$$i.json || true; \
+		printf "\n"; \
+	done
 
 clean:
 	rm -f $(TARGET) parser.tab.c parser.tab.h lex.yy.c
