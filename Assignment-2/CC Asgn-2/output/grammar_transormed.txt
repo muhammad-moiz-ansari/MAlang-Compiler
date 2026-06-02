@@ -1,6 +1,6 @@
-E -> T E' 
-E' -> + T E' | epsilon 
-T -> F T' 
-T' -> * F T' | epsilon 
-F -> ( E ) | id 
+Expr -> Term NEWExpr 
+NEWExpr -> + Term NEWExpr | epsilon 
+Term -> Factor NEWTerm 
+NEWTerm -> * Factor NEWTerm | epsilon 
+Factor -> ( Expr ) | id 
 

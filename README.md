@@ -1,7 +1,7 @@
-# 🛠️ CS4031 — Compiler Construction
+# 🛠️ CS4031 - Compiler Construction
 ### Spring 2026 | FAST-NUCES
 
-> A complete compiler front-end implementation across three assignments — a hand-built lexical analyzer, a full LL(1) predictive parser, and a bottom-up SLR(1)/LR(1) parser, all built from scratch in Java and C++.
+> A complete compiler front-end implementation across four assignments — a hand-built lexical analyzer, a full LL(1) predictive parser, a bottom-up SLR(1)/LR(1) parser, and a JSON-to-XML translator using Flex & Bison with AST construction, all built from scratch in Java and C++.
 
 ---
 
@@ -19,7 +19,7 @@
 ## 📁 Repository Structure
 
 ```
-📦 CS4031-Compiler-Construction/
+📦 MAlang-Compiler/
 ├── 📂 Assignment-1/          ← Lexical Analyzer (Java)
 │   ├── src/
 │   ├── tests/
@@ -38,6 +38,17 @@
 │   ├── input/
 │   ├── output/
 │   ├── docs/
+│   └── README.md
+│
+├── 📂 Assignment-4/          ← JSON to XML Translator (C++ / Flex / Bison)
+│   ├── scanner.l
+│   ├── parser.y
+│   ├── ast.h
+│   ├── ast.cpp
+│   ├── main.cpp
+│   ├── Makefile
+│   ├── tests/
+│   ├── expected_outputs/
 │   └── README.md
 │
 └── README.md                  ← You are here
@@ -213,14 +224,138 @@ build.bat run
 
 ---
 
+## 📒 Assignment 04 — JSON to XML Translator
+
+**Language:** C++ &nbsp;|&nbsp; **Tools:** Flex + Bison
+
+A full compiler-style translator pipeline that reads valid JSON from stdin, tokenizes it with Flex, parses it with Bison, constructs an AST, and outputs well-formed, pretty-printed XML to stdout.
+
+### Pipeline Overview
+
+```
+JSON Input (stdin)
+       │
+       ▼
+  [ Flex Lexer ]         ── Tokenizes the input
+       │
+       ▼
+  [ Bison Parser ]       ── Validates grammar, builds AST
+       │
+       ▼
+  [ AST Traversal ]      ── Walks the tree
+       │
+       ▼
+  XML Output (stdout)
+```
+
+### What It Does
+
+| Step | Description |
+|------|-------------|
+| 1 | Reads JSON from standard input |
+| 2 | **Flex** lexer tokenizes all JSON constructs — `{ } [ ] : ,`, strings, numbers, `true`/`false`/`null` |
+| 3 | **Bison** parser validates the grammar and builds a compact AST during parsing |
+| 4 | AST is traversed to generate **well-formed, indented XML** |
+| 5 | Lexical and syntax errors reported with **line + column** numbers |
+
+### AST Node Types
+
+| Class | JSON Type | Stores |
+|---|---|---|
+| `StringNode` | String | `std::string value` |
+| `NumberNode` | Number (int/float/scientific) | `double value` |
+| `BoolNode` | `true` / `false` | `bool value` |
+| `NullNode` | `null` | *(nothing)* |
+| `ArrayNode` | Array `[...]` | `vector<ASTNode*> elements` |
+| `ObjectNode` | Object `{...}` | `vector<pair<string, ASTNode*>> members` |
+
+All nodes inherit from abstract base `ASTNode` with `printXML()` and `printTree()` virtual methods.
+
+### Conversion Rules
+
+| JSON | XML |
+|---|---|
+| Entire input | Wrapped in `<root>...</root>` |
+| Object `{ "key": val }` | `<key>val</key>` |
+| Array `[a, b, c]` | `<item>a</item><item>b</item><item>c</item>` |
+| String / Number / Bool | Text content inside tag |
+| `null` | Self-closing tag `<tagName/>` |
+| Special chars (`& < > "`) | XML-escaped in output |
+
+### Example
+
+**Input:**
+```json
+{ "author": { "uid": "u1", "name": "Sara" }, "published": true }
+```
+
+**Output:**
+```
+========== AST STRUCTURE ==========
+- ObjectNode
+    [Key: author]
+        - ObjectNode
+            [Key: uid]
+                - StringNode: "u1"
+            [Key: name]
+                - StringNode: "Sara"
+    [Key: published]
+        - BoolNode: true
+
+========== XML OUTPUT =============
+<root>
+    <author>
+        <uid>u1</uid>
+        <name>Sara</name>
+    </author>
+    <published>true</published>
+</root>
+```
+
+### Quick Start
+
+```bash
+# Prerequisites
+sudo apt-get install flex bison g++
+
+# Build
+make
+
+# Run
+./json2xml < input.json
+
+# Redirect output to a file
+./json2xml < input.json > output.xml
+
+# Run all tests at once
+make run-all
+
+# Clean generated files
+make clean
+```
+
+### Bonus Features Implemented
+
+| Feature | Detail |
+|---|---|
+| ✅ Pretty-printed XML | 4-space indentation per nesting level |
+| ✅ AST printing | Visual tree displayed before XML output |
+| ✅ Column-based error detail | Errors report exact line **and** column number |
+| ✅ Unicode escape support | `\uXXXX` decoded to UTF-8 (full BMP range) |
+| ✅ Scientific notation | Numbers like `1.5e10`, `2.3E-4`, `-6e+2` supported |
+
+→ **[Full Assignment 04 README](./Assignment-4/README.md)**
+
+---
+
 ## 🔧 Technologies Used
 
-| | Assignment 01 | Assignment 02 | Assignment 03 |
-|--|---------------|---------------|---------------|
-| **Language** | Java | C++ (C++17) | C++ (C++17) |
-| **Build** | `javac` / JFlex | Visual Studio / g++ | Visual Studio / g++ |
-| **Key Concepts** | DFA, NFA, Regex, Symbol Tables | CFG, LL(1), FIRST/FOLLOW, Parse Trees | LR(0)/LR(1) Items, SLR(1), LR(1), Shift-Reduce |
-| **External Tools** | JFlex 1.9.1 | None | None |
+| | Assignment 01 | Assignment 02 | Assignment 03 | Assignment 04 |
+|--|---------------|---------------|---------------|---------------|
+| **Language** | Java | C++ (C++17) | C++ (C++17) | C++ (C++11) |
+| **Build** | `javac` / JFlex | Visual Studio / g++ | Visual Studio / g++ | `make` / g++ |
+| **Key Concepts** | DFA, NFA, Regex, Symbol Tables | CFG, LL(1), FIRST/FOLLOW, Parse Trees | LR(0)/LR(1) Items, SLR(1), LR(1), Shift-Reduce | Flex, Bison, AST Construction, XML Generation |
+| **External Tools** | JFlex 1.9.1 | None | None | Flex, Bison |
 
 ---
 
